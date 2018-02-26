@@ -10,9 +10,12 @@ repositories {
 }
 
 dependencies {
+    providedCompile 'javax:javaee-web-api:7.0'
+    providedCompile 'javax.servlet:servlet-api:2.5'
+    providedCompile 'javax.servlet.jsp:jsp-api:2.1'
+    compile 'de.svenkubiak:jBCrypt:0.4'
+    compile 'javax.servlet:jstl:1.2'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
-    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.0'
-    compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.8-dmr'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

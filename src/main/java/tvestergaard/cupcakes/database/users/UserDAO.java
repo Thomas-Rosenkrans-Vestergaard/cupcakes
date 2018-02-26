@@ -11,7 +11,7 @@ public interface UserDAO
 	 * @return The {@link User} object representing the user with the provided <code>id</code>. Returns
 	 * <code>null</code> if the provided <code>id</code> doesn't match a user in the database.
 	 */
-	User read(int id);
+	User findFromUsername(int id);
 
 	/**
 	 * Returns a {@link User} object representing the user with the provided <code>username</code>.
@@ -21,7 +21,16 @@ public interface UserDAO
 	 * @return The {@link User} object representing the user with the provided <code>username</code>. Returns
 	 * <code>null</code> if the provided <code>username</code> doesn't match a user in the database.
 	 */
-	User read(String username);
+	User findFromUsername(String username);
+
+	/**
+	 * Retrieves a {@link User} with the provided <code>email</code>.
+	 *
+	 * @param email The email of the {@link User} to return.
+	 *
+	 * @return The {@link User} with the provided <code>email</code>.
+	 */
+	User findFromEmail(String email);
 
 	/**
 	 * Creates a new user in the database using the provided information.

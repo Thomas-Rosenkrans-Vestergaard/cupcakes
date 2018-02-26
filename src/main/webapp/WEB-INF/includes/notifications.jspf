@@ -1,0 +1,11 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:if test="${not empty notifications}">
+    <script>
+        $(document).ready(function () {
+            <c:forEach items="${notifications}" var="notification">
+            Materialize.toast("${notification}", 5000);
+            </c:forEach>
+        });
+    </script>
+</c:if>

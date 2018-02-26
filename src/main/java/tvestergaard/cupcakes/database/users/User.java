@@ -8,13 +8,15 @@ public class User
 	private final int    id;
 	private final String email;
 	private final String username;
+	private final String password;
 	private final int    balance;
 
-	public User(int id, String email, String username, int balance)
+	public User(int id, String email, String username, String password, int balance)
 	{
 		this.id = id;
 		this.email = email;
 		this.username = username;
+		this.password = password;
 		this.balance = balance;
 	}
 
@@ -31,6 +33,11 @@ public class User
 	public final String getUsername()
 	{
 		return this.username;
+	}
+
+	public String getPassword()
+	{
+		return this.password;
 	}
 
 	public final int getBalance()
@@ -52,5 +59,16 @@ public class User
 	@Override public int hashCode()
 	{
 		return Objects.hash(id);
+	}
+
+	@Override public String toString()
+	{
+		return "User{" +
+			   "id=" + id +
+			   ", email='" + email + '\'' +
+			   ", username='" + username + '\'' +
+			   ", password='" + password + '\'' +
+			   ", balance=" + balance +
+			   '}';
 	}
 }

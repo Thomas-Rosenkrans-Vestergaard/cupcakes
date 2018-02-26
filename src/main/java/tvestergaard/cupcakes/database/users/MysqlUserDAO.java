@@ -1,7 +1,6 @@
 package tvestergaard.cupcakes.database.users;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import org.mindrot.jbcrypt.BCrypt;
 import tvestergaard.cupcakes.database.AbstractMysqlDAO;
 
 import java.sql.*;
@@ -14,7 +13,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
 		super(source);
 	}
 
-	@Override public User read(int id)
+	@Override public User findFromUsername(int id)
 	{
 		try {
 
@@ -40,7 +39,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
 		}
 	}
 
-	@Override public User read(String username)
+	@Override public User findFromUsername(String username)
 	{
 		try {
 
@@ -51,6 +50,32 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
 
 				statement = getConnection().prepareStatement("SELECT * FROM users WHERE users.username = ?");
 				statement.setString(1, username);
+				results = statement.executeQuery();
+				return !results.first() ? null : createUser(results);
+
+			} finally {
+				if (statement != null)
+					statement.close();
+				if (results != null)
+					results.close();
+			}
+
+		} catch (SQLException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	public User findFromEmail(String email)
+	{
+		try {
+
+			PreparedStatement statement = null;
+			ResultSet         results   = null;
+
+			try {
+
+				statement = getConnection().prepareStatement("SELECT * FROM users WHERE users.email = ?");
+				statement.setString(1, email);
 				results = statement.executeQuery();
 				return !results.first() ? null : createUser(results);
 
@@ -89,7 +114,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
 				statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS);
 				statement.setString(1, username);
 				statement.setString(2, email);
-				statement.setString(3, BCrypt.hashpw(password, BCrypt.gensalt(10)));
+				statement.setString(3, password);
 
 				statement.executeUpdate();
 
@@ -98,7 +123,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
 
 				connection.commit();
 
-				return read(generatedKeys.getInt(1));
+				return findFromUsername(generatedKeys.getInt(1));
 
 			} catch (SQLException e) {
 				connection.rollback();
@@ -119,6 +144,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
 				results.getInt("users.id"),
 				results.getString("users.email"),
 				results.getString("users.username"),
+				results.getString("users.password"),
 				results.getInt("users.balance")
 		);
 	}
