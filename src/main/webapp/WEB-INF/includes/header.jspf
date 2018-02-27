@@ -20,7 +20,9 @@
     <nav>
         <div id="nav-inner">
             <ul class="nav-mobile">
-                <li><a href="shop">Shop</a></li>
+                <li><a id="navigation-presets" href="shop#presets">Presets</a></li>
+                <li><a id="navigation-bottoms" href="shop#bottoms">Bottoms</a></li>
+                <li><a id="navigation-toppings" href="shop#toppings">Toppings</a></li>
             </ul>
             <ul class="nav-mobile right">
                 <%
@@ -36,6 +38,9 @@
 
                 <ul id="userdrop" class="dropdown-content">
                     <li><a href="profile">Profile</a></li>
+                    <% if (user.getRole() == User.Role.ADMINISTRATOR) {%>
+                    <li><a href="administration/users">Administration</a></li>
+                    <% } %>
                     <li><a href="logout">Log out</a></li>
                 </ul>
                 <li><a class="dropdown-button" href="#!"

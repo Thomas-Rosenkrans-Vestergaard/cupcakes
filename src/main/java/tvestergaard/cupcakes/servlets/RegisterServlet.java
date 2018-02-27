@@ -1,12 +1,12 @@
 package tvestergaard.cupcakes.servlets;
 
-import org.apache.commons.validator.routines.EmailValidator;
 import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.NotificationHelper;
-import tvestergaard.cupcakes.database.CupcakeMysqlDataSource;
+import tvestergaard.cupcakes.Language;
+import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.users.MysqlUserDAO;
 import tvestergaard.cupcakes.database.users.User;
-import tvestergaard.cupcakes.database.users.UserDAO;
+import tvestergaard.cupcakes.database.users.UserRequestInputValidator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,101 +16,101 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "RegisterServlet",
-			urlPatterns = "/register")
+@WebServlet(name = "RegisterServlet", urlPatterns = "/register")
 public class RegisterServlet extends HttpServlet
 {
 
-	private static final String ON_ERROR              = "register";
-	private static final String ON_SUCCESS            = "shop";
-	private static final String USERNAME_FIELD        = "username";
-	private static final String EMAIL_FIELD           = "email";
-	private static final String PASSWORD_FIELD        = "password";
-	private static final String PASSWORD_REPEAT_FIELD = "password-repeat";
-	private static final String SESSION_KEY           = "user";
+    /**
+     * The success message provided to the user when successfully created a new user.
+     */
+    private static final String SUCCESS_MESSAGE = "You successfully created a new account.";
 
-	/**
-	 * Handles the POST from the registration page.
-	 *
-	 * @param request  The request.
-	 * @param response The response.
-	 *
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-																						   IOException
-	{
-		NotificationHelper notifications = new NotificationHelper(request);
-		MysqlUserDAO       userDAO       = new MysqlUserDAO(new CupcakeMysqlDataSource());
+    /**
+     * The page to redirect to on error.
+     */
+    private static final String REDIRECT_ON_ERROR = "register";
 
-		notifications.record();
-		validate(notifications, request, userDAO);
-		if (notifications.hasNew()) {
-			response.sendRedirect(ON_ERROR);
-			return;
-		}
+    /**
+     * The page to redirect to on success.
+     */
+    private static final String REDIRECT_ON_SUCCESS = "shop";
 
-		try {
+    /**
+     * The session key to store the user information under.
+     */
+    private static final String SESSION_KEY = "user";
 
-			User user = userDAO.create(
-					request.getParameter(USERNAME_FIELD),
-					request.getParameter(EMAIL_FIELD),
-					BCrypt.hashpw(request.getParameter(PASSWORD_FIELD), BCrypt.gensalt())
-			);
+    /**
+     * The location of the jsp page to serve to GET requests.
+     */
+    private static final String REGISTER_JSP = "WEB-INF/register.jsp";
 
-			HttpSession session = request.getSession();
-			session.setAttribute(SESSION_KEY, user);
-			response.sendRedirect(ON_SUCCESS);
+    /**
+     * Serves the /register page where the user can create a new user.
+     *
+     * @param request  The request.
+     * @param response The response.
+     * @throws ServletException
+     * @throws IOException
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        new Notifications(request);
+        request.getRequestDispatcher(REGISTER_JSP).forward(request, response);
+    }
 
-		} catch (Exception e) {
-			notifications.notify("An error occurred.");
-			response.sendRedirect(ON_ERROR);
-			return;
-		}
-	}
+    /**
+     * Handles the POST from the registration page.
+     *
+     * @param request  The request.
+     * @param response The response.
+     * @throws ServletException
+     * @throws IOException
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        Notifications             notifications = new Notifications(request);
+        MysqlUserDAO              userDAO       = new MysqlUserDAO(new PrimaryDatabase());
+        UserRequestInputValidator validator     = new UserRequestInputValidator(request);
 
-	/**
-	 * Validates the parameters to the provided request.
-	 *
-	 * @param notifications The {@link NotificationHelper}.
-	 * @param request       The request holding the parameters to validate.
-	 * @param userDAO       The {@link UserDAO} to use to access the database.
-	 */
-	private void validate(NotificationHelper notifications, HttpServletRequest request, UserDAO userDAO)
-	{
-		String email          = request.getParameter(EMAIL_FIELD);
-		String password       = request.getParameter(PASSWORD_FIELD);
-		String passwordRepeat = request.getParameter(PASSWORD_REPEAT_FIELD);
-		String username       = request.getParameter(USERNAME_FIELD);
+        notifications.record();
 
-		if (email == null || password == null || passwordRepeat == null || username == null) {
-			notifications.notify("Missing parameter.");
-			return;
-		}
+        validator.username(userDAO, notifications, Language.USER_USERNAME_ERRORS);
+        validator.email(userDAO, notifications, Language.USER_EMAIL_ERRORS);
+        validator.password(notifications, Language.USER_PASSWORD_ERRORS);
 
-		// Validate email
-		if (!EmailValidator.getInstance().isValid(email))
-			notifications.notify("Incorrectly formatted email address.");
-		else if (userDAO.findFromEmail(email) != null)
-			notifications.notify("Email is already taken.");
+        if (notifications.hasNew()) {
+            response.sendRedirect(REDIRECT_ON_ERROR);
+            return;
+        }
 
-		// Validate password
-		if (password.length() < 4)
-			notifications.notify("Passwords must be 4 characters or longer.");
-		if (!password.equals(passwordRepeat))
-			notifications.notify("Password must match password repeat.");
+        try {
 
-		// Validate username
-		if (username.length() < 1)
-			notifications.notify("Username cannot be empty.");
-		else if (userDAO.findFromUsername(username) != null)
-			notifications.notify("Username already taken.");
-	}
+            User user = userDAO.create(
+                    validator.getUsername(),
+                    validator.getEmail(),
+                    hash(validator.getPassword())
+            );
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		new NotificationHelper(request);
-		request.getRequestDispatcher("WEB-INF/register.jsp").forward(request, response);
-	}
+            notifications.success(SUCCESS_MESSAGE);
+            HttpSession session = request.getSession();
+            session.setAttribute(SESSION_KEY, user);
+            response.sendRedirect(REDIRECT_ON_SUCCESS);
+
+        } catch (Exception e) {
+            notifications.info(Language.GENERAL_ERROR);
+            response.sendRedirect(REDIRECT_ON_ERROR);
+        }
+    }
+
+    /**
+     * Hashes the provided password using the b-crypt hashing function.
+     *
+     * @param password The password to hash.
+     * @return The resulting digest.
+     */
+    private String hash(String password)
+    {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 }

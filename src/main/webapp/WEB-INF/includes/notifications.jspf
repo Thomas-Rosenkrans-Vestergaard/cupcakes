@@ -4,7 +4,7 @@
     <script>
         $(document).ready(function () {
             <c:forEach items="${notifications}" var="notification">
-            Materialize.toast("${notification}", 5000);
+            Materialize.toast("${notification.getMessage()}", 10000, '${notification.getLevel()}');
             </c:forEach>
         });
     </script>

@@ -1,6 +1,7 @@
 package tvestergaard.cupcakes.servlets;
 
-import tvestergaard.cupcakes.NotificationHelper;
+import tvestergaard.cupcakes.Config;
+import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.users.User;
 
 import javax.servlet.ServletException;
@@ -11,40 +12,51 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "LogoutServlet",
-			urlPatterns = "/logout")
+@WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
 public class LogoutServlet extends HttpServlet
 {
 
-	private static final String SUCCESS_NOTIFICATION = "You were successfully logged out, have a nice day.";
-	private static final String ERROR_NOTIFICATION   = "You could not be logged out.";
-	private static final String SESSION_KEY          = "user";
+    /**
+     * The success message provided when the user is successfully logged out.
+     */
+    private static final String SUCCESS_NOTIFICATION = "You were successfully logged out, have a nice day.";
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		logout(request, response);
-	}
+    /**
+     * The error message provided when the user cannot be logged out.
+     */
+    private static final String ERROR_NOTIFICATION = "You could not be logged out.";
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		logout(request, response);
-	}
+    /**
+     * Logs out the user in the provided session.
+     *
+     * @param request  The request.
+     * @param response The response.
+     */
+    private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        HttpSession   session       = request.getSession();
+        User          user          = (User) session.getAttribute(Config.USER_SESSION_KEY);
+        Notifications notifications = new Notifications(request);
+        String        previous      = request.getHeader("referer");
 
-	private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		HttpSession        session       = request.getSession();
-		User               user          = (User) session.getAttribute(SESSION_KEY);
-		NotificationHelper notifications = new NotificationHelper(request);
-		String             previous      = request.getHeader("referer");
+        if (user == null) {
+            notifications.error(ERROR_NOTIFICATION);
+            response.sendRedirect(previous);
+            return;
+        }
 
-		if (user == null) {
-			notifications.notify(ERROR_NOTIFICATION);
-			response.sendRedirect(previous);
-			return;
-		}
+        session.setAttribute(Config.USER_SESSION_KEY, null);
+        notifications.success(SUCCESS_NOTIFICATION);
+        response.sendRedirect(previous);
+    }
 
-		session.setAttribute(SESSION_KEY, null);
-		notifications.notify(SUCCESS_NOTIFICATION);
-		response.sendRedirect(previous);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        logout(request, response);
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        logout(request, response);
+    }
 }

@@ -2,10 +2,10 @@ package tvestergaard.cupcakes.database;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-public class CupcakeMysqlDataSource extends MysqlDataSource
+public class PrimaryDatabase extends MysqlDataSource
 {
 
-	public CupcakeMysqlDataSource()
+	public PrimaryDatabase()
 	{
 		setUser("cupcakes");
 		setDatabaseName("cupcakes");

@@ -5,70 +5,106 @@ import java.util.Objects;
 public class User
 {
 
-	private final int    id;
-	private final String email;
-	private final String username;
-	private final String password;
-	private final int    balance;
+    public enum Role
+    {
+        USER(0),
+        ADMINISTRATOR(1);
 
-	public User(int id, String email, String username, String password, int balance)
-	{
-		this.id = id;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.balance = balance;
-	}
+        public final int code;
 
-	public final int getId()
-	{
-		return this.id;
-	}
+        Role(int code)
+        {
+            this.code = code;
+        }
 
-	public String getEmail()
-	{
-		return this.email;
-	}
+        public int getCode()
+        {
+            return this.code;
+        }
 
-	public final String getUsername()
-	{
-		return this.username;
-	}
+        private static Role[] roles = Role.values();
 
-	public String getPassword()
-	{
-		return this.password;
-	}
+        public static Role code(int code)
+        {
+            return roles[code];
+        }
+    }
 
-	public final int getBalance()
-	{
-		return this.balance;
-	}
+    private final int    id;
+    private final String email;
+    private final String username;
+    private final String password;
+    private final int    balance;
+    private final Role   role;
 
-	@Override public boolean equals(Object o)
-	{
-		if (this == o) return true;
-		if (!(o instanceof User)) return false;
-		User user = (User) o;
-		return id == user.id &&
-			   balance == user.balance &&
-			   Objects.equals(email, user.email) &&
-			   Objects.equals(username, user.username);
-	}
+    public User(int id, String username, String email, String password, int balance, Role role)
+    {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.balance = balance;
+        this.role = role;
+    }
 
-	@Override public int hashCode()
-	{
-		return Objects.hash(id);
-	}
+    public final int getId()
+    {
+        return this.id;
+    }
 
-	@Override public String toString()
-	{
-		return "User{" +
-			   "id=" + id +
-			   ", email='" + email + '\'' +
-			   ", username='" + username + '\'' +
-			   ", password='" + password + '\'' +
-			   ", balance=" + balance +
-			   '}';
-	}
+    public String getEmail()
+    {
+        return this.email;
+    }
+
+    public final String getUsername()
+    {
+        return this.username;
+    }
+
+    public String getPassword()
+    {
+        return this.password;
+    }
+
+    public final int getBalance()
+    {
+        return this.balance;
+    }
+
+    public Role getRole()
+    {
+        return this.role;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return id == user.id &&
+                balance == user.balance &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", balance=" + balance +
+                ", role=" + role +
+                '}';
+    }
 }

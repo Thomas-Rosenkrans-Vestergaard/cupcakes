@@ -7,7 +7,7 @@
         <label for="username-input">Username</label>
     </div>
     <div class="input-field col s12">
-        <input type="password" id="password-input" name="password" pattern="{8,}" required>
+        <input type="password" id="password-input" name="password" required>
         <label for="password-input">Password</label>
     </div>
     <input class="button-submit btn-large" type="submit" value="Login">

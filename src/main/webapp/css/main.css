@@ -29,15 +29,6 @@ main {
     margin-right: auto;
 }
 
-h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
-}
-
-h3 {
-    font-size: 1.3rem;
-}
-
 .clear {
     overflow: auto;
 }
@@ -60,12 +51,42 @@ main {
     padding: 20px 0px 20px 0px;
 }
 
+@media screen
+and (max-width: 1044px) {
+    main {
+        padding: 20px;
+    }
+}
+
 .dropdown-arrow {
     margin-top: 3px;
     margin-left: 2px !important;
 }
 
 h1, h2, h3 {
-    color: #84af9b !important;
-    font-size: 1.3rem;
+    color: #fe4362 !important;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.preset-list {
+    margin: 0 -10px 0 -10px;
+}
+
+.preset-list .col {
+    padding: 10px;
+}
+
+.preset-list .col div.preset-content {
+    background-color: #fc9d9b;
+}
+
+.preset-list .col div.preset-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+#shop > .col {
+    padding: 0px;
 }
