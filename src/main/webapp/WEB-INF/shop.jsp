@@ -12,19 +12,34 @@
 <div id="shop" class="row">
     <div class="col s12">
         <ul id="shop-tabs" class="tabs tabs-fixed-width">
-            <li class="tab col s3"><a class="active" href="#presets">Presets</a></li>
-            <li class="tab col s3"><a href="#bottoms">Bottoms</a></li>
-            <li class="tab col s3"><a href="#toppings">Toppings</a></li>
+            <li class="tab col s3 tab-presets"><a class="active" href="#presets">Presets</a></li>
+            <li class="tab col s3 tab-bottoms"><a href="#bottoms">Bottoms</a></li>
+            <li class="tab col s3 tab-toppings"><a href="#toppings">Toppings</a></li>
         </ul>
     </div>
     <script>
+
+        $('.tab-presets').on('click', function () {
+            location.href = "#presets";
+        });
+
+        $('.tab-bottoms').on('click', function () {
+            location.href = "#bottoms";
+        });
+
+        $('.tab-toppings').on('click', function () {
+            location.href = "#toppings";
+        });
+
         $("#navigation-presets").on('click', function (e) {
             $('#shop-tabs').tabs('select_tab', 'presets');
         });
         $("#navigation-bottoms").on('click', function (e) {
+            location.href = "#bottoms";
             $('#shop-tabs').tabs('select_tab', 'bottoms');
         });
         $("#navigation-toppings").on('click', function (e) {
+            location.href = "#toppings";
             $('#shop-tabs').tabs('select_tab', 'toppings');
         });
     </script>
