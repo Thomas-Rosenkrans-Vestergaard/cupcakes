@@ -12,48 +12,50 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "ProfileServlet", urlPatterns = "/profile")
+@WebServlet(name = "ProfileServlet",
+			urlPatterns = "/profile")
 public class ProfileServlet extends HttpServlet
 {
 
-    /**
-     * The page to redirect to on errors.
-     */
-    private static final String ERROR_REDIRECT = "login";
+	/**
+	 * The page to redirect to on errors.
+	 */
+	private static final String ERROR_REDIRECT = "login";
 
-    /**
-     * The location of the profile.jsp file displayed on GET requests.
-     */
-    private static final String PROFILE_JSP = "WEB-INF/profile.jsp";
+	/**
+	 * The location of the profile.jsp file displayed on GET requests.
+	 */
+	private static final String PROFILE_JSP = "WEB-INF/profile.jsp";
 
-    /**
-     * Serves the /shop page where users can see the products.
-     *
-     * @param request  The request.
-     * @param response The response.
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-        Notifications notificationHelper = new Notifications(request);
-        HttpSession   session            = request.getSession();
+	/**
+	 * Serves the /shop page where users can see the products.
+	 *
+	 * @param request  The request.
+	 * @param response The response.
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		Notifications notificationHelper = new Notifications(request);
+		HttpSession   session            = request.getSession();
 
-        if (session.getAttribute(Config.USER_SESSION_KEY) == null) {
-            notificationHelper.error(Language.ERROR_ACCESS_USER);
-            response.sendRedirect(ERROR_REDIRECT);
-            return;
-        }
+		if (session.getAttribute(Config.USER_SESSION_KEY) == null) {
+			notificationHelper.error(Language.ERROR_ACCESS_USER);
+			response.sendRedirect(ERROR_REDIRECT);
+			return;
+		}
 
-        request.getRequestDispatcher(PROFILE_JSP).forward(request, response);
-    }
+		request.setAttribute("user", session.getAttribute(Config.USER_SESSION_KEY));
+		request.getRequestDispatcher(PROFILE_JSP).forward(request, response);
+	}
 
-    /**
-     * Serves the /shop page where users can see the products.
-     *
-     * @param request  The request.
-     * @param response The response.
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-        doGet(request, response);
-    }
+	/**
+	 * Serves the /shop page where users can see the products.
+	 *
+	 * @param request  The request.
+	 * @param response The response.
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		doGet(request, response);
+	}
 }
