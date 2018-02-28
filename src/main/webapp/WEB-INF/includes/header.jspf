@@ -39,6 +39,7 @@
 
                 <ul id="userdrop" class="dropdown-content">
                     <li><a href="profile">Profile</a></li>
+                    <li><a href="cart">Cart</a></li>
                     <% if (user.getRole() == User.Role.ADMINISTRATOR) {%>
                     <li><a href="administration/users">Administration</a></li>
                     <% } %>

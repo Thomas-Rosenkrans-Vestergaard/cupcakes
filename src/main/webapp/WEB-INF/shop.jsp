@@ -6,27 +6,33 @@
         nisl. Duis tincidunt vehicula arcu aliquet imperdiet. Sed sed nisi et nulla convallis fringilla maximus a erat.
         Aliquam varius nisl ac quam lobortis, non pellentesque leo efficitur.
     </p>
-    <p>If you wish to, you can create you own cupcake <a href="custom">here</a>.</p>
 </div>
 <div id="shop" class="row">
     <div class="col s12">
         <ul id="shop-tabs" class="tabs tabs-fixed-width">
-            <li class="tab col s3 tab-presets"><a class="active" href="#presets">Presets</a></li>
-            <li class="tab col s3 tab-bottoms"><a href="#bottoms">Bottoms</a></li>
-            <li class="tab col s3 tab-toppings"><a href="#toppings">Toppings</a></li>
+            <li class="tab col s3" id="tab-presets"><a class="active" href="#presets">Presets</a></li>
+            <li class="tab col s3" id="tab-bottoms"><a href="#bottoms">Bottoms</a></li>
+            <li class="tab col s3" id="tab-toppings"><a href="#toppings">Toppings</a></li>
         </ul>
     </div>
     <script>
 
-        $('.tab-presets').on('click', function () {
+        $('#tab-presets').on('click', function () {
             location.href = "#presets";
         });
 
-        $('.tab-bottoms').on('click', function () {
+        $('.tab').tabs({
+            onShow: function () {
+                console.log("onSHow");
+                resizeShop();
+            }
+        });
+
+        $('#tab-bottoms').on('click', function () {
             location.href = "#bottoms";
         });
 
-        $('.tab-toppings').on('click', function () {
+        $('#tab-toppings').on('click', function () {
             location.href = "#toppings";
         });
 
@@ -61,6 +67,14 @@
                                 <h2 class="shop-item-name"><c:out value="${preset.getName()}"/></h2>
                                 <p class="shop-item-description"><c:out value="${preset.getDescription()}"/></p>
                                 <p class="shop-item-price price">$<c:out value="${preset.getPrice()}"/></p>
+                                <form action="cart" method="post">
+                                    <input type="hidden" name="bottom" value="${preset.getBottom().getId()}">
+                                    <input type="hidden" name="topping" value="${preset.getTopping().getId()}">
+                                    <div class="row">
+                                        <input type="hidden" name="amount" min="1" value="1" required>
+                                        <input class="button-submit btn" type="submit" value="Add to cart">
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </c:forEach>
@@ -91,6 +105,10 @@
                             <h2 class="shop-item-name"><c:out value="${bottom.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${bottom.getDescription()}"/></p>
                             <p class="shop-item-price price">$<c:out value="${bottom.getPrice()}"/></p>
+                            <form action="custom" method="get">
+                                <input type="hidden" name="bottom" value="${bottom.getId()}">
+                                <input class="button-submit btn" type="submit" value="Customize">
+                            </form>
                         </div>
                     </div>
                 </c:forEach>
@@ -123,6 +141,10 @@
                             <h2 class="shop-item-name"><c:out value="${topping.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${topping.getDescription()}"/></p>
                             <p class="shop-item-price price">$<c:out value="${topping.getPrice()}"/></p>
+                            <form action="cart" method="post">
+                                <input type="hidden" name="topping" value="${topping.getId()}">
+                                <input class="button-submit btn" type="submit" value="Customize">
+                            </form>
                         </div>
                     </div>
                 </c:forEach>

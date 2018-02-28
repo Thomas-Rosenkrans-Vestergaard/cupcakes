@@ -88,16 +88,29 @@ h1, h2, h3 {
 }
 
 .shop-item {
-    overflow: auto;
+    overflow: hidden;
 }
 
+.shop-item-details {
+    position: relative;
+}
+
+.shop-item-show-image {
+    position: absolute;
+    top: 0;
+    font-size: 2rem !important;
+    right: 0;
+    color: #fe4362;
+}
+
+/*
 .shop-item:hover .shop-item-details {
     display: none;
 }
 
 .shop-item:hover .shop-item-image {
     display: block;
-}
+}*/
 
 #shop > .col {
     padding: 0px;
@@ -131,4 +144,9 @@ h1, h2, h3 {
 
 .order-preview-container:nth-of-type(1) {
     margin-bottom: 20px !important;
+}
+
+.shop-item-details #amount-input {
+    width: 100%;
+    height: 2.4rem;
 }

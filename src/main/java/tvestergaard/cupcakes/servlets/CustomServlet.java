@@ -2,6 +2,7 @@ package tvestergaard.cupcakes.servlets;
 
 import tvestergaard.cupcakes.Authentication;
 import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.Parameters;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.database.toppings.MysqlToppingDAO;
@@ -22,13 +23,15 @@ public class CustomServlet extends HttpServlet
     private static final String BOTTOM_JSP = "WEB-INF/custom.jsp";
 
     /**
-     * Serves the /custom page where users can create their own cupcake.
+     * Serves the /custom page where users can create their own cupcake. The url parameters 'bottom' and 'topping' can
+     * be use to prefil the values.
      *
      * @param request  The request.
      * @param response The response.
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+
         new Notifications(request);
         PrimaryDatabase source = new PrimaryDatabase();
         MysqlBottomDAO bottomDAO = new MysqlBottomDAO(source);
@@ -37,6 +40,11 @@ public class CustomServlet extends HttpServlet
         request.setAttribute("bottoms", bottomDAO.get());
         request.setAttribute("toppings", toppingDAO.get());
 
+        Parameters parameters = new Parameters(request);
+        if (parameters.isInt("bottom"))
+            request.setAttribute("selectedBottom", parameters.getInt("bottom"));
+        if (parameters.isInt("topping"))
+            request.setAttribute("selectedTopping", parameters.getInt("topping"));
         request.getRequestDispatcher("WEB-INF/custom.jsp").forward(request, response);
     }
 
@@ -50,7 +58,7 @@ public class CustomServlet extends HttpServlet
     {
         Authentication authentication = new Authentication(request);
 
-        if(!authentication.isAuthenticated()){
+        if (!authentication.isAuthenticated()) {
 
         }
     }

@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ include file="includes/header.jspf" %>
 <h2>Create your own cupcake</h2>
-<form method="get" action="order">
+<form method="post" action="cart">
     <div class="row">
         <div class="col s12 no-padding">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra ex velit, quis mollis mauris
@@ -16,7 +16,9 @@
                     <option value="${bottom.getId()}"
                             data-name="<c:out value="${bottom.getName()}"/>"
                             data-description="<c:out value="${bottom.getDescription()}"/>"
-                            data-price="<c:out value="${bottom.getPrice()}"/>">
+                            data-price="<c:out value="${bottom.getPrice()}"/>"
+                        ${bottom.getId() == selectedBottom ? 'selected' : ''}
+                    >
                         <c:out value="${bottom.getName()}"/>
                     </option>
                 </c:forEach>
@@ -50,6 +52,7 @@
                             data-name="<c:out value="${topping.getName()}"/>"
                             data-description="<c:out value="${topping.getDescription()}"/>"
                             data-price="<c:out value="${topping.getPrice()}"/>"
+                        ${topping.getId() == selectedTopping ? 'selected' : ''}
                     ><c:out value="${topping.getName()}"/></option>
                 </c:forEach>
             </select>
@@ -68,13 +71,18 @@
         </div>
     </div>
     <div class="row">
-        <input class="button-submit btn-large place-custom-order-submit" type="submit" value="Place order"> <span
+        <label for="amount">Order amount</label>
+        <input id="amount" type="number" name="amount" value="5" required>
+    </div>
+    <div class="row">
+        <input class="button-submit btn-large place-custom-order-submit" type="submit" value="Add to cart"> <span
             class="price">Your total is $<span
             id="custom-total">0</span>.</span>
     </div>
 </form>
 <script>
 
+    var amount = $('#amount').val();
     var current_total = 0;
     var bottom_price = 0;
     var topping_price = 0;
@@ -85,7 +93,7 @@
     bottom_select.material_select();
     topping_select.material_select();
 
-    bottom_select.on('change', function (e) {
+    function update_selected_bottom() {
         var option = $('#bottom-select option[value="' + bottom_select.val() + '"]');
         $('#bottom-preview-image').attr("src", "images/bottoms/" + option.attr("value") + ".jpg");
         $('#bottom-preview-name').text(option.data("name"));
@@ -95,10 +103,10 @@
 
         bottom_price = parseInt(option.data("price"));
         current_total = bottom_price + topping_price;
-        $("#custom-total").text(current_total);
-    });
+        $("#custom-total").text(current_total * amount);
+    }
 
-    topping_select.on('change', function () {
+    function update_selected_topping() {
         var option = $('#topping-select option[value="' + topping_select.val() + '"]');
         $('#topping-preview-image').attr("src", "images/toppings/" + option.attr("value") + ".jpg");
         $('#topping-preview-name').text(option.data("name"));
@@ -108,7 +116,28 @@
 
         topping_price = parseInt(option.data("price"));
         current_total = bottom_price + topping_price;
-        $("#custom-total").text(current_total);
+        $("#custom-total").text(current_total * amount);
+    }
+
+    if (bottom_select.val() != null) {
+        update_selected_bottom();
+    }
+
+    if (topping_select.val() != null) {
+        update_selected_topping();
+    }
+
+    $('#amount').on('input', function () {
+        amount = $('#amount').val();
+        $("#custom-total").text(current_total * amount);
+    });
+
+    bottom_select.on('change', function (e) {
+        update_selected_bottom();
+    });
+
+    topping_select.on('change', function () {
+        update_selected_topping();
     });
 
 </script>
