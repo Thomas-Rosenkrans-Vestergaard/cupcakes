@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ include file="includes/header.jspf" %>
 <h2>Create your own cupcake</h2>
-<form method="post">
+<form method="get" action="order">
     <div class="row">
         <div class="col s12 no-padding">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra ex velit, quis mollis mauris
@@ -68,7 +68,8 @@
         </div>
     </div>
     <div class="row">
-        <input class="button-submit btn-large place-custom-order-submit" type="submit" value="Place order"> <span>Your total is $<span
+        <input class="button-submit btn-large place-custom-order-submit" type="submit" value="Place order"> <span
+            class="price">Your total is $<span
             id="custom-total">0</span>.</span>
     </div>
 </form>

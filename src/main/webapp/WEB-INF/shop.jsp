@@ -48,74 +48,102 @@
             tincidunt mi. Nullam eu velit eu diam tempor sollicitudin at et augue. Suspendisse eu accumsan nisi. Ut
             velit ante, efficitur vitae dapibus et, pretium at nisl. Fusce fringilla ligula purus, nec semper mi maximus
             lacinia. </p>
-        <ul class="preset-list row">
-            <div class="col s4">
-                <c:choose>
-                    <c:when test="${not empty presets}">
-                        <c:forEach items="${presets}" var="preset">
-                            <div class="preset-content">
-                                <a href="preset?id=${preset.getId()}">
-                                    <img src="images/presets/${preset.getId()}.jpg" alt="${preset.getName()}">
-                                </a>
+        <ul class="shop-item-list row">
+            <c:choose>
+                <c:when test="${not empty presets}">
+                    <c:forEach items="${presets}" var="preset">
+                        <div class="col s4 shop-item">
+                            <a href="preset?id=${preset.getId()}">
+                                <img class="shop-item-image" src="images/presets/${preset.getId()}.jpg"
+                                     alt="${preset.getName()}">
+                            </a>
+                            <div class="shop-item-details">
+                                <h2 class="shop-item-name"><c:out value="${preset.getName()}"/></h2>
+                                <p class="shop-item-description"><c:out value="${preset.getDescription()}"/></p>
+                                <p class="shop-item-price price">$<c:out value="${preset.getPrice()}"/></p>
                             </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p>There are currently no presets available.</p>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </ul>
-    </div>
-    <div id="bottoms" class="col s12">
-        <h2>Bottoms</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tortor ante, rutrum nec lacus vel, condimentum
-            tincidunt mi. Nullam eu velit eu diam tempor sollicitudin at et augue. Suspendisse eu accumsan nisi. Ut
-            velit ante, efficitur vitae dapibus et, pretium at nisl. Fusce fringilla ligula purus, nec semper mi maximus
-            lacinia. </p>
-        <ul class="preset-list row">
-            <div class="col s4">
-                <c:choose>
-                    <c:when test="${not empty bottoms}">
-                        <c:forEach items="${bottoms}" var="bottom">
-                            <div class="preset-content">
-                                <a href="bottom?id=${bottom.getId()}">
-                                    <img src="images/bottoms/${bottom.getId()}.jpg" alt="${bottom.getName()}">
-                                </a>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p>There are currently no bottoms available.</p>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </ul>
-    </div>
-    <div id="toppings" class="col s12">
-        <h2>Toppings</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tortor ante, rutrum nec lacus vel, condimentum
-            tincidunt mi. Nullam eu velit eu diam tempor sollicitudin at et augue. Suspendisse eu accumsan nisi. Ut
-            velit ante, efficitur vitae dapibus et, pretium at nisl. Fusce fringilla ligula purus, nec semper mi maximus
-            lacinia. </p>
-        <ul class="preset-list row">
-            <div class="col s4">
-                <c:choose>
-                    <c:when test="${not empty toppings}">
-                        <c:forEach items="${toppings}" var="topping">
-                            <div class="preset-content">
-                                <a href="topping?id=${topping.getId()}">
-                                    <img src="images/toppings/${topping.getId()}.jpg" alt="${topping.getName()}">
-                                </a>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p>There are currently no toppings available.</p>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                        </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <p>There are currently no presets available.</p>
+                </c:otherwise>
+            </c:choose>
         </ul>
     </div>
 </div>
+<div id="bottoms" class="col s12">
+    <h2>Bottoms</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tortor ante, rutrum nec lacus vel, condimentum
+        tincidunt mi. Nullam eu velit eu diam tempor sollicitudin at et augue. Suspendisse eu accumsan nisi. Ut
+        velit ante, efficitur vitae dapibus et, pretium at nisl. Fusce fringilla ligula purus, nec semper mi maximus
+        lacinia. </p>
+    <ul class="shop-item-list row">
+        <c:choose>
+            <c:when test="${not empty bottoms}">
+                <c:forEach items="${bottoms}" var="bottom">
+                    <div class="col s4 shop-item">
+                        <a href="bottom?id=${bottom.getId()}">
+                            <img class="shop-item-image" src="images/bottoms/${bottom.getId()}.jpg"
+                                 alt="${bottom.getName()}">
+                        </a>
+                        <div class="shop-item-details">
+                            <h2 class="shop-item-name"><c:out value="${bottom.getName()}"/></h2>
+                            <p class="shop-item-description"><c:out value="${bottom.getDescription()}"/></p>
+                            <p class="shop-item-price price">$<c:out value="${bottom.getPrice()}"/></p>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <p>There are currently no bottoms available.</p>
+            </c:otherwise>
+        </c:choose>
+    </ul>
+</div>
+</ul>
+</div>
+<div id="toppings" class="col s12">
+    <h2>Toppings</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tortor ante, rutrum nec lacus vel, condimentum
+        tincidunt mi. Nullam eu velit eu diam tempor sollicitudin at et augue. Suspendisse eu accumsan nisi. Ut
+        velit ante, efficitur vitae dapibus et, pretium at nisl. Fusce fringilla ligula purus, nec semper mi maximus
+        lacinia. </p>
+    <ul class="shop-item-list row">
+        <c:choose>
+            <c:when test="${not empty toppings}">
+                <c:forEach items="${toppings}" var="topping">
+
+                    <div class="col s4 shop-item">
+                        <a href="topping?id=${topping.getId()}">
+                            <img class="shop-item-image" src="images/toppings/${topping.getId()}.jpg"
+                                 alt="${topping.getName()}">
+                        </a>
+                        <div class="shop-item-details">
+                            <h2 class="shop-item-name"><c:out value="${topping.getName()}"/></h2>
+                            <p class="shop-item-description"><c:out value="${topping.getDescription()}"/></p>
+                            <p class="shop-item-price price">$<c:out value="${topping.getPrice()}"/></p>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <p>There are currently no toppings available.</p>
+            </c:otherwise>
+        </c:choose>
+    </ul>
+</div>
+<script>
+    resizeShop();
+    $(window).resize(function () {
+        resizeShop();
+    });
+
+    function resizeShop() {
+        $('.shop-item').each(function (index, item) {
+            item = $(item);
+            item.height(item.width());
+        });
+    }
+</script>
 <%@ include file="includes/footer.jspf" %>

@@ -1,5 +1,6 @@
 package tvestergaard.cupcakes.servlets;
 
+import tvestergaard.cupcakes.Authentication;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.bottoms.MysqlBottomDAO;
@@ -47,6 +48,10 @@ public class CustomServlet extends HttpServlet
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        doGet(request, response);
+        Authentication authentication = new Authentication(request);
+
+        if(!authentication.isAuthenticated()){
+
+        }
     }
 }

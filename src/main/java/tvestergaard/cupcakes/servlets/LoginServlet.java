@@ -75,21 +75,15 @@ public class LoginServlet extends HttpServlet
 
         try {
             UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
-            User    user    = userDAO.findFromUsername(request.getParameter(USERNAME_FIELD));
+            User user = userDAO.findFromUsername(request.getParameter(USERNAME_FIELD));
 
-            if (user == null) {
+            if (user == null || !BCrypt.checkpw(request.getParameter(PASSWORD_FIELD), user.getPassword())) {
                 notifications.warning(LOGIN_ERROR);
                 response.sendRedirect(REDIRECT_ON_ERROR);
                 return;
             }
 
-            if (!BCrypt.checkpw(request.getParameter(PASSWORD_FIELD), user.getPassword())) {
-                notifications.warning(LOGIN_ERROR);
-                response.sendRedirect(REDIRECT_ON_ERROR);
-                return;
-            }
-
-            String      referer = request.getParameter("referer");
+            String referer = request.getParameter("referer");
             HttpSession session = request.getSession();
             notifications.success(SUCCESS_MESSAGE);
             session.setAttribute(Config.USER_SESSION_KEY, user);

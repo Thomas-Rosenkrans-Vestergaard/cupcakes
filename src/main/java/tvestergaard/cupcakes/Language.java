@@ -3,19 +3,19 @@ package tvestergaard.cupcakes;
 public class Language
 {
 
-    public final static String GENERAL_ERROR              = "An error occurred";
-    public final static String ERROR_ACCESS_USER          = "You must be logged in to access this page.";
+    public final static String GENERAL_ERROR = "An error occurred";
+    public final static String ERROR_ACCESS_USER = "You must be logged in to access this page.";
     public final static String ERROR_ACCESS_ADMINISTRATOR = "You must be logged in as an administrator to access this page.";
 
-    public final static String MISSING_ID_PARAMETER   = "Missing id parameter.";
+    public final static String MISSING_ID_PARAMETER = "Missing id parameter.";
     public final static String MALFORMED_ID_PARAMETER = "Malformed provided id parameter.";
 
     public final static String RECORD_CREATED_SUCCESS = "The record was successfully created.";
     public final static String RECORD_UPDATED_SUCCESS = "The record was successfully updated.";
     public final static String RECORD_DELETED_SUCCESS = "The record was successfully deleted.";
-    public final static String RECORD_CREATED_ERROR   = "The record could not be created.";
-    public final static String RECORD_UPDATED_ERROR   = "The record could not be updated.";
-    public final static String RECORD_DELETED_ERROR   = "The record could not be deleted.";
+    public final static String RECORD_CREATED_ERROR = "The record could not be created.";
+    public final static String RECORD_UPDATED_ERROR = "The record could not be updated.";
+    public final static String RECORD_DELETED_ERROR = "The record could not be deleted.";
 
     public final static String[] USER_USERNAME_ERRORS = {
             "Username field is required, but was not sent.",
@@ -43,5 +43,15 @@ public class Language
     public final static String[] USER_TYPE_ERRORS = {
             "User role field is required, but was not sent.",
             "User role was not one of the listed options.",
+    };
+
+    public final static String[] ORDER_BOTTOM_ERRORS = {
+            "Bottom id field is required, but was not sent.",
+            "Bottom id must be a number."
+    };
+
+    public final static String[] ORDER_TOPPING_ERRORS = {
+            "Bottom id field is required, but was not sent.",
+            "Bottom id must be a number."
     };
 }
