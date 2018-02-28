@@ -90,3 +90,25 @@ h1, h2, h3 {
 #shop > .col {
     padding: 0px;
 }
+
+.custom-preview-container {
+    background: #ffeead;
+    padding: 20px !important;
+    display: none;
+    margin-bottom: 0px !important;
+}
+
+.custom-image-preview {
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+#custom-total {
+    color: #fe4362;
+    font-weight: 800;
+}
+
+.place-custom-order-submit {
+    margin-right: 10px;
+}

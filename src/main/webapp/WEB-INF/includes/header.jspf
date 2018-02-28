@@ -20,7 +20,8 @@
     <nav>
         <div id="nav-inner">
             <ul class="nav-mobile">
-                <li><a id="navigation-presets" href="shop#presets">Presets</a></li>
+                <li><a id="navigation-presets" href="shop#presets">Preset</a></li>
+                <li><a id="navigation-customs" href="custom">Custom</a></li>
                 <li><a id="navigation-bottoms" href="shop#bottoms">Bottoms</a></li>
                 <li><a id="navigation-toppings" href="shop#toppings">Toppings</a></li>
             </ul>

@@ -4,10 +4,9 @@
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam mattis, mauris eu malesuada vehicula, justo diam
         malesuada arcu, tincidunt eleifend ligula metus eget nisl. Donec in augue ac tellus congue consectetur quis eget
         nisl. Duis tincidunt vehicula arcu aliquet imperdiet. Sed sed nisi et nulla convallis fringilla maximus a erat.
-        Aliquam varius nisl ac quam lobortis, non pellentesque leo efficitur. Aenean lobortis neque vitae ornare
-        eleifend. Aliquam nisi erat, pulvinar vel rhoncus quis, maximus et ante. Ut bibendum tincidunt ornare. Aenean mi
-        enim, porta in lobortis at, feugiat ac lorem. Aenean pulvinar ex a dignissim ultricies. Class aptent taciti
-        sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+        Aliquam varius nisl ac quam lobortis, non pellentesque leo efficitur.
+    </p>
+    <p>If you wish to, you can create you own cupcake <a href="custom">here</a>.</p>
 </div>
 <div id="shop" class="row">
     <div class="col s12">
