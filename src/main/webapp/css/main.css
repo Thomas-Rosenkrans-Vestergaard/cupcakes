@@ -186,3 +186,7 @@ h4 {
 .order-items-row {
     display: none;
 }
+
+#funds-form input {
+    margin-bottom: 0px;
+}

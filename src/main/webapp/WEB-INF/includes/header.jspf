@@ -49,7 +49,7 @@
                 <li><a class="dropdown-button" href="#!"
                        data-activates="userdrop">
                     <%= user.getUsername()%>
-                    ($<%= user.getBalance()%>)
+                    ($<%= user.getFormattedBalance()%>)
                     <i class="material-icons right dropdown-arrow">arrow_drop_down</i></a></li>
                 <%
                     }

@@ -78,6 +78,15 @@ public class User
         return this.balance;
     }
 
+    public String getFormattedBalance()
+    {
+        int price = getBalance();
+        int cents = price % 100;
+        int dollars = (price - cents) / 100;
+
+        return dollars + "." + (cents < 9 ? "0" + cents : cents);
+    }
+
     public Role getRole()
     {
         return this.role;
