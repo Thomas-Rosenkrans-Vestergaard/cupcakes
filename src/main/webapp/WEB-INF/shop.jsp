@@ -21,13 +21,6 @@
             location.href = "#presets";
         });
 
-        $('.tab').tabs({
-            onShow: function () {
-                console.log("onSHow");
-                resizeShop();
-            }
-        });
-
         $('#tab-bottoms').on('click', function () {
             location.href = "#bottoms";
         });
@@ -39,10 +32,12 @@
         $("#navigation-presets").on('click', function (e) {
             $('#shop-tabs').tabs('select_tab', 'presets');
         });
+
         $("#navigation-bottoms").on('click', function (e) {
             location.href = "#bottoms";
             $('#shop-tabs').tabs('select_tab', 'bottoms');
         });
+
         $("#navigation-toppings").on('click', function (e) {
             location.href = "#toppings";
             $('#shop-tabs').tabs('select_tab', 'toppings');
@@ -66,7 +61,7 @@
                             <div class="shop-item-details">
                                 <h2 class="shop-item-name"><c:out value="${preset.getName()}"/></h2>
                                 <p class="shop-item-description"><c:out value="${preset.getDescription()}"/></p>
-                                <p class="shop-item-price price">$<c:out value="${preset.getPrice()}"/></p>
+                                <p class="shop-item-price price">$<c:out value="${preset.getFormattedPrice()}"/></p>
                                 <form action="cart" method="post">
                                     <input type="hidden" name="bottom" value="${preset.getBottom().getId()}">
                                     <input type="hidden" name="topping" value="${preset.getTopping().getId()}">
@@ -104,11 +99,19 @@
                         <div class="shop-item-details">
                             <h2 class="shop-item-name"><c:out value="${bottom.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${bottom.getDescription()}"/></p>
-                            <p class="shop-item-price price">$<c:out value="${bottom.getPrice()}"/></p>
-                            <form action="custom" method="get">
-                                <input type="hidden" name="bottom" value="${bottom.getId()}">
-                                <input class="button-submit btn" type="submit" value="Customize">
-                            </form>
+                            <p class="shop-item-price price">$<c:out value="${bottom.getFormattedPrice()}"/></p>
+                            <div class="row">
+                                <div class="col s6 no-padding">
+                                    <form action="custom" method="get">
+                                        <input type="hidden" name="bottom" value="${bottom.getId()}">
+                                        <input class="button-submit btn" type="submit" value="Customize">
+                                    </form>
+                                </div>
+                               <!-- <div class="col s6 no-padding">
+                                    <img class="shop-item-image" src="images/bottoms/${bottom.getId()}.jpg" alt="">
+                                    <button class="btn red">Image</button>
+                                </div>-->
+                            </div>
                         </div>
                     </div>
                 </c:forEach>
@@ -140,8 +143,8 @@
                         <div class="shop-item-details">
                             <h2 class="shop-item-name"><c:out value="${topping.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${topping.getDescription()}"/></p>
-                            <p class="shop-item-price price">$<c:out value="${topping.getPrice()}"/></p>
-                            <form action="cart" method="post">
+                            <p class="shop-item-price price">$<c:out value="${topping.getFormattedPrice()}"/></p>
+                            <form action="custom" method="get">
                                 <input type="hidden" name="topping" value="${topping.getId()}">
                                 <input class="button-submit btn" type="submit" value="Customize">
                             </form>
@@ -155,17 +158,4 @@
         </c:choose>
     </ul>
 </div>
-<script>
-    resizeShop();
-    $(window).resize(function () {
-        resizeShop();
-    });
-
-    function resizeShop() {
-        $('.shop-item').each(function (index, item) {
-            item = $(item);
-            item.height(item.width());
-        });
-    }
-</script>
 <%@ include file="includes/footer.jspf" %>

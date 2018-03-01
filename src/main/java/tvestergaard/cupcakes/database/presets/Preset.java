@@ -52,4 +52,12 @@ public class Preset
 	{
 		return this.price;
 	}
+
+	public String getFormattedPrice()
+	{
+		int cents = price % 100;
+		int dollars = (price - cents) / 100;
+
+		return dollars + "." + (cents < 9 ? "0" + cents : cents);
+	}
 }

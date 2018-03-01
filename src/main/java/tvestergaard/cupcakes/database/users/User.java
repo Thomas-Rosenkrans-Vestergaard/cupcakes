@@ -8,7 +8,8 @@ public class User
     public enum Role
     {
         USER(0),
-        ADMINISTRATOR(1);
+        ADMINISTRATOR(1),
+        OWNER(2);
 
         public final int code;
 
@@ -20,6 +21,11 @@ public class User
         public int getCode()
         {
             return this.code;
+        }
+
+        public boolean is(Role role)
+        {
+            return code >= role.code;
         }
 
         private static Role[] roles = Role.values();

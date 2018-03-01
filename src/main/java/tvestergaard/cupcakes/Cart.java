@@ -46,6 +46,34 @@ public class Cart implements Iterable<Cart.Item>
         {
             return this.amount;
         }
+
+        public int getUnitPrice()
+        {
+            return bottom.getPrice() + topping.getPrice();
+        }
+
+        public String getFormattedUnitPrice()
+        {
+            int price = getUnitPrice();
+            int cents = price % 100;
+            int dollars = (price - cents) / 100;
+
+            return dollars + "." + (cents < 9 ? "0" + cents : cents);
+        }
+
+        public int getTotalPrice()
+        {
+            return getUnitPrice() * amount;
+        }
+
+        public String getFormattedTotalPrice()
+        {
+            int price = getTotalPrice();
+            int cents = price % 100;
+            int dollars = (price - cents) / 100;
+
+            return dollars + "." + (cents < 9 ? "0" + cents : cents);
+        }
     }
 
     public Cart(HttpServletRequest request)
@@ -53,7 +81,27 @@ public class Cart implements Iterable<Cart.Item>
         this.request = request;
         this.session = request.getSession();
         this.items = getItems();
-        request.setAttribute(SESSION_KEY, this.items);
+        request.setAttribute(SESSION_KEY, this);
+    }
+
+    public int getTotal()
+    {
+        int total = 0;
+        Iterator<Item> itemIterator = iterator();
+        while (itemIterator.hasNext()) {
+            total += itemIterator.next().getTotalPrice();
+        }
+
+        return total;
+    }
+
+    public String getFormattedTotal()
+    {
+        int price = getTotal();
+        int cents = price % 100;
+        int dollars = (price - cents) / 100;
+
+        return dollars + "." + (cents < 9 ? "0" + cents : cents);
     }
 
     private List<Item> getItems()
@@ -69,6 +117,12 @@ public class Cart implements Iterable<Cart.Item>
         return (List<Item>) fromSession;
     }
 
+    public void clear()
+    {
+        this.items = new ArrayList<>();
+        session.setAttribute(SESSION_KEY, this.items);
+    }
+
     /**
      * Returns an iterator over elements of type {@code T}.
      *
@@ -79,15 +133,19 @@ public class Cart implements Iterable<Cart.Item>
         return new ItemIterator();
     }
 
+    public boolean isEmpty()
+    {
+        return size() == 0;
+    }
+
     public class ItemIterator implements java.util.Iterator<Item>
     {
 
         int counter = 0;
 
         /**
-         * Returns {@code true} if the iteration has more elements.
-         * (In other words, returns {@code true} if {@link #next} would
-         * return an element rather than throwing an exception.)
+         * Returns {@code true} if the iteration has more elements. (In other words, returns {@code true} if {@link
+         * #next} would return an element rather than throwing an exception.)
          *
          * @return {@code true} if the iteration has more elements
          */

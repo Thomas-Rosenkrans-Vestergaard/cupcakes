@@ -17,7 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "CartServlet", urlPatterns = "/cart")
+@WebServlet(name = "CartServlet",
+        urlPatterns = "/cart")
 public class CartServlet extends HttpServlet
 {
 
@@ -29,6 +30,15 @@ public class CartServlet extends HttpServlet
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        Notifications notifications = new Notifications(request);
+        Authentication authentication = new Authentication(request, response);
+
+        if (!authentication.isAuthenticated()) {
+            notifications.error(Language.ERROR_ACCESS_USER);
+            authentication.redirect("cart");
+            return;
+        }
+
         new Cart(request);
         new Notifications(request);
         request.getRequestDispatcher("WEB-INF/cart.jsp").forward(request, response);
@@ -43,21 +53,21 @@ public class CartServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Notifications notifications = new Notifications(request);
-        Authentication authentication = new Authentication(request);
+        Authentication authentication = new Authentication(request, response);
 
         if (!authentication.isAuthenticated()) {
             notifications.error(Language.ERROR_ACCESS_USER);
-            response.sendRedirect("login");
+            authentication.redirect("cart");
             return;
         }
 
         Parameters parameters = new Parameters(request);
 
         if (parameters.isNull("bottom") || !parameters.isInt("bottom") ||
-                parameters.isNull("topping") || !parameters.isNull("bottom") ||
+                parameters.isNull("topping") || !parameters.isInt("topping") ||
                 parameters.isNull("amount") || !parameters.isInt("amount")) {
             notifications.error("Error with parameters.");
-            response.sendRedirect("login");
+            response.sendRedirect(request.getHeader("referer"));
             return;
         }
 
@@ -83,6 +93,6 @@ public class CartServlet extends HttpServlet
         Cart cart = new Cart(request);
         int amount = parameters.getInt("amount");
         cart.addItem(new Cart.Item(bottom, topping, amount));
-        response.sendRedirect("card");
+        response.sendRedirect("cart");
     }
 }

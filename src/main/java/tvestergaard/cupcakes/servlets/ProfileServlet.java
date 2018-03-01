@@ -1,15 +1,17 @@
 package tvestergaard.cupcakes.servlets;
 
-import tvestergaard.cupcakes.Config;
+import tvestergaard.cupcakes.Authentication;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.database.PrimaryDatabase;
+import tvestergaard.cupcakes.database.orders.MysqlOrderDAO;
+import tvestergaard.cupcakes.database.orders.OrderDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "ProfileServlet",
@@ -35,16 +37,19 @@ public class ProfileServlet extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		Notifications notificationHelper = new Notifications(request);
-		HttpSession   session            = request.getSession();
+		Notifications  notifications  = new Notifications(request);
+		Authentication authentication = new Authentication(request, response);
 
-		if (session.getAttribute(Config.USER_SESSION_KEY) == null) {
-			notificationHelper.error(Language.ERROR_ACCESS_USER);
-			response.sendRedirect(ERROR_REDIRECT);
+		if (!authentication.isAuthenticated()) {
+			notifications.warning(Language.ERROR_ACCESS_USER);
+			authentication.redirect("profile");
 			return;
 		}
 
-		request.setAttribute("user", session.getAttribute(Config.USER_SESSION_KEY));
+		OrderDAO orderDAO = new MysqlOrderDAO(new PrimaryDatabase());
+		request.setAttribute("user", authentication.getUser());
+		request.setAttribute("orders", orderDAO.get(authentication.getUser()));
+
 		request.getRequestDispatcher(PROFILE_JSP).forward(request, response);
 	}
 
@@ -54,7 +59,8 @@ public class ProfileServlet extends HttpServlet
 	 * @param request  The request.
 	 * @param response The response.
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+																						   IOException
 	{
 		doGet(request, response);
 	}

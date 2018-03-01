@@ -1,7 +1,6 @@
 package tvestergaard.cupcakes.servlets;
 
 import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.Config;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
@@ -16,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
+import static tvestergaard.cupcakes.Config.USER_SESSION_KEY;
+import static tvestergaard.cupcakes.Function.referer;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet
@@ -83,11 +85,10 @@ public class LoginServlet extends HttpServlet
                 return;
             }
 
-            String referer = request.getParameter("referer");
             HttpSession session = request.getSession();
             notifications.success(SUCCESS_MESSAGE);
-            session.setAttribute(Config.USER_SESSION_KEY, user);
-            response.sendRedirect(referer == null ? "shop" : referer);
+            session.setAttribute(USER_SESSION_KEY, user);
+            response.sendRedirect(referer(request, "shop"));
 
         } catch (Exception e) {
             notifications.error(Language.GENERAL_ERROR);

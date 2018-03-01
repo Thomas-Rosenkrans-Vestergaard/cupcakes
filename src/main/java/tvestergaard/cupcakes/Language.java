@@ -17,6 +17,9 @@ public class Language
     public final static String RECORD_UPDATED_ERROR = "The record could not be updated.";
     public final static String RECORD_DELETED_ERROR = "The record could not be deleted.";
 
+    public static final String LOGOUT_SUCCESS_NOTIFICATION = "You were successfully logged out, have a nice day.";
+    public static final String LOGOUT_ERROR_NOTIFICATION = "You could not be logged out.";
+
     public final static String[] USER_USERNAME_ERRORS = {
             "Username field is required, but was not sent.",
             "Username must be longer than 3 characters.",

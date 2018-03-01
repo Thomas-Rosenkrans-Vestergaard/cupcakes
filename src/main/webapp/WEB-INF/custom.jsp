@@ -16,7 +16,7 @@
                     <option value="${bottom.getId()}"
                             data-name="<c:out value="${bottom.getName()}"/>"
                             data-description="<c:out value="${bottom.getDescription()}"/>"
-                            data-price="<c:out value="${bottom.getPrice()}"/>"
+                            data-price="<c:out value="${bottom.getFormattedPrice()}"/>"
                         ${bottom.getId() == selectedBottom ? 'selected' : ''}
                     >
                         <c:out value="${bottom.getName()}"/>
@@ -51,7 +51,7 @@
                     <option value="${topping.getId()}"
                             data-name="<c:out value="${topping.getName()}"/>"
                             data-description="<c:out value="${topping.getDescription()}"/>"
-                            data-price="<c:out value="${topping.getPrice()}"/>"
+                            data-price="<c:out value="${topping.getFormattedPrice()}"/>"
                         ${topping.getId() == selectedTopping ? 'selected' : ''}
                     ><c:out value="${topping.getName()}"/></option>
                 </c:forEach>
@@ -68,6 +68,14 @@
                     <p class="custom-preview-price" id="topping-preview-price"></p>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 no-padding">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra ex velit, quis mollis mauris
+                feugiatac. Mauris magna quam, volutpat non nisi a, feugiat mollis turpis. Suspendisse luctus tellus id
+                metus iaculis, non ultrices tellus laoreet. Cras lectus purus, lobortis vel lobortis non, hendrerit quis
+                nisi.</p>
         </div>
     </div>
     <div class="row">
@@ -99,7 +107,7 @@
         $('#bottom-preview-name').text(option.data("name"));
         $('#bottom-preview-description').text(option.data("description"));
         $('#bottom-preview-price').text(option.data("price"));
-        $("#bottom-preview-container").show(800);
+        $("#bottom-preview-container").show(300);
 
         bottom_price = parseInt(option.data("price"));
         current_total = bottom_price + topping_price;
@@ -112,7 +120,7 @@
         $('#topping-preview-name').text(option.data("name"));
         $('#topping-preview-description').text(option.data("description"));
         $('#topping-preview-price').text(option.data("price"));
-        $("#topping-preview-container").show(800);
+        $("#topping-preview-container").show(300);
 
         topping_price = parseInt(option.data("price"));
         current_total = bottom_price + topping_price;

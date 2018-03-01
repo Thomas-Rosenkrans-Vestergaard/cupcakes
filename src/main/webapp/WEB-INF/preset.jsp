@@ -3,5 +3,5 @@
 <img src="images/presets/${preset.getId()}.jpg" alt="${preset.getName()}">
 <h2><c:out value="${bottom.getName()}"/></h2>
 <p><c:out value="${bottom.getDescription()}"/></p>
-<p>$<c:out value="${bottom.getPrice()}"/></p>
+<p>$<c:out value="${bottom.getFormattedPrice()}"/></p>
 <%@ include file="includes/footer.jspf" %>
