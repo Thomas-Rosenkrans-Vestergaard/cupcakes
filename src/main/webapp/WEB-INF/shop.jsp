@@ -54,23 +54,12 @@
                 <c:when test="${not empty presets}">
                     <c:forEach items="${presets}" var="preset">
                         <div class="col s4 shop-item">
-                            <a href="preset?id=${preset.getId()}">
-                                <img class="shop-item-image" src="images/presets/${preset.getId()}.jpg"
-                                     alt="${preset.getName()}">
-                            </a>
-                            <div class="shop-item-details">
-                                <h2 class="shop-item-name"><c:out value="${preset.getName()}"/></h2>
-                                <p class="shop-item-description"><c:out value="${preset.getDescription()}"/></p>
-                                <p class="shop-item-price price">$<c:out value="${preset.getFormattedPrice()}"/></p>
-                                <form action="cart" method="post">
-                                    <input type="hidden" name="bottom" value="${preset.getBottom().getId()}">
-                                    <input type="hidden" name="topping" value="${preset.getTopping().getId()}">
-                                    <div class="row">
-                                        <input type="hidden" name="amount" min="1" value="1" required>
-                                        <input class="button-submit btn" type="submit" value="Add to cart">
-                                    </div>
-                                </form>
-                            </div>
+                                <div class="shop-item-details">
+                                    <h2 class="shop-item-name"><c:out value="${preset.getName()}"/></h2>
+                                    <p class="shop-item-description"><c:out value="${preset.getDescription()}"/></p>
+                                    <p class="shop-item-price price">$<c:out value="${preset.getFormattedPrice()}"/></p>
+                                </div>
+                            <a href="preset?id=${preset.getId()}" class="btn red">MORE</a>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -92,27 +81,12 @@
             <c:when test="${not empty bottoms}">
                 <c:forEach items="${bottoms}" var="bottom">
                     <div class="col s4 shop-item">
-                        <a href="bottom?id=${bottom.getId()}">
-                            <img class="shop-item-image" src="images/bottoms/${bottom.getId()}.jpg"
-                                 alt="${bottom.getName()}">
-                        </a>
-                        <div class="shop-item-details">
-                            <h2 class="shop-item-name"><c:out value="${bottom.getName()}"/></h2>
-                            <p class="shop-item-description"><c:out value="${bottom.getDescription()}"/></p>
-                            <p class="shop-item-price price">$<c:out value="${bottom.getFormattedPrice()}"/></p>
-                            <div class="row">
-                                <div class="col s6 no-padding">
-                                    <form action="custom" method="get">
-                                        <input type="hidden" name="bottom" value="${bottom.getId()}">
-                                        <input class="button-submit btn" type="submit" value="Customize">
-                                    </form>
-                                </div>
-                               <!-- <div class="col s6 no-padding">
-                                    <img class="shop-item-image" src="images/bottoms/${bottom.getId()}.jpg" alt="">
-                                    <button class="btn red">Image</button>
-                                </div>-->
+                            <div class="shop-item-details">
+                                <h2 class="shop-item-name"><c:out value="${bottom.getName()}"/></h2>
+                                <p class="shop-item-description"><c:out value="${bottom.getDescription()}"/></p>
+                                <p class="shop-item-price price">$<c:out value="${bottom.getFormattedPrice()}"/></p>
                             </div>
-                        </div>
+                        <a href="bottom?id=${bottom.getId()}" class="btn red">MORE</a>
                     </div>
                 </c:forEach>
             </c:when>
@@ -136,19 +110,12 @@
                 <c:forEach items="${toppings}" var="topping">
 
                     <div class="col s4 shop-item">
-                        <a href="topping?id=${topping.getId()}">
-                            <img class="shop-item-image" src="images/toppings/${topping.getId()}.jpg"
-                                 alt="${topping.getName()}">
-                        </a>
-                        <div class="shop-item-details">
-                            <h2 class="shop-item-name"><c:out value="${topping.getName()}"/></h2>
-                            <p class="shop-item-description"><c:out value="${topping.getDescription()}"/></p>
-                            <p class="shop-item-price price">$<c:out value="${topping.getFormattedPrice()}"/></p>
-                            <form action="custom" method="get">
-                                <input type="hidden" name="topping" value="${topping.getId()}">
-                                <input class="button-submit btn" type="submit" value="Customize">
-                            </form>
-                        </div>
+                            <div class="shop-item-details">
+                                <h2 class="shop-item-name"><c:out value="${topping.getName()}"/></h2>
+                                <p class="shop-item-description"><c:out value="${topping.getDescription()}"/></p>
+                                <p class="shop-item-price price">$<c:out value="${topping.getFormattedPrice()}"/></p>
+                            </div>
+                        <a href="topping?id=${topping.getId()}" class="btn red">MORE</a>
                     </div>
                 </c:forEach>
             </c:when>
