@@ -4,131 +4,154 @@ import tvestergaard.cupcakes.database.bottoms.Bottom;
 import tvestergaard.cupcakes.database.toppings.Topping;
 import tvestergaard.cupcakes.database.users.User;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Order
 {
-	private final int        id;
-	private final User       user;
-	private final int        total;
-	private final String     comment;
-	private final Status     status;
-	private final List<Item> items;
+    private final int        id;
+    private final User       user;
+    private final int        total;
+    private final String     comment;
+    private final Status     status;
+    private final List<Item> items;
 
-	public Order(int id, User user, int total, String comment, Status status, List<Item> items)
-	{
-		this.id = id;
-		this.user = user;
-		this.total = total;
-		this.comment = comment;
-		this.status = status;
-		this.items = items;
-	}
+    public Order(int id, User user, int total, String comment, Status status, List<Item> items)
+    {
+        this.id = id;
+        this.user = user;
+        this.total = total;
+        this.comment = comment;
+        this.status = status;
+        this.items = items;
+    }
 
-	public int getId()
-	{
-		return this.id;
-	}
+    public int getId()
+    {
+        return this.id;
+    }
 
-	public User getUser()
-	{
-		return this.user;
-	}
+    public User getUser()
+    {
+        return this.user;
+    }
 
-	public int getTotal()
-	{
-		return this.total;
-	}
+    public int getTotal()
+    {
+        return this.total;
+    }
 
-	public String getComment()
-	{
-		return this.comment;
-	}
+    public String getFormattedTotal()
+    {
+        int cents = total % 100;
+        int dollars = (total - cents) / 100;
 
-	public Status getStatus()
-	{
-		return this.status;
-	}
+        return dollars + "." + (cents < 9 ? "0" + cents : cents);
+    }
 
-	public List<Item> getItems()
-	{
-		return this.items;
-	}
+    public String getComment()
+    {
+        return this.comment;
+    }
 
-	public enum Status
-	{
-		PLACED(0),
-		READY(1),
-		INACTIVE(2);
+    public Status getStatus()
+    {
+        return this.status;
+    }
 
-		private final int code;
+    public List<Item> getItems()
+    {
+        return this.items;
+    }
 
-		Status(int code)
-		{
-			this.code = code;
-		}
+    public enum Status
+    {
+        PLACED(0),
+        READY(1),
+        INACTIVE(2);
 
-		public int getCode()
-		{
-			return this.code;
-		}
+        private final int code;
 
-		private static Status[] statuses = Status.values();
+        Status(int code)
+        {
+            this.code = code;
+        }
 
-		public static Status fromCode(int code)
-		{
-			return statuses[code];
-		}
-	}
+        public int getCode()
+        {
+            return this.code;
+        }
 
-	public static class Item
-	{
-		private final int     id;
-		private final Bottom  bottom;
-		private final Topping topping;
-		private final int     amount;
-		private final int     unitPrice;
-		private final int     totalPrice;
+        private static Status[] statuses = Status.values();
 
-		public Item(int id, Bottom bottom, Topping topping, int amount, int unitPrice, int totalPrice)
-		{
-			this.id = id;
-			this.bottom = bottom;
-			this.topping = topping;
-			this.amount = amount;
-			this.unitPrice = unitPrice;
-			this.totalPrice = totalPrice;
-		}
+        public static Status fromCode(int code)
+        {
+            return statuses[code];
+        }
+    }
 
-		public int getId()
-		{
-			return this.id;
-		}
+    public static class Item
+    {
+        private final int     id;
+        private final Bottom  bottom;
+        private final Topping topping;
+        private final int     amount;
+        private final int     unitPrice;
+        private final int     totalPrice;
 
-		public Bottom getBottom()
-		{
-			return this.bottom;
-		}
+        public Item(int id, Bottom bottom, Topping topping, int amount, int unitPrice, int totalPrice)
+        {
+            this.id = id;
+            this.bottom = bottom;
+            this.topping = topping;
+            this.amount = amount;
+            this.unitPrice = unitPrice;
+            this.totalPrice = totalPrice;
+        }
 
-		public Topping getTopping()
-		{
-			return this.topping;
-		}
+        public int getId()
+        {
+            return this.id;
+        }
 
-		public int getAmount()
-		{
-			return this.amount;
-		}
+        public Bottom getBottom()
+        {
+            return this.bottom;
+        }
 
-		public int getUnitPrice()
-		{
-			return this.unitPrice;
-		}
+        public Topping getTopping()
+        {
+            return this.topping;
+        }
 
-		public int getTotalPrice()
-		{
-			return this.totalPrice;
-		}
-	}
+        public int getAmount()
+        {
+            return this.amount;
+        }
+
+        public int getUnitPrice()
+        {
+            return this.unitPrice;
+        }
+
+        public String getFormattedUnitPrice()
+        {
+            int cents = unitPrice % 100;
+            int dollars = (unitPrice - cents) / 100;
+
+            return dollars + "." + (cents < 9 ? "0" + cents : cents);
+        }
+
+        public int getTotalPrice()
+        {
+            return this.totalPrice;
+        }
+
+        public String getFormattedTotalPrice()
+        {
+            int cents = totalPrice % 100;
+            int dollars = (totalPrice - cents) / 100;
+
+            return dollars + "." + (cents < 9 ? "0" + cents : cents);
+        }
+    }
 }

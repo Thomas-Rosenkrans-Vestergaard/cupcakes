@@ -26,14 +26,12 @@ public class Parameters
     {
         String value = request.getParameter(parameter);
 
-        return value == null && value.length() < 1;
+        return value == null || value.length() < 1;
     }
 
     public boolean notEmpty(String parameter)
     {
-        String value = request.getParameter(parameter);
-
-        return value != null && value.length() > 0;
+        return !isEmpty(parameter);
     }
 
     public boolean isInt(String parameter)

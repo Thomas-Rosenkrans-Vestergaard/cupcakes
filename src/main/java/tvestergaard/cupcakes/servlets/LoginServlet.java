@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet
 
             if (user == null || !BCrypt.checkpw(request.getParameter(PASSWORD_FIELD), user.getPassword())) {
                 notifications.warning(LOGIN_ERROR);
-                response.sendRedirect(REDIRECT_ON_ERROR);
+                response.sendRedirect(getRedirectOnError(request));
                 return;
             }
 
@@ -95,5 +95,12 @@ public class LoginServlet extends HttpServlet
             response.sendRedirect(REDIRECT_ON_ERROR);
             return;
         }
+    }
+
+    private String getRedirectOnError(HttpServletRequest request)
+    {
+        String query = request.getQueryString();
+
+        return REDIRECT_ON_ERROR + (query.isEmpty() ? query : "?" + query);
     }
 }

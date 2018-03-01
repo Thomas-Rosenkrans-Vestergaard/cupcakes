@@ -1,5 +1,7 @@
 package tvestergaard.cupcakes.database.bottoms;
 
+import java.util.Objects;
+
 public final class Bottom
 {
 
@@ -42,5 +44,18 @@ public final class Bottom
         int dollars = (price - cents) / 100;
 
         return dollars + "." + (cents < 9 ? "0" + cents : cents);
+    }
+
+    @Override public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof Bottom)) return false;
+        Bottom bottom = (Bottom) o;
+        return id == bottom.id;
+    }
+
+    @Override public int hashCode()
+    {
+        return Objects.hash(id);
     }
 }
