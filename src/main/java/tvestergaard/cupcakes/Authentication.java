@@ -12,15 +12,22 @@ import java.net.URLEncoder;
 public class Authentication
 {
 
-    private HttpServletRequest  request;
-    private HttpServletResponse response;
-    private HttpSession         session;
+    private final String              path;
+    private final HttpServletRequest  request;
+    private final HttpServletResponse response;
+    private final HttpSession         session;
 
     public Authentication(HttpServletRequest request, HttpServletResponse response)
+    {
+        this(request, response, "");
+    }
+
+    public Authentication(HttpServletRequest request, HttpServletResponse response, String path)
     {
         this.request = request;
         this.session = request.getSession();
         this.response = response;
+        this.path = path;
     }
 
     public void logout()
@@ -33,7 +40,7 @@ public class Authentication
      */
     public void redirect(String referer) throws ServletException, IOException
     {
-        response.sendRedirect("login?referer=" + URLEncoder.encode(referer, "UTF-8"));
+        response.sendRedirect(path + "login?referer=" + URLEncoder.encode(referer, "UTF-8"));
     }
 
     public User getUser()
@@ -48,7 +55,9 @@ public class Authentication
 
     public boolean is(User.Role role)
     {
-        return getUser().getRole().code >= role.code;
+        User user = getUser();
+
+        return user != null && user.getRole().code >= role.code;
     }
 
     public boolean isAdministrator()

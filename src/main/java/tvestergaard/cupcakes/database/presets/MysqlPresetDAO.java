@@ -11,9 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MysqlPresetsDAO extends AbstractMysqlDAO implements PresetsDAO
+public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
 {
-	public MysqlPresetsDAO(MysqlDataSource source)
+	public MysqlPresetDAO(MysqlDataSource source)
 	{
 		super(source);
 	}

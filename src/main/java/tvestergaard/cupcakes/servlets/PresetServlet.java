@@ -3,9 +3,9 @@ package tvestergaard.cupcakes.servlets;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.presets.MysqlPresetsDAO;
+import tvestergaard.cupcakes.database.presets.MysqlPresetDAO;
 import tvestergaard.cupcakes.database.presets.Preset;
-import tvestergaard.cupcakes.database.presets.PresetsDAO;
+import tvestergaard.cupcakes.database.presets.PresetDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,7 +50,7 @@ public class PresetServlet extends HttpServlet
         }
 
         try {
-            PresetsDAO presetsDAO = new MysqlPresetsDAO(new PrimaryDatabase());
+            PresetDAO presetsDAO = new MysqlPresetDAO(new PrimaryDatabase());
             int        id         = Integer.parseInt(request.getParameter(ID_PARAMETER));
             Preset     preset     = presetsDAO.get(id);
 

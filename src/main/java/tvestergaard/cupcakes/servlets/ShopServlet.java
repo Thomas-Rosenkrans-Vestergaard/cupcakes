@@ -3,7 +3,7 @@ package tvestergaard.cupcakes.servlets;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.bottoms.MysqlBottomDAO;
-import tvestergaard.cupcakes.database.presets.MysqlPresetsDAO;
+import tvestergaard.cupcakes.database.presets.MysqlPresetDAO;
 import tvestergaard.cupcakes.database.toppings.MysqlToppingDAO;
 
 import javax.servlet.ServletException;
@@ -28,7 +28,7 @@ public class ShopServlet extends HttpServlet
         new Notifications(request);
 
         PrimaryDatabase source = new PrimaryDatabase();
-        MysqlPresetsDAO presetsDAO = new MysqlPresetsDAO(source);
+        MysqlPresetDAO presetsDAO = new MysqlPresetDAO(source);
         MysqlBottomDAO bottomDAO = new MysqlBottomDAO(source);
         MysqlToppingDAO toppingDAO = new MysqlToppingDAO(source);
 

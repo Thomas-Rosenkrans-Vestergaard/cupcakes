@@ -12,7 +12,6 @@
           <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
           <option name="ALIGN_MULTILINE_ASSIGNMENT" value="true" />
           <option name="ALIGN_MULTILINE_TERNARY_OPERATION" value="true" />
-          <option name="ALIGN_MULTILINE_METHOD_BRACKETS" value="true" />
           <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
           <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
           <option name="METHOD_ANNOTATION_WRAP" value="0" />

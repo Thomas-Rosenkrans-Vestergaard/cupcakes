@@ -2,7 +2,7 @@ package tvestergaard.cupcakes.database.presets;
 
 import java.util.List;
 
-public interface PresetsDAO
+public interface PresetDAO
 {
 	Preset get(int id);
 

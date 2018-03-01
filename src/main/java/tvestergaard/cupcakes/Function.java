@@ -7,18 +7,18 @@ import java.io.IOException;
 public class Function
 {
 
-	public static void redirect(HttpServletResponse response, String location) throws IOException
-	{
-		response.sendRedirect(location);
-	}
+    public static void redirect(HttpServletResponse response, String location) throws IOException
+    {
+        response.sendRedirect(location);
+    }
 
-	public static String referer(HttpServletRequest request, String or)
-	{
-		String referer = request.getParameter("referer");
+    public static String referer(HttpServletRequest request, String or)
+    {
+        String referer = request.getParameter("referer");
 
-		if (referer == null || referer.isEmpty())
-			return or;
+        if (referer == null || referer.isEmpty())
+            return or;
 
-		return referer;
-	}
+        return referer;
+    }
 }
