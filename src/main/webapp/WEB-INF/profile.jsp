@@ -87,7 +87,7 @@
                             <tr class="">
                                 <td><c:out value="${order.getId()}"/></td>
                                 <td><c:out value="${order.getComment()}"/></td>
-                                <td><c:out value="${order.getTotal()}"/></td>
+                                <td class="price">$<c:out value="${order.getFormattedTotal()}"/></td>
                                 <td><c:out value="${order.getStatus()}"/></td>
                             </tr>
                             <tr class="order-items-row">
@@ -110,8 +110,8 @@
                                                 <td><c:out value="${item.getBottom().getName()}"/></td>
                                                 <td><c:out value="${item.getTopping().getName()}"/></td>
                                                 <td><c:out value="${item.getAmount()}"/></td>
-                                                <td><c:out value="${item.getUnitPrice()}"/></td>
-                                                <td><c:out value="${item.getTotalPrice()}"/></td>
+                                                <td class="price">$<c:out value="${item.getFormattedUnitPrice()}"/></td>
+                                                <td class="price">$<c:out value="${item.getFormattedTotalPrice()}"/></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>

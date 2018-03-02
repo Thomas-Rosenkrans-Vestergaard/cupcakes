@@ -9,7 +9,7 @@
         velit ante, efficitur vitae dapibus et, pretium at nisl. Fusce fringilla ligula purus, nec semper mi maximus
         lacinia. </p>
 
-    <p>You currently have <span class="price">$${user.getBalance()}</span> in funds.</p>
+    <p>You currently have <span class="price">$${user.getFormattedBalance()}</span> in funds.</p>
 </div>
 <div class="row">
     <h2>Add funds</h2>

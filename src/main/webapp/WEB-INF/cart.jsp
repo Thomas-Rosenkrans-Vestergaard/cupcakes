@@ -27,7 +27,7 @@
                         <td><c:out value="${item.getBottom().getName()}"/></td>
                         <td><c:out value="${item.getTopping().getName()}"/></td>
                         <td><c:out value="${item.getAmount()}"/></td>
-                        <td><c:out value="${item.getFormattedTotalPrice()}"/></td>
+                        <td class="price">$<c:out value="${item.getFormattedTotalPrice()}"/></td>
                     </tr>
                 </c:forEach>
                 </tbody>
