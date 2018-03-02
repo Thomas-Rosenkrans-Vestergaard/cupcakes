@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="includes/header.jspf" %>
-<form class="main" method="post">
+<form class="main" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="input-field col s12">
             <input name="name" id="name" type="text" class="validate" required>

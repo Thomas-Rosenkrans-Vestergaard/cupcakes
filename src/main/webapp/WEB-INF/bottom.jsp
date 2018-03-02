@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ include file="includes/header.jspf" %>
-<img src="images/presets/${bottom.getId()}.jpg" alt="${bottom.getName()}">
+<img src="images/bottoms/${bottom.getId()}.jpg" alt="${bottom.getName()}">
 <h2><c:out value="${bottom.getName()}"/></h2>
 <p><c:out value="${bottom.getDescription()}"/></p>
-<p>$<c:out value="${bottom.getFormattedPrice()}"/></p>
+<p class="price">$<c:out value="${bottom.getFormattedPrice()}"/></p>
 <%@ include file="includes/footer.jspf" %>

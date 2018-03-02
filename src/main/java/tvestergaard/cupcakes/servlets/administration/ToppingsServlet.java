@@ -59,7 +59,7 @@ public class ToppingsServlet extends HttpServlet
 
         ToppingDAO toppingsDAO = new MysqlToppingDAO(new PrimaryDatabase());
         request.setAttribute(PAGE, toppingsDAO.get());
-        request.getRequestDispatcher("/WEB-INF/administration/toppings.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/administration/read_toppings.jsp").forward(request, response);
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response, Notifications notifications) throws ServletException, IOException

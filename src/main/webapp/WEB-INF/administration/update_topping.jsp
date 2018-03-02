@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="includes/header.jspf" %>
-<form class="main" method="post">
+<form class="main" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="input-field col s12">
             <input name="name" id="name" type="text" class="validate" value="${topping.getName()}" required>
@@ -19,6 +19,12 @@
         <div class="input-field col s12">
             <input name="price" id="price" type="number" class="validate" value="${topping.getPrice()}" required>
             <label for="price">Price</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <input name="image" id="image" type="file" accept="image/*" class="validate">
+            <label for="image">Image</label>
         </div>
     </div>
     <div class="row">

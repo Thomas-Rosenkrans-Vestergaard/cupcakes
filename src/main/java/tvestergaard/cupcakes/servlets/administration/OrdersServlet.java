@@ -33,7 +33,7 @@ public class OrdersServlet extends HttpServlet
 
         OrderDAO ordersDAO = new MysqlOrderDAO(new PrimaryDatabase());
         request.setAttribute("orders", ordersDAO.get());
-        request.getRequestDispatcher("/WEB-INF/administration/orders.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/administration/read_orders.jsp").forward(request, response);
     }
 
     @Override protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

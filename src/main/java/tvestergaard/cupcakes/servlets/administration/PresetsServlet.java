@@ -66,7 +66,7 @@ public class PresetsServlet extends HttpServlet
 
         PresetDAO presetsDAO = new MysqlPresetDAO(new PrimaryDatabase());
         request.setAttribute(PAGE, presetsDAO.get());
-        request.getRequestDispatcher("/WEB-INF/administration/presets.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/administration/read_presets.jsp").forward(request, response);
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response, Notifications notifications) throws ServletException, IOException

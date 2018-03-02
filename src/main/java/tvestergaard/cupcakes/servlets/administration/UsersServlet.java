@@ -28,7 +28,7 @@ public class UsersServlet extends HttpServlet
     private static final String ACTION_NEW             = "new";
     private static final String ACTION_EDIT            = "update";
     private static final String ACTION_DELETE          = "delete";
-    private static final String USERS_JSP              = "/WEB-INF/administration/users.jsp";
+    private static final String USERS_JSP              = "/WEB-INF/administration/read_users.jsp";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {

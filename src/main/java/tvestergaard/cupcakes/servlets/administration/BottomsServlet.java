@@ -59,7 +59,7 @@ public class BottomsServlet extends HttpServlet
 
         BottomDAO bottomsDAO = new MysqlBottomDAO(new PrimaryDatabase());
         request.setAttribute(PAGE, bottomsDAO.get());
-        request.getRequestDispatcher("/WEB-INF/administration/bottoms.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/administration/read_bottoms.jsp").forward(request, response);
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response, Notifications notifications) throws ServletException, IOException
