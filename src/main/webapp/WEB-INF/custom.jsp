@@ -32,7 +32,7 @@
                 <div class="col s8">
                     <h3 class="custom-preview-name" id="bottom-preview-name"></h3>
                     <p class="custom-preview-description" id="bottom-preview-description"></p>
-                    <p class="custom-preview-price" id="bottom-preview-price"></p>
+                    <p class="custom-preview-price price" id="bottom-preview-price"></p>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                 <div class="col s8">
                     <h3 class="custom-preview-name" id="topping-preview-name"></h3>
                     <p class="custom-preview-description" id="topping-preview-description"></p>
-                    <p class="custom-preview-price" id="topping-preview-price"></p>
+                    <p class="custom-preview-price price" id="topping-preview-price"></p>
                 </div>
             </div>
         </div>
@@ -84,8 +84,8 @@
     </div>
     <div class="row">
         <input class="button-submit btn-large place-custom-order-submit" type="submit" value="Add to cart"> <span
-            class="price">Your total is $<span
-            id="custom-total">0</span>.</span>
+            class="price">Your total is <span
+            id="custom-total">$0</span>.</span>
     </div>
 </form>
 <script>
@@ -106,12 +106,12 @@
         $('#bottom-preview-image').attr("src", "images/bottoms/" + option.attr("value") + ".jpg");
         $('#bottom-preview-name').text(option.data("name"));
         $('#bottom-preview-description').text(option.data("description"));
-        $('#bottom-preview-price').text(option.data("price"));
+        $('#bottom-preview-price').text("$" + option.data("price"));
         $("#bottom-preview-container").show(300);
 
         bottom_price = parseInt(option.data("price"));
         current_total = bottom_price + topping_price;
-        $("#custom-total").text(current_total * amount);
+        $("#custom-total").text("$" + (current_total * amount));
     }
 
     function update_selected_topping() {
@@ -119,12 +119,12 @@
         $('#topping-preview-image').attr("src", "images/toppings/" + option.attr("value") + ".jpg");
         $('#topping-preview-name').text(option.data("name"));
         $('#topping-preview-description').text(option.data("description"));
-        $('#topping-preview-price').text(option.data("price"));
+        $('#topping-preview-price').text("$" + option.data("price"));
         $("#topping-preview-container").show(300);
 
         topping_price = parseInt(option.data("price"));
         current_total = bottom_price + topping_price;
-        $("#custom-total").text(current_total * amount);
+        $("#custom-total").text("$" + (current_total * amount));
     }
 
     if (bottom_select.val() != null) {
@@ -137,7 +137,7 @@
 
     $('#amount').on('input', function () {
         amount = $('#amount').val();
-        $("#custom-total").text(current_total * amount);
+        $("#custom-total").text("$" + (current_total * amount));
     });
 
     bottom_select.on('change', function (e) {

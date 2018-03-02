@@ -36,7 +36,7 @@
         <div class="row">
             <div class="col s12 no-padding">
                 <p class="col s12">
-                    The total price of your cart is <span class="price">${cart.getFormattedTotal()}</span>.
+                    The total price of your cart is <span class="price">$${cart.getFormattedTotal()}</span>.
                 </p>
             </div>
         </div>

@@ -8,6 +8,8 @@
         <th>Name</th>
         <th>Description</th>
         <th>Price</th>
+        <th>Image</th>
+        <th>Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +21,13 @@
                     <td><c:out value="${bottom.getName()}"/></td>
                     <td><c:out value="${bottom.getDescription()}"/></td>
                     <td><c:out value="${bottom.getFormattedPrice()}"/></td>
+                    <td class="table-image"><img src="../images/bottoms/${bottom.getId()}.jpg" alt=""></td>
+                    <td>
+                        <form class="main" method="post" action="bottoms?action=delete">
+                            <input name="id" type="hidden" value="${bottom.getId()}">
+                            <input class="button-submit btn" type="submit" value="Delete">
+                        </form>
+                    </td>
                 </tr>
             </c:forEach>
         </c:when>

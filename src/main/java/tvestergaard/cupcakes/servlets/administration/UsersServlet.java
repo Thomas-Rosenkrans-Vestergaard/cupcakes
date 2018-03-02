@@ -133,7 +133,7 @@ public class UsersServlet extends HttpServlet
             validator.role(notifications, Language.USER_TYPE_ERRORS);
 
             if (notifications.hasNew()) {
-                request.getRequestDispatcher("/WEB-INF/administration/newuser.jsp").forward(request, response);
+                request.getRequestDispatcher("/WEB-INF/administration/create_user.jsp").forward(request, response);
                 return;
             }
 
@@ -221,12 +221,12 @@ public class UsersServlet extends HttpServlet
         UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
         List<User> users = userDAO.get();
         request.setAttribute("users", users);
-        request.getRequestDispatcher("/WEB-INF/administration/users.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/administration/read_users.jsp").forward(request, response);
     }
 
     private void showNew(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        request.getRequestDispatcher("/WEB-INF/administration/newuser.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/administration/create_user.jsp").forward(request, response);
     }
 
     private void showUser(
@@ -247,7 +247,7 @@ public class UsersServlet extends HttpServlet
             }
 
             request.setAttribute("user", user);
-            request.getRequestDispatcher("/WEB-INF/administration/user.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/administration/update_user.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
             notifications.error("Malformed parameter id.");

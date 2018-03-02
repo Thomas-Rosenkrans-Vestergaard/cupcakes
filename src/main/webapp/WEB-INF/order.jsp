@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col s12 no-padding">
                 <p class="col s12">
-                    The total cost of the order is <span class="price">${cart.getTotal()}</span>.
+                    The total cost of the order is <span class="price">$${cart.getFormattedTotal()}</span>.
                 </p>
             </div>
         </div>

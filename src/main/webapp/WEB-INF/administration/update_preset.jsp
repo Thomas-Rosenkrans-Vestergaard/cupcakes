@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="includes/header.jspf" %>
 <form class="main" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="${preset.getId()}">
     <div class="row">
         <div class="input-field col s12">
             <input name="name" id="name" type="text" class="validate" value="${preset.getName()}" required>
@@ -45,18 +46,20 @@
         $("#bottom-select").material_select();
         $("#topping-select").material_select();
     </script>
+    <img src="../images/presets/${preset.getId()}.jpg" alt="">
     <div class="row">
-        <div class="input-field col s12">
-            <input name="image" id="image" type="file" accept="image/*" class="validate">
-            <label for="image">Image</label>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Image</span>
+                <input name="image" id="image" type="file" accept="image/jpg," class="validate">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
         </div>
     </div>
     <div class="row">
         <input class="button-submit btn-large" type="submit" value="Create">
     </div>
-</form>
-<form class="main" method="post" action="presets?action=delete">
-    <input name="id" type="hidden" value="${preset.getId()}">
-    <input class="button-submit btn-large" type="submit" value="Delete">
 </form>
 <%@ include file="includes/footer.jspf" %>

@@ -8,6 +8,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Price</th>
+        <th>Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +20,13 @@
                     <td><c:out value="${topping.getName()}"/></td>
                     <td><c:out value="${topping.getDescription()}"/></td>
                     <td><c:out value="${topping.getFormattedPrice()}"/></td>
+                    <td class="table-image"><img src="../images/toppings/${topping.getId()}.jpg" alt=""></td>
+                    <td>
+                        <form class="main" method="post" action="toppings?action=delete">
+                            <input name="id" type="hidden" value="${topping.getId()}">
+                            <input class="button-submit btn" type="submit" value="Delete">
+                        </form>
+                    </td>
                 </tr>
             </c:forEach>
         </c:when>

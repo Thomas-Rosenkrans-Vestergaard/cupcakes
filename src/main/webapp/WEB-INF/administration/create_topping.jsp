@@ -10,7 +10,8 @@
     </div>
     <div class="row">
         <div class="col s12 input-field no-padding">
-            <textarea class="materialize-textarea" name="description" id="description" cols="30" rows="10" minlength="1" required></textarea>
+            <textarea class="materialize-textarea" name="description" id="description" cols="30" rows="10" minlength="1"
+                      required></textarea>
             <label for="description">Description</label>
         </div>
     </div>
@@ -18,6 +19,17 @@
         <div class="input-field col s12">
             <input name="price" id="price" type="number" class="validate" required>
             <label for="price">Price</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Image</span>
+                <input name="image" id="image" type="file" accept="image/jpg," class="validate" required>
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
         </div>
     </div>
     <div class="row">

@@ -20,3 +20,8 @@ form.main {
 a.add-record {
     margin: 20px;
 }
+
+.table-image img {
+    max-height: 100px;
+    max-width: 100px;
+}

@@ -146,7 +146,7 @@ public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
                 statement.setString(2, description);
                 statement.setInt(3, bottom.getId());
                 statement.setInt(4, topping.getId());
-                statement.setInt(4, id);
+                statement.setInt(5, id);
 
                 statement.executeUpdate();
                 connection.commit();

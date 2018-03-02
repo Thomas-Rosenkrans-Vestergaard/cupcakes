@@ -40,7 +40,7 @@
                         <h4>Balance</h4>
                     </div>
                     <div class="col s6 no-padding">
-                        <p>$<c:out value="${user.getBalance()}"/></p>
+                        <p class="price">$<c:out value="${user.getFormattedBalance()}"/></p>
                     </div>
                 </li>
                 <li class="collection-item row">

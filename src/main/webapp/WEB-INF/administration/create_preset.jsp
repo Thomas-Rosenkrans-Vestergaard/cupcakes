@@ -40,9 +40,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="input-field col s12">
-            <input name="image" id="image" type="file" accept="image/*" class="validate" required>
-            <label for="image">Image</label>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Image</span>
+                <input name="image" id="image" type="file" accept="image/jpg," class="validate" required>
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
         </div>
     </div>
     <script>

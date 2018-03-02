@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="includes/header.jspf" %>
 <form class="main" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="${bottom.getId()}">
     <div class="row">
         <div class="input-field col s12">
             <input name="name" id="name" type="text" class="validate" value="${bottom.getName()}" required>
@@ -21,18 +22,20 @@
             <label for="price">Price</label>
         </div>
     </div>
+    <img src="../images/bottoms/${bottom.getId()}.jpg" alt="">
     <div class="row">
-        <div class="input-field col s12">
-            <input name="image" id="image" type="file" accept="image/*" class="validate">
-            <label for="image">Image</label>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Image</span>
+                <input name="image" id="image" type="file" accept="image/jpg," class="validate">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
         </div>
     </div>
     <div class="row">
         <input class="button-submit btn-large" type="submit" value="Update">
     </div>
-</form>
-<form class="main" method="post" action="bottoms?action=delete">
-    <input name="id" type="hidden" value="${bottom.getId()}">
-    <input class="button-submit btn-large" type="submit" value="Delete">
 </form>
 <%@ include file="includes/footer.jspf" %>

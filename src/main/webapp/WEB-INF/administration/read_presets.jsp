@@ -23,6 +23,13 @@
                     <td><c:out value="${preset.getBottom().getName()}"/></td>
                     <td><c:out value="${preset.getTopping().getName()}"/></td>
                     <td><c:out value="${preset.getFormattedPrice()}"/></td>
+                    <td class="table-image"><img src="../images/presets/${preset.getId()}.jpg" alt=""></td>
+                    <td>
+                        <form class="main" method="post" action="presets?action=delete">
+                            <input name="id" type="hidden" value="${preset.getId()}">
+                            <input class="button-submit btn" type="submit" value="Delete">
+                        </form>
+                    </td>
                 </tr>
             </c:forEach>
         </c:when>
