@@ -12,66 +12,71 @@ import java.net.URLEncoder;
 public class Authentication
 {
 
-    private final String              path;
-    private final HttpServletRequest  request;
-    private final HttpServletResponse response;
-    private final HttpSession         session;
+	private final String              path;
+	private final HttpServletRequest  request;
+	private final HttpServletResponse response;
+	private final HttpSession         session;
 
-    public Authentication(HttpServletRequest request, HttpServletResponse response)
-    {
-        this(request, response, "");
-    }
+	public Authentication(HttpServletRequest request, HttpServletResponse response)
+	{
+		this(request, response, "");
+	}
 
-    public Authentication(HttpServletRequest request, HttpServletResponse response, String path)
-    {
-        this.request = request;
-        this.session = request.getSession();
-        this.response = response;
-        this.path = path;
-    }
+	public Authentication(HttpServletRequest request, HttpServletResponse response, String path)
+	{
+		this.request = request;
+		this.session = request.getSession();
+		this.response = response;
+		this.path = path;
+	}
 
-    public void logout()
-    {
-        session.setAttribute(Config.USER_SESSION_KEY, null);
-    }
+	public void updateUser(User user)
+	{
+		session.setAttribute(Config.USER_SESSION_KEY, user);
+	}
 
-    /**
-     * Redirects the user to the login page.
-     */
-    public void redirect(String referer) throws ServletException, IOException
-    {
-        response.sendRedirect(path + "login?referer=" + URLEncoder.encode(referer, "UTF-8"));
-    }
+	public void logout()
+	{
+		session.setAttribute(Config.USER_SESSION_KEY, null);
+	}
 
-    public User getUser()
-    {
-        return (User) session.getAttribute(Config.USER_SESSION_KEY);
-    }
+	/**
+	 * Redirects the user to the login page.
+	 */
+	public void redirect(String referer) throws ServletException, IOException
+	{
+		response.sendRedirect(path + "login?referer=" + URLEncoder.encode(referer, "UTF-8"));
+	}
 
-    public boolean isAuthenticated()
-    {
-        return session.getAttribute(Config.USER_SESSION_KEY) != null;
-    }
+	public User getUser()
+	{
+		return (User) session.getAttribute(Config.USER_SESSION_KEY);
+	}
 
-    public boolean is(User.Role role)
-    {
-        User user = getUser();
+	public boolean isAuthenticated()
+	{
+		return session.getAttribute(Config.USER_SESSION_KEY) != null;
+	}
 
-        return user != null && user.getRole().code >= role.code;
-    }
+	public boolean is(User.Role role)
+	{
+		User user = getUser();
 
-    public boolean isAdministrator()
-    {
-        return is(User.Role.ADMINISTRATOR);
-    }
+		return user != null && user.getRole().code >= role.code;
+	}
 
-    public boolean isUser()
-    {
-        return is(User.Role.USER);
-    }
+	public boolean isAdministrator()
+	{
+		return is(User.Role.ADMINISTRATOR);
+	}
 
-    public boolean isOwner()
-    {
-        return is(User.Role.OWNER);
-    }
+	public boolean isUser()
+	{
+		return is(User.Role.USER);
+	}
+
+	public boolean isOwner()
+	{
+		return is(User.Role.OWNER);
+	}
 }
