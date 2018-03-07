@@ -24,7 +24,8 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 	{
 		try {
 
-			String sql = "SELECT * FROM orders INNER JOIN order_items ON `orders`.id = `order` " +
+			String sql = "SELECT * FROM orders " +
+                         "INNER JOIN order_items ON `orders`.id = `order` " +
 						 "INNER JOIN users ON `user` = users.id " +
 						 "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
 						 "INNER JOIN toppings ON toppings.id = order_items.topping " +
@@ -73,6 +74,7 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 
 		int currentOrder = resultSet.getInt("orders.id");
 		items.add(createItem(resultSet));
+
 		while (resultSet.next()) {
 			if (resultSet.getInt("orders.id") == currentOrder)
 				items.add(createItem(resultSet));
@@ -163,7 +165,7 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 			int currentId = results.getInt("orders.id");
 			orders.add(createOrder(results));
 			while (results.next()) {
-				if (currentId != results.getInt("orders.id")) {
+			if (currentId != results.getInt("orders.id")) {
 					currentId = results.getInt("orders.id");
 					orders.add(createOrder(results));
 				}
