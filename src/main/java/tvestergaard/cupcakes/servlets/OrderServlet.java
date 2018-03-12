@@ -3,7 +3,7 @@ package tvestergaard.cupcakes.servlets;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import tvestergaard.cupcakes.Authentication;
-import tvestergaard.cupcakes.Cart;
+import tvestergaard.cupcakes.ShoppingCart;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
@@ -21,94 +21,94 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "OrderServlet",
-			urlPatterns = "/order")
+        urlPatterns = "/order")
 public class OrderServlet extends HttpServlet
 {
 
-	/**
-	 * Serves the /order page where users can see information about and confirm their order.
-	 *
-	 * @param request  The request.
-	 * @param response The response.
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		Authentication authentication = new Authentication(request, response);
-		Notifications  notifications  = new Notifications(request);
-		Cart           cart           = new Cart(request);
+    /**
+     * Serves the /order page where users can see information about and confirm their order.
+     *
+     * @param request  The request.
+     * @param response The response.
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        Authentication authentication = new Authentication(request, response);
+        Notifications  notifications  = new Notifications(request);
+        ShoppingCart   shoppingCart   = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
 
-		if (!authentication.isAuthenticated()) {
-			notifications.error(Language.ERROR_ACCESS_USER);
-			response.sendRedirect("login");
-			return;
-		}
+        if (!authentication.isAuthenticated()) {
+            notifications.error(Language.ERROR_ACCESS_USER);
+            response.sendRedirect("login");
+            return;
+        }
 
-		if (cart.size() == 0) {
-			notifications.error("No items is cart.");
-			response.sendRedirect("cart");
-			return;
-		}
+        if (shoppingCart.size() == 0) {
+            notifications.error("No items is shoppingCart.");
+            response.sendRedirect("shoppingCart");
+            return;
+        }
 
-		request.setAttribute("user", authentication.getUser());
-		request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
-	}
+        request.setAttribute("user", authentication.getUser());
+        request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
+    }
 
-	/**
-	 * Serves the /preset page where users can see information about the preset with the provided id.
-	 *
-	 * @param request  The request.
-	 * @param response The response.
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-																						   IOException
-	{
-		Authentication authentication = new Authentication(request, response);
-		Notifications  notifications  = new Notifications(request);
-		Cart           cart           = new Cart(request);
+    /**
+     * Serves the /preset page where users can see information about the preset with the provided id.
+     *
+     * @param request  The request.
+     * @param response The response.
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException
+    {
+        Authentication authentication = new Authentication(request, response);
+        Notifications  notifications  = new Notifications(request);
+        ShoppingCart   shoppingCart   = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
 
-		if (!authentication.isAuthenticated()) {
-			notifications.error(Language.ERROR_ACCESS_USER);
-			response.sendRedirect("login");
-			return;
-		}
+        if (!authentication.isAuthenticated()) {
+            notifications.error(Language.ERROR_ACCESS_USER);
+            response.sendRedirect("login");
+            return;
+        }
 
-		if (cart.size() == 0) {
-			notifications.error("No items is cart.");
-			response.sendRedirect("cart");
-			return;
-		}
+        if (shoppingCart.size() == 0) {
+            notifications.error("No items is shoppingCart.");
+            response.sendRedirect("shoppingCart");
+            return;
+        }
 
-		if (cart.getTotal() > authentication.getUser().getBalance()) {
-			notifications.error("You do not have enough funds.");
-			response.sendRedirect("funds");
-			return;
-		}
+        if (shoppingCart.getTotal() > authentication.getUser().getBalance()) {
+            notifications.error("You do not have enough funds.");
+            response.sendRedirect("funds");
+            return;
+        }
 
-		try {
-			MysqlDataSource source   = new PrimaryDatabase();
-			UserDAO         userDAO  = new MysqlUserDAO(source);
-			OrderDAO        orderDAO = new MysqlOrderDAO(source);
-			orderDAO.create(authentication.getUser(), cart, request.getParameter("comment"));
-			User user = userDAO.find(authentication.getUser().getId());
-			notifications.success("The order was successfully placed.");
-			user = userDAO.update(
-					user.getId(),
-					user.getUsername(),
-					user.getEmail(),
-					user.getPassword(),
-					user.getBalance() - cart.getTotal(),
-					user.getRole()
-			);
+        try {
+            MysqlDataSource source   = new PrimaryDatabase();
+            UserDAO         userDAO  = new MysqlUserDAO(source);
+            OrderDAO        orderDAO = new MysqlOrderDAO(source);
+            orderDAO.create(authentication.getUser(), shoppingCart, request.getParameter("comment"));
+            User user = userDAO.find(authentication.getUser().getId());
+            notifications.success("The order was successfully placed.");
+            user = userDAO.update(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getPassword(),
+                    user.getBalance() - shoppingCart.getTotal(),
+                    user.getRole()
+            );
 
-			authentication.updateUser(user);
-			cart.clear();
+            authentication.updateUser(user);
+            shoppingCart.clear();
 
-			response.sendRedirect("profile");
+            response.sendRedirect("profile");
 
-		} catch (Exception e) {
-			notifications.error("The order could not be placed.");
-			response.sendRedirect(request.getHeader("referer"));
-			return;
-		}
-	}
+        } catch (Exception e) {
+            notifications.error("The order could not be placed.");
+            response.sendRedirect(request.getHeader("referer"));
+            return;
+        }
+    }
 }

@@ -1,7 +1,7 @@
 package tvestergaard.cupcakes.database.orders;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import tvestergaard.cupcakes.Cart;
+import tvestergaard.cupcakes.ShoppingCart;
 import tvestergaard.cupcakes.database.AbstractMysqlDAO;
 import tvestergaard.cupcakes.database.bottoms.Bottom;
 import tvestergaard.cupcakes.database.toppings.Topping;
@@ -181,7 +181,7 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 		}
 	}
 
-	@Override public Order create(User user, Cart cart, String comment)
+	@Override public Order create(User user, ShoppingCart shoppingCart, String comment)
 	{
 		try {
 
@@ -193,7 +193,7 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 
 				statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS);
 				statement.setInt(1, user.getId());
-				statement.setInt(2, cart.getTotal());
+				statement.setInt(2, shoppingCart.getTotal());
 				statement.setString(3, comment);
 
 				statement.executeUpdate();
@@ -201,15 +201,15 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 				ResultSet generatedKeys = statement.getGeneratedKeys();
 				generatedKeys.first();
 
-				int                 id       = generatedKeys.getInt(1);
-				Iterator<Cart.Item> iterator = cart.iterator();
+				int                         id       = generatedKeys.getInt(1);
+				Iterator<ShoppingCart.Item> iterator = shoppingCart.iterator();
 
 				String sql = "INSERT INTO order_items (`order`, bottom, topping, amount, unit_price, total_price) " +
 							 "VALUES (?, ?, ?, ?, ?, ?)";
 				PreparedStatement itemStatement = connection.prepareStatement(sql);
 
 				while (iterator.hasNext()) {
-					Cart.Item item = iterator.next();
+					ShoppingCart.Item item = iterator.next();
 					itemStatement.setInt(1, id);
 					itemStatement.setInt(2, item.getBottom().getId());
 					itemStatement.setInt(3, item.getTopping().getId());

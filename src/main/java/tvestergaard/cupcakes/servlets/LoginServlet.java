@@ -1,6 +1,7 @@
 package tvestergaard.cupcakes.servlets;
 
 import org.mindrot.jbcrypt.BCrypt;
+import tvestergaard.cupcakes.ShoppingCart;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
@@ -77,7 +78,7 @@ public class LoginServlet extends HttpServlet
 
         try {
             UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
-            User user = userDAO.findFromUsername(request.getParameter(USERNAME_FIELD));
+            User    user    = userDAO.findFromUsername(request.getParameter(USERNAME_FIELD));
 
             if (user == null || !BCrypt.checkpw(request.getParameter(PASSWORD_FIELD), user.getPassword())) {
                 notifications.warning(LOGIN_ERROR);
@@ -88,6 +89,7 @@ public class LoginServlet extends HttpServlet
             HttpSession session = request.getSession();
             notifications.success(SUCCESS_MESSAGE);
             session.setAttribute(USER_SESSION_KEY, user);
+            session.setAttribute("cart", new ShoppingCart());
             response.sendRedirect(referer(request, "shop"));
 
         } catch (Exception e) {

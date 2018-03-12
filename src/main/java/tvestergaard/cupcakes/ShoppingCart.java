@@ -3,21 +3,14 @@ package tvestergaard.cupcakes;
 import tvestergaard.cupcakes.database.bottoms.Bottom;
 import tvestergaard.cupcakes.database.toppings.Topping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class Cart implements Iterable<Cart.Item>
+public class ShoppingCart implements Iterable<ShoppingCart.Item>
 {
-
-    private static String SESSION_KEY = "cart";
-
-    private HttpServletRequest request;
-    private HttpSession        session;
-    private List<Item>         items;
+    private List<Item> items = new ArrayList<>();
 
     public static class Item
     {
@@ -54,8 +47,8 @@ public class Cart implements Iterable<Cart.Item>
 
         public String getFormattedUnitPrice()
         {
-            int price = getUnitPrice();
-            int cents = price % 100;
+            int price   = getUnitPrice();
+            int cents   = price % 100;
             int dollars = (price - cents) / 100;
 
             return dollars + "." + (cents < 9 ? "0" + cents : cents);
@@ -68,25 +61,17 @@ public class Cart implements Iterable<Cart.Item>
 
         public String getFormattedTotalPrice()
         {
-            int price = getTotalPrice();
-            int cents = price % 100;
+            int price   = getTotalPrice();
+            int cents   = price % 100;
             int dollars = (price - cents) / 100;
 
             return dollars + "." + (cents < 9 ? "0" + cents : cents);
         }
     }
 
-    public Cart(HttpServletRequest request)
-    {
-        this.request = request;
-        this.session = request.getSession();
-        this.items = getItems();
-        request.setAttribute(SESSION_KEY, this);
-    }
-
     public int getTotal()
     {
-        int total = 0;
+        int            total        = 0;
         Iterator<Item> itemIterator = iterator();
         while (itemIterator.hasNext()) {
             total += itemIterator.next().getTotalPrice();
@@ -97,30 +82,16 @@ public class Cart implements Iterable<Cart.Item>
 
     public String getFormattedTotal()
     {
-        int price = getTotal();
-        int cents = price % 100;
+        int price   = getTotal();
+        int cents   = price % 100;
         int dollars = (price - cents) / 100;
 
         return dollars + "." + (cents < 9 ? "0" + cents : cents);
     }
 
-    private List<Item> getItems()
-    {
-        Object fromSession = this.session.getAttribute(SESSION_KEY);
-
-        if (fromSession == null) {
-            List<Item> items = new ArrayList<>();
-            this.session.setAttribute(SESSION_KEY, items);
-            return items;
-        }
-
-        return (List<Item>) fromSession;
-    }
-
     public void clear()
     {
-        this.items = new ArrayList<>();
-        session.setAttribute(SESSION_KEY, this.items);
+        this.items.clear();
     }
 
     /**
