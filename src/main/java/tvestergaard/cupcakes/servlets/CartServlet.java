@@ -57,7 +57,7 @@ public class CartServlet extends HttpServlet
 
         if (!authentication.isAuthenticated()) {
             notifications.error(Language.ERROR_ACCESS_USER);
-            authentication.redirect(Function.referer(request, "shoppingCart"));
+            authentication.redirect(Function.referer(request, "cart"));
             return;
         }
 
@@ -90,9 +90,9 @@ public class CartServlet extends HttpServlet
             return;
         }
 
-        ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
+        ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
         int          amount       = parameters.getInt("amount");
         shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, amount));
-        response.sendRedirect("shoppingCart");
+        response.sendRedirect("cart");
     }
 }

@@ -35,7 +35,7 @@ public class OrderServlet extends HttpServlet
     {
         Authentication authentication = new Authentication(request, response);
         Notifications  notifications  = new Notifications(request);
-        ShoppingCart   shoppingCart   = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
+        ShoppingCart   shoppingCart   = (ShoppingCart) request.getSession().getAttribute("cart");
 
         if (!authentication.isAuthenticated()) {
             notifications.error(Language.ERROR_ACCESS_USER);
@@ -45,7 +45,7 @@ public class OrderServlet extends HttpServlet
 
         if (shoppingCart.size() == 0) {
             notifications.error("No items is shoppingCart.");
-            response.sendRedirect("shoppingCart");
+            response.sendRedirect("cart");
             return;
         }
 
@@ -64,7 +64,7 @@ public class OrderServlet extends HttpServlet
     {
         Authentication authentication = new Authentication(request, response);
         Notifications  notifications  = new Notifications(request);
-        ShoppingCart   shoppingCart   = (ShoppingCart) request.getSession().getAttribute("shoppingCart");
+        ShoppingCart   shoppingCart   = (ShoppingCart) request.getSession().getAttribute("cart");
 
         if (!authentication.isAuthenticated()) {
             notifications.error(Language.ERROR_ACCESS_USER);
@@ -74,7 +74,7 @@ public class OrderServlet extends HttpServlet
 
         if (shoppingCart.size() == 0) {
             notifications.error("No items is shoppingCart.");
-            response.sendRedirect("shoppingCart");
+            response.sendRedirect("cart");
             return;
         }
 
