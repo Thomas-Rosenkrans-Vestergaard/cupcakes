@@ -1,0 +1,27 @@
+@startuml
+
+title "Adding to cart and placing order for authorized users."
+
+actor User
+boundary Backend as Backend
+control Cart as Cart
+entity OrderDAO as OrderDAO
+database Database as Database
+
+User -> Backend : Submit cupcake form (POST)
+Backend -> Cart : add(Item(topping, bottom, quantity))
+Cart -> Backend : void
+Backend -> User : redirect to /cart
+User -> Backend : Press "PLACE ORDER"
+Backend -> User : redirect to /order
+User -> Backend : Add order details, press "CONFIRM"
+Backend -> OrderDAO : create(order, cart)
+OrderDAO -> Database : INSERT ORDER
+Database -> OrderDAO : generated key
+    loop each order item
+        OrderDAO -> Database : INSERT ORDER_ITEM
+        Database -> OrderDAO : generated key
+    end
+OrderDAO -> Backend : Order
+Backend -> User : show profile page
+@enduml
