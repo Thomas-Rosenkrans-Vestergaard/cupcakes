@@ -1,6 +1,5 @@
 package tvestergaard.cupcakes.servlets;
 
-
 import tvestergaard.cupcakes.*;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.bottoms.Bottom;
@@ -17,8 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "CartServlet",
-        urlPatterns = "/cart")
+@WebServlet(name = "CartServlet", urlPatterns = "/cart")
 public class CartServlet extends HttpServlet
 {
 
@@ -35,12 +33,12 @@ public class CartServlet extends HttpServlet
 
         if (!authentication.isAuthenticated()) {
             notifications.error(Language.ERROR_ACCESS_USER);
-            authentication.redirect(Function.referer(request, "cart"));
+            authentication.redirect(Utility.referer(request, "cart"));
             return;
         }
 
         new Notifications(request);
-        request.setAttribute("cart", (ShoppingCart) request.getSession().getAttribute("cart"));
+        request.setAttribute("cart", request.getSession().getAttribute("cart"));
         request.getRequestDispatcher("WEB-INF/cart.jsp").forward(request, response);
     }
 
@@ -57,7 +55,7 @@ public class CartServlet extends HttpServlet
 
         if (!authentication.isAuthenticated()) {
             notifications.error(Language.ERROR_ACCESS_USER);
-            authentication.redirect(Function.referer(request, "cart"));
+            authentication.redirect(Utility.referer(request, "cart"));
             return;
         }
 
@@ -67,32 +65,40 @@ public class CartServlet extends HttpServlet
             parameters.isNull("topping") || !parameters.isInt("topping") ||
             parameters.isNull("amount") || !parameters.isInt("amount")) {
             notifications.error("Error with parameters.");
-            response.sendRedirect(request.getHeader("referer"));
+            response.sendRedirect(Utility.referer(request, "shop"));
             return;
         }
 
-        PrimaryDatabase source     = new PrimaryDatabase();
-        BottomDAO       bottomDAO  = new MysqlBottomDAO(source);
-        ToppingDAO      toppingDAO = new MysqlToppingDAO(source);
+        try {
 
-        Bottom  bottom  = bottomDAO.get(parameters.getInt("bottom"));
-        Topping topping = toppingDAO.get(parameters.getInt("topping"));
+            PrimaryDatabase source     = new PrimaryDatabase();
+            BottomDAO       bottomDAO  = new MysqlBottomDAO(source);
+            ToppingDAO      toppingDAO = new MysqlToppingDAO(source);
 
-        if (bottom == null) {
-            notifications.error("Bottom doesn't exist.");
-            response.sendRedirect(request.getHeader("referer"));
+            Bottom  bottom  = bottomDAO.get(parameters.getInt("bottom"));
+            Topping topping = toppingDAO.get(parameters.getInt("topping"));
+
+            if (bottom == null) {
+                notifications.error("Bottom doesn't exist.");
+                response.sendRedirect(Utility.referer(request, "shop"));
+                return;
+            }
+
+            if (topping == null) {
+                notifications.error("Bottom doesn't exist.");
+                response.sendRedirect(Utility.referer(request, "shop"));
+                return;
+            }
+
+            ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
+            int          amount       = parameters.getInt("amount");
+            shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, amount));
+            response.sendRedirect("cart");
+
+        } catch (Exception e) {
+            notifications.error("An error occurred that prevented the requested page from being rendered.");
+            response.sendRedirect(Utility.referer(request, "shop"));
             return;
         }
-
-        if (topping == null) {
-            notifications.error("Bottom doesn't exist.");
-            response.sendRedirect(request.getHeader("referer"));
-            return;
-        }
-
-        ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
-        int          amount       = parameters.getInt("amount");
-        shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, amount));
-        response.sendRedirect("cart");
     }
 }

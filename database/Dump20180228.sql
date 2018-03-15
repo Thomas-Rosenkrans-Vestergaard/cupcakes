@@ -54,7 +54,7 @@ CREATE TABLE `orders` (
   `user` int(10) unsigned NOT NULL,
   `bottom` int(10) unsigned NOT NULL,
   `topping` int(10) unsigned NOT NULL,
-  `amount` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `total` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),

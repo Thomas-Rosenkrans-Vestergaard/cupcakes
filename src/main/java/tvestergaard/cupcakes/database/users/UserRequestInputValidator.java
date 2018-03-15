@@ -75,7 +75,7 @@ public class UserRequestInputValidator
     {
         String username = request.getParameter(usernameParameter);
 
-        return userDAO == null ? false : userDAO.findFromUsername(username) == null;
+        return userDAO == null ? false : userDAO.getFromUsername(username) == null;
     }
 
     public boolean usernameAvailable(UserDAO userDAO, Notifications notifications, String error)
@@ -138,7 +138,7 @@ public class UserRequestInputValidator
     {
         String email = request.getParameter(emailParameter);
 
-        return email == null ? false : userDAO.findFromEmail(email) == null;
+        return email == null ? false : userDAO.getFromEmail(email) == null;
     }
 
     public boolean emailAvailable(UserDAO userDAO, Notifications notifications, String error)

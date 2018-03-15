@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static tvestergaard.cupcakes.Config.USER_SESSION_KEY;
-import static tvestergaard.cupcakes.Function.referer;
+import static tvestergaard.cupcakes.Utility.referer;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet
@@ -78,7 +78,7 @@ public class LoginServlet extends HttpServlet
 
         try {
             UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
-            User    user    = userDAO.findFromUsername(request.getParameter(USERNAME_FIELD));
+            User    user    = userDAO.getFromUsername(request.getParameter(USERNAME_FIELD));
 
             if (user == null || !BCrypt.checkpw(request.getParameter(PASSWORD_FIELD), user.getPassword())) {
                 notifications.warning(LOGIN_ERROR);

@@ -40,7 +40,7 @@
                         <h4>Balance</h4>
                     </div>
                     <div class="col s6 no-padding">
-                        <p class="price">$<c:out value="${user.getFormattedBalance()}"/></p>
+                        <p class="price">$<c:out value="${user.getBalance()}"/></p>
                     </div>
                 </li>
                 <li class="collection-item row">
@@ -84,10 +84,10 @@
                         </thead>
                         <tbody>
                         <c:forEach items="${orders}" var="order">
-                            <tr class="">
+                            <tr class="expandable">
                                 <td><c:out value="${order.getId()}"/></td>
                                 <td><c:out value="${order.getComment()}"/></td>
-                                <td class="price">$<c:out value="${order.getFormattedTotal()}"/></td>
+                                <td class="price">$<c:out value="${order.getTotal()}"/></td>
                                 <td><c:out value="${order.getStatus()}"/></td>
                             </tr>
                             <tr class="order-items-row">
@@ -98,7 +98,7 @@
                                             <th>ID</th>
                                             <th>Bottom</th>
                                             <th>Topping</th>
-                                            <th>Amount</th>
+                                            <th>Quantity</th>
                                             <th>Unit price</th>
                                             <th>Total price</th>
                                         </tr>
@@ -109,9 +109,9 @@
                                                 <td><c:out value="${item.getId()}"/></td>
                                                 <td><c:out value="${item.getBottom().getName()}"/></td>
                                                 <td><c:out value="${item.getTopping().getName()}"/></td>
-                                                <td><c:out value="${item.getAmount()}"/></td>
-                                                <td class="price">$<c:out value="${item.getFormattedUnitPrice()}"/></td>
-                                                <td class="price">$<c:out value="${item.getFormattedTotalPrice()}"/></td>
+                                                <td><c:out value="${item.getQuantity()}"/></td>
+                                                <td class="price">$<c:out value="${item.getUnitPrice()}"/></td>
+                                                <td class="price">$<c:out value="${item.getTotalPrice()}"/></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -130,7 +130,7 @@
     </div>
 </div>
 <script>
-    $(".order-table tbody tr").on('click', function () {
+    $(".expandable").on('click', function () {
         var items_table = $(this).next();
 
         if (!items_table.is(":visible")) {

@@ -35,7 +35,7 @@ public class ShoppingCart implements Iterable<ShoppingCart.Item>
             return this.topping;
         }
 
-        public int getAmount()
+        public int getQuantity()
         {
             return this.amount;
         }

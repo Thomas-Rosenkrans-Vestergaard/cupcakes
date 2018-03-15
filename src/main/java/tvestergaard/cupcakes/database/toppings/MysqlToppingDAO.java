@@ -20,188 +20,170 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
         super(source);
     }
 
-    @Override public Topping get(int id)
+    /**
+     * Returns an entity representing the topping with the provided id.
+     *
+     * @param id The id of the topping to return an entity of.
+     * @return The entity representing the topping with the provided id.
+     * @throws SQLException
+     */
+    @Override public Topping get(int id) throws SQLException
     {
+        PreparedStatement statement = null;
+        ResultSet         results   = null;
+
         try {
 
-            PreparedStatement statement = null;
-            ResultSet results = null;
+            statement = getConnection().prepareStatement("SELECT * FROM toppings WHERE id = ?");
+            statement.setInt(1, id);
+            results = statement.executeQuery();
+            return !results.first() ? null : createTopping(results);
 
-            try {
+        } finally {
+            if (statement != null)
+                statement.close();
+            if (results != null)
+                results.close();
+        }
 
-                statement = getConnection().prepareStatement("SELECT * FROM toppings WHERE id = ?");
-                statement.setInt(1, id);
-                results = statement.executeQuery();
-                return !results.first() ? null : createTopping(results);
+    }
 
-            } finally {
-                if (statement != null)
-                    statement.close();
-                if (results != null)
-                    results.close();
-            }
+    /**
+     * Returns a list of all the toppings in the database.
+     *
+     * @return The list of all the toppings in the database.
+     * @throws SQLException
+     */
+    @Override public List<Topping> get() throws SQLException
+    {
+        List<Topping>     list      = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet         results   = null;
 
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
+        try {
+
+            statement = getConnection().prepareStatement("SELECT * FROM toppings");
+            results = statement.executeQuery();
+            while (results.next())
+                list.add(createTopping(results));
+
+            return list;
+
+        } finally {
+            if (statement != null)
+                statement.close();
+            if (results != null)
+                results.close();
         }
     }
 
-    @Override public Topping get(String name)
+    /**
+     * Inserts a new topping into the database.
+     *
+     * @param name        The name of the topping to insert.
+     * @param description The description of the topping to insert.
+     * @param price       The price of the topping to insert (in cents).
+     * @return The new entity representing the newly inserted topping.
+     * @throws SQLException
+     */
+    @Override public Topping create(String name, String description, int price) throws SQLException
     {
+        String            update     = "INSERT INTO toppings (`name`, description, price) VALUES (?, ?, ?)";
+        Connection        connection = getConnection();
+        PreparedStatement statement  = null;
+
         try {
 
-            PreparedStatement statement = null;
-            ResultSet results = null;
+            statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, name);
+            statement.setString(2, description);
+            statement.setInt(3, price);
 
-            try {
+            statement.executeUpdate();
 
-                statement = getConnection().prepareStatement("SELECT * FROM toppings WHERE name = ?");
-                statement.setString(1, name);
-                results = statement.executeQuery();
-                return !results.first() ? null : createTopping(results);
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            generatedKeys.first();
 
-            } finally {
-                if (statement != null)
-                    statement.close();
-                if (results != null)
-                    results.close();
-            }
+            int id = generatedKeys.getInt(1);
+            connection.commit();
+
+            return new Topping(id, name, description, price);
 
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            connection.rollback();
+            throw e;
+        } finally {
+            if (statement != null)
+                statement.close();
         }
     }
 
-    @Override public List<Topping> get()
+    /**
+     * Updates the topping with the provided id in the database.
+     *
+     * @param id          The id of the topping to update.
+     * @param name        The name to update to.
+     * @param description The description to update to.
+     * @param price       The price to update to (in cents).
+     * @return An entity representing the updated row.
+     * @throws SQLException
+     */
+    @Override public Topping update(int id, String name, String description, int price) throws SQLException
     {
-        List<Topping> list = new ArrayList<>();
+        String            update     = "UPDATE toppings SET `name` = ?, `description` = ?, `price` = ? WHERE id = ?";
+        Connection        connection = getConnection();
+        PreparedStatement statement  = null;
 
         try {
 
-            PreparedStatement statement = null;
-            ResultSet results = null;
+            statement = connection.prepareStatement(update);
+            statement.setString(1, name);
+            statement.setString(2, description);
+            statement.setInt(3, price);
+            statement.setInt(4, id);
 
-            try {
+            statement.executeUpdate();
+            connection.commit();
 
-                statement = getConnection().prepareStatement("SELECT * FROM toppings");
-                results = statement.executeQuery();
-                while (results.next())
-                    list.add(createTopping(results));
-
-                return list;
-
-            } finally {
-                if (statement != null)
-                    statement.close();
-                if (results != null)
-                    results.close();
-            }
+            return new Topping(id, name, description, price);
 
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            connection.rollback();
+            throw e;
+        } finally {
+            if (statement != null)
+                statement.close();
         }
     }
 
-    @Override public Topping create(String name, String description, int price)
+    /**
+     * Deletes the topping with the provided id.
+     *
+     * @param id The id of the topping to delete from the database.
+     * @return {@code true} if the row was successfully deleted, {@code false} if the row was not deleted.
+     * @throws SQLException
+     */
+    @Override public boolean delete(int id) throws SQLException
     {
+        Connection        connection = getConnection();
+        PreparedStatement statement  = null;
+
         try {
 
-            String update = "INSERT INTO toppings (`name`, description, price) VALUES (?, ?, ?)";
-            Connection connection = getConnection();
-            PreparedStatement statement = null;
+            statement = connection.prepareStatement("DELETE FROM toppings WHERE id = ?");
+            statement.setInt(1, id);
 
-            try {
+            int deleted = statement.executeUpdate();
+            connection.commit();
 
-                statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS);
-                statement.setString(1, name);
-                statement.setString(2, description);
-                statement.setInt(3, price);
-
-                statement.executeUpdate();
-
-                ResultSet generatedKeys = statement.getGeneratedKeys();
-                generatedKeys.first();
-
-                int id = generatedKeys.getInt(1);
-                connection.commit();
-
-                return new Topping(id, name, description, price);
-
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                if (statement != null)
-                    statement.close();
-            }
+            return deleted > 0;
 
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override public Topping update(int id, String name, String description, int price)
-    {
-        try {
-
-            String update = "UPDATE toppings SET `name` = ?, `description` = ?, `price` = ? WHERE id = ?";
-            Connection connection = getConnection();
-            PreparedStatement statement = null;
-
-            try {
-
-                statement = connection.prepareStatement(update);
-                statement.setString(1, name);
-                statement.setString(2, description);
-                statement.setInt(3, price);
-                statement.setInt(4, id);
-
-                statement.executeUpdate();
-                connection.commit();
-
-                return new Topping(id, name, description, price);
-
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                if (statement != null)
-                    statement.close();
-            }
-
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override public boolean delete(int id)
-    {
-        try {
-
-            String            delete     = "DELETE FROM toppings WHERE id = ?";
-            Connection        connection = getConnection();
-            PreparedStatement statement  = null;
-
-            try {
-
-                statement = connection.prepareStatement(delete);
-                statement.setInt(1, id);
-
-                int deleted = statement.executeUpdate();
-                connection.commit();
-
-                return deleted > 0;
-
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                if (statement != null)
-                    statement.close();
-            }
-
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            connection.rollback();
+            throw e;
+        } finally {
+            if (statement != null)
+                statement.close();
         }
     }
 

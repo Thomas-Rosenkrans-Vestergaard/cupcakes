@@ -2,60 +2,114 @@ package tvestergaard.cupcakes.database.bottoms;
 
 import java.util.Objects;
 
+/**
+ * Represents a bottom record in a database.
+ */
 public final class Bottom
 {
 
-	private final int     id;
-	private final String  name;
-	private final String  description;
-	private final int     price;
+    /**
+     * The id of the bottom in the database.
+     */
+    private final int id;
 
-	public Bottom(int id, String name, String description, int price)
-	{
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.price = price;
-	}
+    /**
+     * The name of the bottom in the database.
+     */
+    private final String name;
 
-	public int getId()
-	{
-		return this.id;
-	}
+    /**
+     * The description of the bottom in the database.
+     */
+    private final String description;
 
-	public String getName()
-	{
-		return this.name;
-	}
+    /**
+     * The price of the bottom in cents in the database.
+     */
+    private final int price;
 
-	public String getDescription()
-	{
-		return this.description;
-	}
+    /**
+     * Whether or not the bottom is active.
+     */
+    private final boolean active;
 
-	public int getPrice()
-	{
-		return this.price;
-	}
+    /**
+     * Creates a new bottom.
+     *
+     * @param id          The id of the bottom.
+     * @param name        The name of the bottom.
+     * @param description The description of the bottom.
+     * @param price       The price of the bottom in cents.
+     * @param active      Whether or not the bottom is currently active.
+     */
+    public Bottom(int id, String name, String description, int price, boolean active)
+    {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
 
-	public String getFormattedPrice()
-	{
-		int cents   = price % 100;
-		int dollars = (price - cents) / 100;
+    /**
+     * Returns the id of the bottom.
+     *
+     * @return The id of the bottom.
+     */
+    public int getId()
+    {
+        return this.id;
+    }
 
-		return dollars + "." + (cents < 9 ? "0" + cents : cents);
-	}
+    /**
+     * Returns the name of the bottom.
+     *
+     * @return The name of the bottom.
+     */
+    public String getName()
+    {
+        return this.name;
+    }
 
-	@Override public boolean equals(Object o)
-	{
-		if (this == o) return true;
-		if (!(o instanceof Bottom)) return false;
-		Bottom bottom = (Bottom) o;
-		return id == bottom.id;
-	}
+    /**
+     * Returns the description of the bottom.
+     *
+     * @return The description of the bottom.
+     */
+    public String getDescription()
+    {
+        return this.description;
+    }
 
-	@Override public int hashCode()
-	{
-		return Objects.hash(id);
-	}
+    /**
+     * Returns the price of the bottom in cents.
+     *
+     * @return The price of the bottom in cents.
+     */
+    public int getPrice()
+    {
+        return this.price;
+    }
+
+    /**
+     * Checks if the bottom can currently be ordered.
+     *
+     * @return
+     */
+    public boolean isActive()
+    {
+        return this.active;
+    }
+
+    @Override public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof Bottom)) return false;
+        Bottom bottom = (Bottom) o;
+        return id == bottom.id;
+    }
+
+    @Override public int hashCode()
+    {
+        return Objects.hash(id);
+    }
 }

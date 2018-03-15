@@ -16,7 +16,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
     }
 
     @Override
-    public User find(int id)
+    public User get(int id)
     {
         try {
 
@@ -43,7 +43,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
     }
 
     @Override
-    public User findFromUsername(String username)
+    public User getFromUsername(String username)
     {
         try {
 
@@ -69,7 +69,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
         }
     }
 
-    public User findFromEmail(String email)
+    public User getFromEmail(String email)
     {
         try {
 
@@ -127,7 +127,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
 
                 connection.commit();
 
-                return find(generatedKeys.getInt(1));
+                return get(generatedKeys.getInt(1));
 
             } catch (SQLException e) {
                 connection.rollback();
@@ -176,7 +176,7 @@ public class MysqlUserDAO extends AbstractMysqlDAO implements UserDAO
 
                 connection.commit();
 
-                return find(generatedKeys.getInt(1));
+                return get(generatedKeys.getInt(1));
 
             } catch (SQLException e) {
                 connection.rollback();

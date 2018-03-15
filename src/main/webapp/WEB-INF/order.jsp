@@ -23,7 +23,7 @@
                 <td><c:out value="${item.getBottom().getName()}"/></td>
                 <td><c:out value="${item.getTopping().getName()}"/></td>
                 <td><c:out value="${item.getAmount()}"/></td>
-                <td><c:out value="${item.getFormattedTotalPrice()}"/></td>
+                <td><c:out value="${item.getTotalPrice()}"/></td>
             </tr>
         </c:forEach>
         </tbody>
@@ -50,7 +50,7 @@
         <div class="row">
             <div class="col s12 no-padding">
                 <p class="col s12">
-                    The total cost of the order is <span class="price">$${cart.getFormattedTotal()}</span>.
+                    The total cost of the order is <span class="price">$${cart.getTotal()}</span>.
                 </p>
             </div>
         </div>

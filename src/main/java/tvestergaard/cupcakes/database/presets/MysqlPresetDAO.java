@@ -11,190 +11,182 @@ import java.util.List;
 
 public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
 {
+
+    /**
+     * Creates a new {@link MysqlDataSource}.
+     *
+     * @param source The source.
+     */
     public MysqlPresetDAO(MysqlDataSource source)
     {
         super(source);
     }
 
-    @Override public Preset get(int id)
+    /**
+     * Returns a {@link Preset} entity representing the preset with the provided id.
+     *
+     * @param id The id of the preset to retrieve.
+     * @return The {@link Preset} entity representing the preset with the provided id.
+     * @throws SQLException
+     */
+    @Override public Preset get(int id) throws SQLException
     {
+        String sql = "SELECT * FROM presets INNER JOIN bottoms ON bottom = bottoms.id INNER JOIN toppings ON " +
+                     "topping = toppings.id WHERE presets.id = ?";
 
-        try {
+        PreparedStatement statement = getConnection().prepareStatement(sql);
+        statement.setInt(1, id);
+        ResultSet results = statement.executeQuery();
+        if (!results.first())
+            return null;
 
-            String sql = "SELECT * FROM presets INNER JOIN bottoms ON bottom = bottoms.id INNER JOIN toppings ON " +
-                    "topping = toppings.id WHERE presets.id = ?";
+        Preset preset = createPreset(results);
 
-            PreparedStatement statement = getConnection().prepareStatement(sql);
-            statement.setInt(1, id);
-            ResultSet results = statement.executeQuery();
-            if (!results.first())
-                return null;
+        results.close();
+        statement.close();
 
-            Preset preset = createPreset(results);
+        return preset;
 
-            results.close();
-            statement.close();
-
-            return preset;
-
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
     }
 
-    @Override public Preset get(String name)
-    {
-        try {
-
-            String sql = "SELECT * FROM presets INNER JOIN bottoms ON bottom = bottoms.id INNER JOIN toppings ON " +
-                    "topping = toppings.id WHERE presets.name = ?";
-
-            PreparedStatement statement = getConnection().prepareStatement(sql);
-            statement.setString(1, name);
-            ResultSet results = statement.executeQuery();
-            if (!results.first())
-                return null;
-
-            Preset preset = createPreset(results);
-
-            results.close();
-            statement.close();
-
-            return preset;
-
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override public List<Preset> get()
+    /**
+     * Returns all the presets in the database.
+     *
+     * @return The list of all the presets in the database.
+     * @throws SQLException
+     */
+    @Override public List<Preset> get() throws SQLException
     {
         List<Preset> list = new ArrayList<>();
+        String sql = "SELECT * FROM presets INNER JOIN bottoms ON bottom = bottoms.id INNER JOIN toppings ON " +
+                     "topping = toppings.id";
+
+        PreparedStatement statement = getConnection().prepareStatement(sql);
+        ResultSet         results   = statement.executeQuery();
+        while (results.next())
+            list.add(createPreset(results));
+
+        results.close();
+        statement.close();
+
+        return list;
+
+    }
+
+    /**
+     * Inserts a new preset into the database.
+     *
+     * @param name        The name of the preset to insert.
+     * @param description The description of the preset to insert.
+     * @param bottom      The bottom of the preset to insert.
+     * @param topping     The topping of the preset to insert.
+     * @return A new {@link Preset} representing the newly inserted row.
+     * @throws SQLException
+     */
+    @Override public Preset create(String name, String description, Bottom bottom, Topping topping) throws SQLException
+    {
+        String            update     = "INSERT INTO presets (`name`, description, bottom, topping) VALUES (?, ?, ?, ?)";
+        Connection        connection = getConnection();
+        PreparedStatement statement  = null;
 
         try {
 
-            String sql = "SELECT * FROM presets INNER JOIN bottoms ON bottom = bottoms.id INNER JOIN toppings ON " +
-                    "topping = toppings.id";
+            statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, name);
+            statement.setString(2, description);
+            statement.setInt(3, bottom.getId());
+            statement.setInt(4, topping.getId());
 
-            PreparedStatement statement = getConnection().prepareStatement(sql);
-            ResultSet results = statement.executeQuery();
-            while (results.next())
-                list.add(createPreset(results));
+            statement.executeUpdate();
 
-            results.close();
-            statement.close();
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            generatedKeys.first();
 
-            return list;
+            int id = generatedKeys.getInt(1);
+            connection.commit();
 
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+            return new Preset(id, name, description, bottom, topping);
+
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            if (statement != null)
+                statement.close();
         }
     }
 
-
-    @Override public Preset create(String name, String description, Bottom bottom, Topping topping)
+    /**
+     * Updates the preset with the provided id in the database.
+     *
+     * @param id          The id of the preset to update.
+     * @param name        The name to update to.
+     * @param description The description to update to.
+     * @param bottom      The bottom to update to.
+     * @param topping     The topping to update to.
+     * @return The entity representing the newly inserted row.
+     * @throws SQLException
+     */
+    @Override
+    public Preset update(int id, String name, String description, Bottom bottom, Topping topping) throws SQLException
     {
+        String            update     = "UPDATE presets SET `name` = ?, `description` = ?, `bottom` = ?, topping = ? WHERE id = ?";
+        Connection        connection = getConnection();
+        PreparedStatement statement  = null;
+
         try {
 
-            String update = "INSERT INTO presets (`name`, description, bottom, topping) VALUES (?, ?, ?, ?)";
-            Connection connection = getConnection();
-            PreparedStatement statement = null;
+            statement = connection.prepareStatement(update);
+            statement.setString(1, name);
+            statement.setString(2, description);
+            statement.setInt(3, bottom.getId());
+            statement.setInt(4, topping.getId());
+            statement.setInt(5, id);
 
-            try {
+            statement.executeUpdate();
+            connection.commit();
 
-                statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS);
-                statement.setString(1, name);
-                statement.setString(2, description);
-                statement.setInt(3, bottom.getId());
-                statement.setInt(4, topping.getId());
-
-                statement.executeUpdate();
-
-                ResultSet generatedKeys = statement.getGeneratedKeys();
-                generatedKeys.first();
-
-                int id = generatedKeys.getInt(1);
-                connection.commit();
-
-                return new Preset(id, name, description, bottom, topping);
-
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                if (statement != null)
-                    statement.close();
-            }
+            return new Preset(id, name, description, bottom, topping);
 
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            connection.rollback();
+            throw e;
+        } finally {
+            if (statement != null)
+                statement.close();
         }
     }
 
-    @Override public Preset update(int id, String name, String description, Bottom bottom, Topping topping)
+    /**
+     * Deletes the preset with the provided id.
+     *
+     * @param id The id of the preset to delete.
+     * @return {@code true} if the preset is deleted, {@code false} if the preset was not deleted.
+     * @throws SQLException
+     */
+    @Override public boolean delete(int id) throws SQLException
     {
+        Connection        connection = getConnection();
+        PreparedStatement statement  = null;
+
         try {
 
-            String update = "UPDATE presets SET `name` = ?, `description` = ?, `bottom` = ?, topping = ? WHERE id = ?";
-            Connection connection = getConnection();
-            PreparedStatement statement = null;
+            statement = connection.prepareStatement("DELETE FROM presets WHERE id = ?");
+            statement.setInt(1, id);
 
-            try {
+            int deleted = statement.executeUpdate();
+            connection.commit();
 
-                statement = connection.prepareStatement(update);
-                statement.setString(1, name);
-                statement.setString(2, description);
-                statement.setInt(3, bottom.getId());
-                statement.setInt(4, topping.getId());
-                statement.setInt(5, id);
-
-                statement.executeUpdate();
-                connection.commit();
-
-                return new Preset(id, name, description, bottom, topping);
-
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                if (statement != null)
-                    statement.close();
-            }
+            return deleted > 0;
 
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
+            connection.rollback();
+            throw e;
+        } finally {
+            if (statement != null)
+                statement.close();
         }
-    }
 
-    @Override public boolean delete(int id)
-    {
-        try {
-
-            String delete = "DELETE FROM presets WHERE id = ?";
-            Connection connection = getConnection();
-            PreparedStatement statement = null;
-
-            try {
-
-                statement = connection.prepareStatement(delete);
-                statement.setInt(1, id);
-
-                int deleted = statement.executeUpdate();
-                connection.commit();
-
-                return deleted > 0;
-
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                if (statement != null)
-                    statement.close();
-            }
-
-        } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     private Preset createPreset(ResultSet resultSet) throws SQLException

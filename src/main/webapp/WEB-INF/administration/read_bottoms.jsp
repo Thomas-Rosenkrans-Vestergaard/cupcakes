@@ -20,7 +20,7 @@
                     <td><a href="bottoms?action=update&id=${bottom.getId()}">${bottom.getId()}</a></td>
                     <td><c:out value="${bottom.getName()}"/></td>
                     <td><c:out value="${bottom.getDescription()}"/></td>
-                    <td><c:out value="${bottom.getFormattedPrice()}"/></td>
+                    <td><c:out value="${bottom.getPrice()}"/></td>
                     <td class="table-image"><img src="../images/bottoms/${bottom.getId()}.jpg" alt=""></td>
                     <td>
                         <form class="main" method="post" action="bottoms?action=delete">

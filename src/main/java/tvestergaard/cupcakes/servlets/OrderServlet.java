@@ -2,10 +2,7 @@ package tvestergaard.cupcakes.servlets;
 
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import tvestergaard.cupcakes.Authentication;
-import tvestergaard.cupcakes.ShoppingCart;
-import tvestergaard.cupcakes.Language;
-import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.*;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.database.orders.OrderDAO;
@@ -20,8 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "OrderServlet",
-        urlPatterns = "/order")
+@WebServlet(name = "OrderServlet", urlPatterns = "/order")
 public class OrderServlet extends HttpServlet
 {
 
@@ -89,7 +85,7 @@ public class OrderServlet extends HttpServlet
             UserDAO         userDAO  = new MysqlUserDAO(source);
             OrderDAO        orderDAO = new MysqlOrderDAO(source);
             orderDAO.create(authentication.getUser(), shoppingCart, request.getParameter("comment"));
-            User user = userDAO.find(authentication.getUser().getId());
+            User user = userDAO.get(authentication.getUser().getId());
             notifications.success("The order was successfully placed.");
             user = userDAO.update(
                     user.getId(),
@@ -107,7 +103,7 @@ public class OrderServlet extends HttpServlet
 
         } catch (Exception e) {
             notifications.error("The order could not be placed.");
-            response.sendRedirect(request.getHeader("referer"));
+            response.sendRedirect(Utility.referer(request, "shop"));
             return;
         }
     }

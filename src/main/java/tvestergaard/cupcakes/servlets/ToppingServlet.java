@@ -2,6 +2,7 @@ package tvestergaard.cupcakes.servlets;
 
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.Utility;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.database.toppings.Topping;
@@ -35,11 +36,11 @@ public class ToppingServlet extends HttpServlet
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications notificationHelper = new Notifications(request);
+        Notifications notifications = new Notifications(request);
 
         if (request.getParameter(ID_PARAMETER) == null) {
-            notificationHelper.warning(Language.MISSING_ID_PARAMETER);
-            response.sendRedirect(request.getHeader("referer"));
+            notifications.warning(Language.MISSING_ID_PARAMETER);
+            response.sendRedirect(Utility.referer(request, "shop"));
             return;
         }
 
@@ -49,8 +50,8 @@ public class ToppingServlet extends HttpServlet
             Topping    topping    = toppingDAO.get(id);
 
             if (topping == null) {
-                notificationHelper.warning(NO_TOPPING_MESSAGE);
-                response.sendRedirect(request.getHeader("referer"));
+                notifications.warning(NO_TOPPING_MESSAGE);
+                response.sendRedirect(Utility.referer(request, "shop"));
                 return;
             }
 
@@ -58,8 +59,12 @@ public class ToppingServlet extends HttpServlet
             request.getRequestDispatcher(TOPPING_JSP).forward(request, response);
 
         } catch (NumberFormatException e) {
-            notificationHelper.warning(Language.MALFORMED_ID_PARAMETER);
-            response.sendRedirect(request.getHeader("referer"));
+            notifications.warning(Language.MALFORMED_ID_PARAMETER);
+            response.sendRedirect(Utility.referer(request, "shop"));
+        } catch (Exception e) {
+            notifications.error("An error occurred that prevented the requested page from being rendered.");
+            response.sendRedirect(Utility.referer(request, "shop"));
+            return;
         }
     }
 

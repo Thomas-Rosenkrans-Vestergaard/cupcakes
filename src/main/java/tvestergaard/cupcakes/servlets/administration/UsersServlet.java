@@ -4,6 +4,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import tvestergaard.cupcakes.Authentication;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.Utility;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.users.MysqlUserDAO;
 import tvestergaard.cupcakes.database.users.User;
@@ -33,7 +34,7 @@ public class UsersServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Authentication authentication = new Authentication(request, response, "../");
-        Notifications notifications = new Notifications(request);
+        Notifications  notifications  = new Notifications(request);
 
         if (!authentication.isAdministrator()) {
             authentication.redirect(REFERER);
@@ -67,7 +68,7 @@ public class UsersServlet extends HttpServlet
     {
         try {
 
-            UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
+            UserDAO                   userDAO   = new MysqlUserDAO(new PrimaryDatabase());
             UserRequestInputValidator validator = new UserRequestInputValidator(request);
             notifications.record();
 
@@ -88,7 +89,7 @@ public class UsersServlet extends HttpServlet
                     hash(validator.getPassword()),
                     validator.getBalance(),
                     validator.getRole()
-                                      );
+            );
 
             notifications.success(Language.RECORD_CREATED_SUCCESS);
             response.sendRedirect("users?action=update&id=" + user.getId());
@@ -113,13 +114,13 @@ public class UsersServlet extends HttpServlet
 
         if (request.getParameter("id") == null) {
             notifications.warning(Language.MISSING_ID_PARAMETER);
-            response.sendRedirect(request.getHeader("referer"));
+            response.sendRedirect(Utility.referer(request, "administrator/users"));
             return;
         }
 
         try {
 
-            UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
+            UserDAO                   userDAO   = new MysqlUserDAO(new PrimaryDatabase());
             UserRequestInputValidator validator = new UserRequestInputValidator(request);
             notifications.record();
 
@@ -146,7 +147,7 @@ public class UsersServlet extends HttpServlet
                     hash(validator.getPassword()),
                     validator.getBalance(),
                     validator.getRole()
-                                      );
+            );
 
             notifications.success(Language.RECORD_UPDATED_SUCCESS);
             response.sendRedirect("users?action=update&id=" + user.getId());
@@ -168,19 +169,19 @@ public class UsersServlet extends HttpServlet
     {
         if (request.getParameter("id") == null) {
             notifications.warning(Language.MISSING_ID_PARAMETER);
-            response.sendRedirect(request.getHeader("referer"));
+            response.sendRedirect(Utility.referer(request, "administrator/users"));
             return;
         }
 
         try {
 
-            int id = Integer.parseInt(request.getParameter("id"));
+            int     id      = Integer.parseInt(request.getParameter("id"));
             UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
-            boolean result = userDAO.delete(id);
+            boolean result  = userDAO.delete(id);
 
             if (!result) {
                 notifications.error(Language.RECORD_DELETED_ERROR);
-                response.sendRedirect(request.getHeader("referer"));
+                response.sendRedirect(Utility.referer(request, "administrator/users"));
                 return;
             }
 
@@ -189,7 +190,7 @@ public class UsersServlet extends HttpServlet
 
         } catch (NumberFormatException e) {
             notifications.warning(Language.MALFORMED_ID_PARAMETER);
-            response.sendRedirect(request.getHeader("referer"));
+            response.sendRedirect(Utility.referer(request, "administrator/users"));
         } catch (Exception e) {
             notifications.warning(Language.GENERAL_ERROR);
             response.sendRedirect("users");
@@ -198,7 +199,7 @@ public class UsersServlet extends HttpServlet
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications notifications = new Notifications(request);
+        Notifications  notifications  = new Notifications(request);
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
@@ -218,10 +219,16 @@ public class UsersServlet extends HttpServlet
             return;
         }
 
-        UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
-        List<User> users = userDAO.get();
-        request.setAttribute("users", users);
-        request.getRequestDispatcher("/WEB-INF/administration/read_users.jsp").forward(request, response);
+        try {
+
+            UserDAO    userDAO = new MysqlUserDAO(new PrimaryDatabase());
+            List<User> users   = userDAO.get();
+            request.setAttribute("users", users);
+            request.getRequestDispatcher("/WEB-INF/administration/read_users.jsp").forward(request, response);
+
+        } catch (Exception e) {
+
+        }
     }
 
     private void showNew(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -238,7 +245,7 @@ public class UsersServlet extends HttpServlet
             int id = Integer.parseInt(request.getParameter("id"));
 
             UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
-            User user = userDAO.find(id);
+            User    user    = userDAO.get(id);
 
             if (user == null) {
                 notifications.error("Unknown user.");

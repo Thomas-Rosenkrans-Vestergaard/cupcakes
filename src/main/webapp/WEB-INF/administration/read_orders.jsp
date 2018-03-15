@@ -19,7 +19,7 @@
                     <td><a href="orders?action=update&id=${order.getId()}">${order.getId()}</a></td>
                     <td><c:out value="${order.getUser().getUsername()}"/></td>
                     <td><c:out value="${order.getComment()}"/></td>
-                    <td><c:out value="${order.getFormattedTotal()}"/></td>
+                    <td class="price">$<c:out value="${order.getTotal()}"/></td>
                     <td><c:out value="${order.getStatus()}"/></td>
                 </tr>
             </c:forEach>

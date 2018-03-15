@@ -2,6 +2,7 @@ package tvestergaard.cupcakes.servlets;
 
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.Utility;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.presets.MysqlPresetDAO;
 import tvestergaard.cupcakes.database.presets.Preset;
@@ -45,18 +46,18 @@ public class PresetServlet extends HttpServlet
 
         if (request.getParameter(ID_PARAMETER) == null) {
             notifications.error(Language.MISSING_ID_PARAMETER);
-            response.sendRedirect(request.getHeader("referer"));
+            response.sendRedirect(Utility.referer(request, "shop"));
             return;
         }
 
         try {
             PresetDAO presetsDAO = new MysqlPresetDAO(new PrimaryDatabase());
-            int        id         = Integer.parseInt(request.getParameter(ID_PARAMETER));
-            Preset     preset     = presetsDAO.get(id);
+            int       id         = Integer.parseInt(request.getParameter(ID_PARAMETER));
+            Preset    preset     = presetsDAO.get(id);
 
             if (preset == null) {
                 notifications.warning(NO_PRESET);
-                response.sendRedirect(request.getHeader("referer"));
+                response.sendRedirect(Utility.referer(request, "shop"));
                 return;
             }
 
@@ -65,7 +66,11 @@ public class PresetServlet extends HttpServlet
 
         } catch (NumberFormatException e) {
             notifications.warning(Language.MALFORMED_ID_PARAMETER);
-            response.sendRedirect(request.getHeader("referer"));
+            response.sendRedirect(Utility.referer(request, "shop"));
+        } catch (Exception e) {
+            notifications.error("An error occurred that prevented the requested page from being rendered.");
+            response.sendRedirect(Utility.referer(request, "shop"));
+            return;
         }
     }
 

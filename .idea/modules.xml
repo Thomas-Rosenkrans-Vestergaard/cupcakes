@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/cupcakes.iml" filepath="$PROJECT_DIR$/cupcakes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cupcakes.iml" filepath="$PROJECT_DIR$/.idea/modules/cupcakes.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cupcakes_main.iml" filepath="$PROJECT_DIR$/.idea/modules/cupcakes_main.iml" group="cupcakes" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/cupcakes_test.iml" filepath="$PROJECT_DIR$/.idea/modules/cupcakes_test.iml" group="cupcakes" />
     </modules>

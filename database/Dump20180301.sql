@@ -56,7 +56,7 @@ CREATE TABLE `order_items` (
   `order` int(10) unsigned NOT NULL,
   `bottom` int(10) unsigned NOT NULL,
   `topping` int(10) unsigned NOT NULL,
-  `amount` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
   `unit_price` int(10) unsigned NOT NULL,
   `total_price` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),

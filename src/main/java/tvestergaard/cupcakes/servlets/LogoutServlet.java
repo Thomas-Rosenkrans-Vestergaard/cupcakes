@@ -12,8 +12,8 @@ import java.io.IOException;
 
 import static tvestergaard.cupcakes.Language.LOGOUT_ERROR_NOTIFICATION;
 import static tvestergaard.cupcakes.Language.LOGOUT_SUCCESS_NOTIFICATION;
-import static tvestergaard.cupcakes.Function.redirect;
-import static tvestergaard.cupcakes.Function.referer;
+import static tvestergaard.cupcakes.Utility.redirect;
+import static tvestergaard.cupcakes.Utility.referer;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
 public class LogoutServlet extends HttpServlet

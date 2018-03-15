@@ -16,7 +16,7 @@
                     <option value="${bottom.getId()}"
                             data-name="<c:out value="${bottom.getName()}"/>"
                             data-description="<c:out value="${bottom.getDescription()}"/>"
-                            data-price="<c:out value="${bottom.getFormattedPrice()}"/>"
+                            data-price="<c:out value="${bottom.getPrice()}"/>"
                         ${bottom.getId() == selectedBottom ? 'selected' : ''}
                     >
                         <c:out value="${bottom.getName()}"/>
@@ -51,7 +51,7 @@
                     <option value="${topping.getId()}"
                             data-name="<c:out value="${topping.getName()}"/>"
                             data-description="<c:out value="${topping.getDescription()}"/>"
-                            data-price="<c:out value="${topping.getFormattedPrice()}"/>"
+                            data-price="<c:out value="${topping.getPrice()}"/>"
                         ${topping.getId() == selectedTopping ? 'selected' : ''}
                     ><c:out value="${topping.getName()}"/></option>
                 </c:forEach>
@@ -79,8 +79,8 @@
         </div>
     </div>
     <div class="row">
-        <label for="amount">Order amount</label>
-        <input id="amount" type="number" name="amount" value="5" required>
+        <label for="quantity">Order quantity</label>
+        <input id="quantity" type="number" name="quantity" value="5" required>
     </div>
     <div class="row">
         <input class="button-submit btn-large place-custom-order-submit" type="submit" value="Add to cart"> <span
@@ -90,7 +90,7 @@
 </form>
 <script>
 
-    var amount = $('#amount').val();
+    var quantity = $('#quantity').val();
     var current_total = 0;
     var bottom_price = 0;
     var topping_price = 0;
@@ -111,7 +111,7 @@
 
         bottom_price = parseInt(option.data("price"));
         current_total = bottom_price + topping_price;
-        $("#custom-total").text("$" + (current_total * amount));
+        $("#custom-total").text("$" + (current_total * quantity));
     }
 
     function update_selected_topping() {
@@ -124,7 +124,7 @@
 
         topping_price = parseInt(option.data("price"));
         current_total = bottom_price + topping_price;
-        $("#custom-total").text("$" + (current_total * amount));
+        $("#custom-total").text("$" + (current_total * quantity));
     }
 
     if (bottom_select.val() != null) {
@@ -135,9 +135,9 @@
         update_selected_topping();
     }
 
-    $('#amount').on('input', function () {
-        amount = $('#amount').val();
-        $("#custom-total").text("$" + (current_total * amount));
+    $('#quantity').on('input', function () {
+        quantity = $('#quantity').val();
+        $("#custom-total").text("$" + (current_total * quantity));
     });
 
     bottom_select.on('change', function (e) {
