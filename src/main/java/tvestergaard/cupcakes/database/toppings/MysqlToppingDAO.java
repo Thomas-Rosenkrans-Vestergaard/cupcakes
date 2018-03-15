@@ -10,11 +10,6 @@ import java.util.List;
 public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
 {
 
-    private static final String ID_COLUMN          = "toppings.id";
-    private static final String NAME_COLUMN        = "toppings.name";
-    private static final String DESCRIPTION_COLUMN = "toppings.description";
-    private static final String PRICE_COLUMN       = "toppings.price";
-
     public MysqlToppingDAO(MysqlDataSource source)
     {
         super(source);
@@ -30,7 +25,7 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
     @Override public Topping get(int id) throws SQLException
     {
         PreparedStatement statement = null;
-        ResultSet         results   = null;
+        ResultSet results = null;
 
         try {
 
@@ -56,9 +51,9 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
      */
     @Override public List<Topping> get() throws SQLException
     {
-        List<Topping>     list      = new ArrayList<>();
+        List<Topping> list = new ArrayList<>();
         PreparedStatement statement = null;
-        ResultSet         results   = null;
+        ResultSet results = null;
 
         try {
 
@@ -83,14 +78,15 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
      * @param name        The name of the topping to insert.
      * @param description The description of the topping to insert.
      * @param price       The price of the topping to insert (in cents).
+     * @param active      Whether or not the topping can be ordered.
      * @return The new entity representing the newly inserted topping.
      * @throws SQLException
      */
-    @Override public Topping create(String name, String description, int price) throws SQLException
+    @Override public Topping create(String name, String description, int price, boolean active) throws SQLException
     {
-        String            update     = "INSERT INTO toppings (`name`, description, price) VALUES (?, ?, ?)";
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        String update = "INSERT INTO toppings (`name`, description, price, active) VALUES (?, ?, ?, ?)";
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -98,6 +94,7 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
             statement.setString(1, name);
             statement.setString(2, description);
             statement.setInt(3, price);
+            statement.setBoolean(4, active);
 
             statement.executeUpdate();
 
@@ -107,7 +104,7 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
             int id = generatedKeys.getInt(1);
             connection.commit();
 
-            return new Topping(id, name, description, price);
+            return new Topping(id, name, description, price, active);
 
         } catch (SQLException e) {
             connection.rollback();
@@ -125,14 +122,15 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
      * @param name        The name to update to.
      * @param description The description to update to.
      * @param price       The price to update to (in cents).
+     * @param active      Whether or not the topping can be ordered.
      * @return An entity representing the updated row.
      * @throws SQLException
      */
-    @Override public Topping update(int id, String name, String description, int price) throws SQLException
+    @Override public Topping update(int id, String name, String description, int price, boolean active) throws SQLException
     {
-        String            update     = "UPDATE toppings SET `name` = ?, `description` = ?, `price` = ? WHERE id = ?";
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        String update = "UPDATE toppings SET `name` = ?, `description` = ?, `price` = ?, `active` = ? WHERE id = ?";
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -140,12 +138,13 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
             statement.setString(1, name);
             statement.setString(2, description);
             statement.setInt(3, price);
-            statement.setInt(4, id);
+            statement.setBoolean(4, active);
+            statement.setInt(5, id);
 
             statement.executeUpdate();
             connection.commit();
 
-            return new Topping(id, name, description, price);
+            return new Topping(id, name, description, price, active);
 
         } catch (SQLException e) {
             connection.rollback();
@@ -165,8 +164,8 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
      */
     @Override public boolean delete(int id) throws SQLException
     {
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -190,10 +189,11 @@ public class MysqlToppingDAO extends AbstractMysqlDAO implements ToppingDAO
     private Topping createTopping(ResultSet results) throws SQLException
     {
         return new Topping(
-                results.getInt(ID_COLUMN),
-                results.getString(NAME_COLUMN),
-                results.getString(DESCRIPTION_COLUMN),
-                results.getInt(PRICE_COLUMN)
+                results.getInt("id"),
+                results.getString("name"),
+                results.getString("description"),
+                results.getInt("price"),
+                results.getBoolean("active")
         );
     }
 }

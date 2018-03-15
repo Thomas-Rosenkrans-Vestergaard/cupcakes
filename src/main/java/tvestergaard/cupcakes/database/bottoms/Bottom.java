@@ -29,7 +29,7 @@ public final class Bottom
     private final int price;
 
     /**
-     * Whether or not the bottom is active.
+     * Whether or not the bottom can currently be ordered.
      */
     private final boolean active;
 
@@ -48,6 +48,7 @@ public final class Bottom
         this.name = name;
         this.description = description;
         this.price = price;
+        this.active = active;
     }
 
     /**
@@ -93,7 +94,7 @@ public final class Bottom
     /**
      * Checks if the bottom can currently be ordered.
      *
-     * @return
+     * @return {@code true} if the bottom can currently be ordered.
      */
     public boolean isActive()
     {

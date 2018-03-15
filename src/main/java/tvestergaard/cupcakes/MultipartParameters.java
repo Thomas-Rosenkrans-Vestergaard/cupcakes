@@ -9,109 +9,145 @@ import java.io.Reader;
 
 public class MultipartParameters
 {
-	private HttpServletRequest request;
+    private HttpServletRequest request;
 
-	public String asString(String parameter) throws ServletException, IOException
-	{
-		Part part = request.getPart(parameter);
+    public String asString(String parameter) throws ServletException, IOException
+    {
+        Part part = request.getPart(parameter);
 
-		if (part == null)
-			return "";
+        if (part == null)
+            return "";
 
-		final int           bufferSize = 1024;
-		final char[]        buffer     = new char[bufferSize];
-		final StringBuilder out        = new StringBuilder();
-		Reader              in         = new InputStreamReader(part.getInputStream(), "UTF-8");
-		for (; ; ) {
-			int rsz = in.read(buffer, 0, buffer.length);
-			if (rsz < 0)
-				break;
-			out.append(buffer, 0, rsz);
-		}
-		return out.toString();
-	}
+        final int bufferSize = 1024;
+        final char[] buffer = new char[bufferSize];
+        final StringBuilder out = new StringBuilder();
+        Reader in = new InputStreamReader(part.getInputStream(), "UTF-8");
+        for (; ; ) {
+            int rsz = in.read(buffer, 0, buffer.length);
+            if (rsz < 0)
+                break;
+            out.append(buffer, 0, rsz);
+        }
+        return out.toString();
+    }
 
-	public MultipartParameters(HttpServletRequest request)
-	{
-		this.request = request;
-	}
+    public MultipartParameters(HttpServletRequest request)
+    {
+        this.request = request;
+    }
 
-	public boolean isPresent(String parameter) throws ServletException, IOException
-	{
-		return request.getPart(parameter) != null;
-	}
+    public boolean isPresent(String parameter) throws ServletException, IOException
+    {
+        return request.getPart(parameter) != null;
+    }
 
-	public boolean notPresent(String parameter) throws ServletException, IOException
-	{
-		return !isPresent(parameter);
-	}
+    public boolean notPresent(String parameter) throws ServletException, IOException
+    {
+        return !isPresent(parameter);
+    }
 
-	public boolean isNull(String parameter) throws ServletException, IOException
-	{
-		return asString(parameter) == null;
-	}
+    public boolean isNull(String parameter) throws ServletException, IOException
+    {
+        return asString(parameter) == null;
+    }
 
-	public boolean notNull(String parameter) throws ServletException, IOException
-	{
-		return asString(parameter) != null;
-	}
+    public boolean notNull(String parameter) throws ServletException, IOException
+    {
+        return asString(parameter) != null;
+    }
 
-	public boolean isEmpty(String parameter) throws ServletException, IOException
-	{
-		String value = asString(parameter);
+    public boolean isEmpty(String parameter) throws ServletException, IOException
+    {
+        String value = asString(parameter);
 
-		return value == null || value.length() < 1;
-	}
+        return value == null || value.length() < 1;
+    }
 
-	public boolean notEmpty(String parameter) throws ServletException, IOException
-	{
-		return !isEmpty(parameter);
-	}
+    public boolean notEmpty(String parameter) throws ServletException, IOException
+    {
+        return !isEmpty(parameter);
+    }
 
-	public boolean isInt(String parameter) throws ServletException, IOException
-	{
-		try {
-			Integer.parseInt(asString(parameter));
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public boolean isInt(String parameter) throws ServletException, IOException
+    {
+        try {
+            Integer.parseInt(asString(parameter));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
-	public boolean notInt(String parameter) throws ServletException, IOException
-	{
-		return !isInt(parameter);
-	}
+    public boolean notInt(String parameter) throws ServletException, IOException
+    {
+        return !isInt(parameter);
+    }
 
-	public int getInt(String parameter) throws ServletException, IOException
-	{
-		return Integer.parseInt(asString(parameter));
-	}
+    public int getInt(String parameter) throws ServletException, IOException
+    {
+        return Integer.parseInt(asString(parameter));
+    }
 
-	public String getString(String parameter) throws ServletException, IOException
-	{
-		String value = asString(parameter);
+    public String getString(String parameter) throws ServletException, IOException
+    {
+        String value = asString(parameter);
 
-		return value == null ? "" : value;
-	}
+        return value == null ? "" : value;
+    }
 
-	public boolean isPositiveInt(String parameter) throws ServletException, IOException
-	{
-		return isInt(parameter) && getInt(parameter) > 0;
-	}
+    public boolean isPositiveInt(String parameter) throws ServletException, IOException
+    {
+        return isInt(parameter) && getInt(parameter) > 0;
+    }
 
-	public boolean notPositiveInt(String parameter) throws ServletException, IOException
-	{
-		return !isPositiveInt(parameter);
-	}
+    public boolean notPositiveInt(String parameter) throws ServletException, IOException
+    {
+        return !isPositiveInt(parameter);
+    }
 
-	public boolean isNegativeInt(String parameter) throws ServletException, IOException
-	{
-		return isInt(parameter) && getInt(parameter) < 0;
-	}
+    public boolean isNegativeInt(String parameter) throws ServletException, IOException
+    {
+        return isInt(parameter) && getInt(parameter) < 0;
+    }
 
-	public boolean notNegativeInt(String parameter) throws ServletException, IOException
-	{
-		return isInt(parameter) && getInt(parameter) > -1;
-	}
+    public boolean notNegativeInt(String parameter) throws ServletException, IOException
+    {
+        return isInt(parameter) && getInt(parameter) > -1;
+    }
+
+    public boolean isBoolean(String parameter) throws ServletException, IOException
+    {
+        String value = asString(parameter);
+
+        if (value == null)
+            return false;
+
+        return value.equals("true") || value.equals("false") || value.equals("t") || value.equals("f") || value.equals("1") || value.equals("0");
+    }
+
+    public boolean notBoolean(String parameter) throws ServletException, IOException
+    {
+        String value = asString(parameter);
+
+        if (value == null)
+            return true;
+
+        if (value.equals("true") || value.equals("false") || value.equals("t") || value.equals("f") || value.equals("1") || value.equals("0"))
+            return false;
+
+        return true;
+    }
+
+    public boolean getBoolean(String parameter) throws ServletException, IOException
+    {
+        String value = asString(parameter);
+
+        if (value.equals("true") || value.equals("t") || value.equals("!"))
+            return true;
+
+        if (value.equals("false") || value.equals("f") || value.equals("0"))
+            return false;
+
+        throw new UnsupportedOperationException("getBoolean found " + value);
+    }
 }

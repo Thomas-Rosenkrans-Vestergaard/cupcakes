@@ -2,7 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="includes/header.jspf" %>
 <form class="main" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="${preset.getId()}">
+    <div class="row">
+        <div class="input-field col s12">
+            <input disabled type="number" name="id" value="${preset.getId()}">
+        </div>
+    </div>
     <div class="row">
         <div class="input-field col s12">
             <input name="name" id="name" type="text" class="validate" value="${preset.getName()}" required>

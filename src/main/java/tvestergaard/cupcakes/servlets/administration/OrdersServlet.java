@@ -4,8 +4,11 @@ package tvestergaard.cupcakes.servlets.administration;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import tvestergaard.cupcakes.Authentication;
 import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.Parameters;
+import tvestergaard.cupcakes.Utility;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.orders.MysqlOrderDAO;
+import tvestergaard.cupcakes.database.orders.Order;
 import tvestergaard.cupcakes.database.orders.OrderDAO;
 
 import javax.servlet.ServletException;
@@ -20,14 +23,12 @@ import java.sql.SQLException;
 public class OrdersServlet extends HttpServlet
 {
 
-    private static final String URL = "administration/orders";
-
     private static final String ACTION_UPDATE = "update";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications  notifications  = new Notifications(request);
+        Notifications notifications = new Notifications(request);
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
@@ -43,6 +44,7 @@ public class OrdersServlet extends HttpServlet
                 showUpdate(request, response, notifications);
                 return;
             }
+
             OrderDAO ordersDAO = new MysqlOrderDAO(new PrimaryDatabase());
             request.setAttribute("orders", ordersDAO.get());
             request.getRequestDispatcher("/WEB-INF/administration/read_orders.jsp").forward(request, response);
@@ -58,11 +60,11 @@ public class OrdersServlet extends HttpServlet
             throws ServletException, IOException, SQLException
     {
         try {
-            int             id       = Integer.parseInt(request.getParameter("id"));
-            MysqlDataSource source   = new PrimaryDatabase();
-            OrderDAO        orderDAO = new MysqlOrderDAO(source);
+            int id = Integer.parseInt(request.getParameter("id"));
+            MysqlDataSource source = new PrimaryDatabase();
+            OrderDAO orderDAO = new MysqlOrderDAO(source);
             request.setAttribute("order", orderDAO.get(id));
-            request.getRequestDispatcher("/WEB-INF/administration/update_order.jsp");
+            request.getRequestDispatcher("/WEB-INF/administration/update_order.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             notifications.warning("Bad id parameter.");
             response.sendRedirect("/orders");
@@ -77,13 +79,52 @@ public class OrdersServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        doGet(request, response);
+        Notifications notifications = new Notifications(request);
+        Authentication authentication = new Authentication(request, response);
+        String action = request.getParameter("action");
+
+        if (!authentication.isAdministrator()) {
+            authentication.redirect(Utility.referer(request, getRedirectURL(request)));
+            return;
+        }
+
+        try {
+
+            if (ACTION_UPDATE.equals(action)) {
+                handleUpdate(request, response, notifications);
+                return;
+            }
+
+        } catch (SQLException e) {
+
+        }
+    }
+
+    private void handleUpdate(HttpServletRequest request, HttpServletResponse response, Notifications notifications)
+            throws ServletException, IOException, SQLException
+    {
+        Parameters parameters = new Parameters(request);
+
+        if (parameters.isEmpty("id")
+                || parameters.notInt("id")
+                || parameters.isNull("comment")
+                || parameters.isEmpty("comment")
+                || parameters.isNull("status")
+                || parameters.isEmpty("status")
+                || parameters.notInt("status")) {
+            notifications.error("Incomplete form data.");
+            response.sendRedirect(Utility.referer(request, "orders"));
+            return;
+        }
+
+        OrderDAO orderDAO = new MysqlOrderDAO(new PrimaryDatabase());
+        orderDAO.update(parameters.getInt("id"), parameters.getInt("user"))
     }
 
     private String getRedirectURL(HttpServletRequest request)
     {
         String query = request.getQueryString();
         if (query == null) query = "";
-        return query.isEmpty() ? URL : URL + '?' + query;
+        return "administration/orders" + (query.isEmpty() ? '?' + query : "");
     }
 }

@@ -44,4 +44,16 @@ public interface OrderDAO
      * @return An {@link Order} instance representing the newly inserted row.
      */
     Order create(User user, Iterable<ShoppingCart.Item> items, String comment) throws SQLException;
+
+    /**
+     * Updates the order with the provided id in the database.
+     *
+     * @param id      The id of the order to update.
+     * @param user    The user to update to.
+     * @param comment The comment to update to.
+     * @param status  The status to update to.
+     * @return An entity representing the updated row.
+     * @throws SQLException
+     */
+    Order update(int id, User user, String comment, Order.Status status) throws SQLException;
 }

@@ -80,4 +80,27 @@ public class Parameters
     {
         return isInt(parameter) && getInt(parameter) > -1;
     }
+
+    public boolean isBoolean(String parameter)
+    {
+        String value = request.getParameter(parameter);
+
+        if (value == null)
+            return false;
+
+        return value.equals("true") || value.equals("false") || value.equals("t") || value.equals("f") || value.equals("1") || value.equals("0");
+    }
+
+    public boolean getBoolean(String parameter)
+    {
+        String value = request.getParameter(parameter);
+
+        if (value.equals("true") || value.equals("t") || value.equals("!"))
+            return true;
+
+        if (value.equals("false") || value.equals("f") || value.equals("0"))
+            return false;
+
+        throw new UnsupportedOperationException("getBoolean found " + value);
+    }
 }

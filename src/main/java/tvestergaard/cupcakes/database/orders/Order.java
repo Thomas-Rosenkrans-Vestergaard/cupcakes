@@ -94,19 +94,6 @@ public class Order
     }
 
     /**
-     * Returns the total price of the order formatted as dollars using a period as decimal separator.
-     *
-     * @return The total price of the order formatted as dollars using a period as decimal separator.
-     */
-    public String getFormattedTotal()
-    {
-        int cents   = total % 100;
-        int dollars = (total - cents) / 100;
-
-        return dollars + "." + (cents < 9 ? "0" + cents : cents);
-    }
-
-    /**
      * Returns an optional comment provided by the user who placed the order.
      *
      * @return The optional comment provided by the user who placed the order.

@@ -8,6 +8,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Price</th>
+        <th>Active</th>
         <th>Image</th>
         <th>Delete</th>
     </tr>
@@ -21,6 +22,7 @@
                     <td><c:out value="${bottom.getName()}"/></td>
                     <td><c:out value="${bottom.getDescription()}"/></td>
                     <td><c:out value="${bottom.getPrice()}"/></td>
+                    <td>${bottom.isActive() ? "true" : "false"}</td>
                     <td class="table-image"><img src="../images/bottoms/${bottom.getId()}.jpg" alt=""></td>
                     <td>
                         <form class="main" method="post" action="bottoms?action=delete">

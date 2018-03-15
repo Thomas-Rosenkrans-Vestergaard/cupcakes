@@ -29,19 +29,26 @@ public final class Topping
     private final int price;
 
     /**
+     * Whether or not the topping can currently be ordered.
+     */
+    private final boolean active;
+
+    /**
      * Creates a new topping.
      *
      * @param id          The id of the topping.
      * @param name        The name of the topping.
      * @param description The description of the topping.
      * @param price       The price of the topping in cents.
+     * @param active      Whether or not the topping can currently be ordered.
      */
-    public Topping(int id, String name, String description, int price)
+    public Topping(int id, String name, String description, int price, boolean active)
     {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.active = active;
     }
 
     /**
@@ -82,6 +89,16 @@ public final class Topping
     public int getPrice()
     {
         return this.price;
+    }
+
+    /**
+     * Checks whether or not the topping can currently be ordered.
+     *
+     * @return {@code true} if the topping can currently be ordered, otherwise {@code false}.
+     */
+    public boolean isActive()
+    {
+        return this.active;
     }
 
     @Override public boolean equals(Object o)

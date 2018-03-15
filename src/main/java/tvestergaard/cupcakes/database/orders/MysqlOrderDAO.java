@@ -34,11 +34,11 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     @Override public Order get(int id) throws SQLException
     {
         String sql = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                     "INNER JOIN users ON `user` = users.id " +
-                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                     "INNER JOIN toppings ON toppings.id = order_items.topping " +
-                     "WHERE orders.id = ?";
+                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                "INNER JOIN users ON `user` = users.id " +
+                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                "INNER JOIN toppings ON toppings.id = order_items.topping " +
+                "WHERE orders.id = ?";
 
         PreparedStatement statement = getConnection().prepareStatement(sql);
         statement.setInt(1, id);
@@ -66,11 +66,11 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                     "INNER JOIN users ON `user` = users.id " +
-                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                     "INNER JOIN toppings ON toppings.id = order_items.topping " +
-                     "WHERE `user` = ?";
+                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                "INNER JOIN users ON `user` = users.id " +
+                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                "INNER JOIN toppings ON toppings.id = order_items.topping " +
+                "WHERE `user` = ?";
 
         PreparedStatement statement = getConnection().prepareStatement(sql);
         statement.setInt(1, user.getId());
@@ -103,13 +103,13 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                     "INNER JOIN users ON `user` = users.id " +
-                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                     "INNER JOIN toppings ON toppings.id = order_items.topping";
+                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                "INNER JOIN users ON `user` = users.id " +
+                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                "INNER JOIN toppings ON toppings.id = order_items.topping";
 
         PreparedStatement statement = getConnection().prepareStatement(sql);
-        ResultSet         results   = statement.executeQuery();
+        ResultSet results = statement.executeQuery();
         if (!results.first())
             return null;
 
@@ -139,9 +139,9 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     @Override public Order create(User user, Iterable<ShoppingCart.Item> items, String comment) throws SQLException
     {
 
-        String            update     = "INSERT INTO orders (`user`, comment) VALUES (?, ?, ?)";
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        String update = "INSERT INTO orders (`user`, comment) VALUES (?, ?)";
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -156,7 +156,7 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 
             int id = generatedKeys.getInt(1);
             String sql = "INSERT INTO order_items (`order`, bottom, topping, quantity, unit_price) " +
-                         "VALUES (?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement itemStatement = connection.prepareStatement(sql);
 
             for (ShoppingCart.Item item : items) {
@@ -168,6 +168,44 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
                 itemStatement.executeUpdate();
             }
 
+            connection.commit();
+
+            return get(id);
+
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            if (statement != null)
+                statement.close();
+        }
+    }
+
+    /**
+     * Updates the order with the provided id in the database.
+     *
+     * @param id      The id of the order to update.
+     * @param user    The user to update to.
+     * @param comment The comment to update to.
+     * @param status  The status to update to.
+     * @return An entity representing the updated row.
+     * @throws SQLException
+     */
+    @Override public Order update(int id, User user, String comment, Order.Status status) throws SQLException
+    {
+        String update = "UPDATE orders  SET `user` = ?, comment = ?, status = ? WHERE id = ?";
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
+
+        try {
+
+            statement = connection.prepareStatement(update);
+            statement.setInt(1, user.getId());
+            statement.setString(2, comment);
+            statement.setInt(3, status.getCode());
+            statement.setInt(4, id);
+
+            statement.executeUpdate();
             connection.commit();
 
             return get(id);
@@ -227,13 +265,15 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
                         resultSet.getInt("bottoms.id"),
                         resultSet.getString("bottoms.name"),
                         resultSet.getString("bottoms.description"),
-                        resultSet.getInt("bottoms.price")
+                        resultSet.getInt("bottoms.price"),
+                        resultSet.getBoolean("bottoms.active")
                 ),
                 new Topping(
                         resultSet.getInt("toppings.id"),
                         resultSet.getString("toppings.name"),
                         resultSet.getString("toppings.description"),
-                        resultSet.getInt("toppings.price")
+                        resultSet.getInt("toppings.price"),
+                        resultSet.getBoolean("toppings.active")
                 ),
                 resultSet.getInt("order_items.quantity"),
                 resultSet.getInt("order_items.unit_price")

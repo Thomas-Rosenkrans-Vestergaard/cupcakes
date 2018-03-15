@@ -22,6 +22,16 @@
         </div>
     </div>
     <div class="row">
+        <p>
+            <input name="active" type="radio" id="active-true" />
+            <label for="active-true">Active</label>
+        </p>
+        <p>
+            <input name="active" type="radio" id="active-false" />
+            <label for="active-false">Inactive</label>
+        </p>
+    </div>
+    <div class="row">
         <div class="file-field input-field">
             <div class="btn">
                 <span>Image</span>

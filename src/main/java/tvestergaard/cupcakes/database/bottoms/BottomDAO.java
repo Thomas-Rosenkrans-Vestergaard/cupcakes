@@ -34,10 +34,11 @@ public interface BottomDAO
      * @param name        The name of the bottom to create.
      * @param description The description of the bottom to create.
      * @param price       The price of the bottom to create.
+     * @param active      Whether or not the bottom can be ordered.
      * @return The newly created {@link Bottom} representing the inserted bottom in the database.
      * @throws SQLException
      */
-    Bottom create(String name, String description, int price) throws SQLException;
+    Bottom create(String name, String description, int price, boolean active) throws SQLException;
 
     /**
      * Updates the bottom with the provided id in the database, using the provided information.
@@ -46,10 +47,11 @@ public interface BottomDAO
      * @param name        The name to update to.
      * @param description The description to update to.
      * @param price       The price to update to.
+     * @param active      Whether or not the bottom can be ordered.
      * @return The bottom representing the updated bottom in the database.
      * @throws SQLException
      */
-    Bottom update(int id, String name, String description, int price) throws SQLException;
+    Bottom update(int id, String name, String description, int price, boolean active) throws SQLException;
 
     /**
      * Deletes the provided {@link Topping} from the database.

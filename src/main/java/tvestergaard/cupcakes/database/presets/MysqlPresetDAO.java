@@ -32,7 +32,7 @@ public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
     @Override public Preset get(int id) throws SQLException
     {
         String sql = "SELECT * FROM presets INNER JOIN bottoms ON bottom = bottoms.id INNER JOIN toppings ON " +
-                     "topping = toppings.id WHERE presets.id = ?";
+                "topping = toppings.id WHERE presets.id = ?";
 
         PreparedStatement statement = getConnection().prepareStatement(sql);
         statement.setInt(1, id);
@@ -59,10 +59,10 @@ public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
     {
         List<Preset> list = new ArrayList<>();
         String sql = "SELECT * FROM presets INNER JOIN bottoms ON bottom = bottoms.id INNER JOIN toppings ON " +
-                     "topping = toppings.id";
+                "topping = toppings.id";
 
         PreparedStatement statement = getConnection().prepareStatement(sql);
-        ResultSet         results   = statement.executeQuery();
+        ResultSet results = statement.executeQuery();
         while (results.next())
             list.add(createPreset(results));
 
@@ -85,9 +85,9 @@ public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
      */
     @Override public Preset create(String name, String description, Bottom bottom, Topping topping) throws SQLException
     {
-        String            update     = "INSERT INTO presets (`name`, description, bottom, topping) VALUES (?, ?, ?, ?)";
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        String update = "INSERT INTO presets (`name`, description, bottom, topping) VALUES (?, ?, ?, ?)";
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -130,9 +130,9 @@ public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
     @Override
     public Preset update(int id, String name, String description, Bottom bottom, Topping topping) throws SQLException
     {
-        String            update     = "UPDATE presets SET `name` = ?, `description` = ?, `bottom` = ?, topping = ? WHERE id = ?";
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        String update = "UPDATE presets SET `name` = ?, `description` = ?, `bottom` = ?, topping = ? WHERE id = ?";
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -166,8 +166,8 @@ public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
      */
     @Override public boolean delete(int id) throws SQLException
     {
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -199,13 +199,15 @@ public class MysqlPresetDAO extends AbstractMysqlDAO implements PresetDAO
                         resultSet.getInt("bottoms.id"),
                         resultSet.getString("bottoms.name"),
                         resultSet.getString("bottoms.description"),
-                        resultSet.getInt("bottoms.price")
+                        resultSet.getInt("bottoms.price"),
+                        resultSet.getBoolean("bottoms.active")
                 ),
                 new Topping(
                         resultSet.getInt("toppings.id"),
                         resultSet.getString("toppings.name"),
                         resultSet.getString("toppings.description"),
-                        resultSet.getInt("toppings.price")
+                        resultSet.getInt("toppings.price"),
+                        resultSet.getBoolean("bottoms.active")
                 )
         );
     }

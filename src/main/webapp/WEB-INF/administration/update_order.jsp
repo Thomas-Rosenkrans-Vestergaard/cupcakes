@@ -1,46 +1,42 @@
+<%@ page import="tvestergaard.cupcakes.database.orders.Order" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="includes/header.jspf" %>
 <form class="main" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="${bottom.getId()}">
+    <div class="row">
+        <div class="input-field col s12">
+            <input disabled type="number" name="id" value="${order.getId()}">
+        </div>
+    </div>
     <div class="row">
         <div class="col s12 input-field no-padding">
             <input disabled type="text" id="user" name="user" value="${order.getUser().getUsername()}">
-            <label for="user"></label>
+            <label for="user">Username</label>
         </div>
     </div>
     <div class="row">
         <div class="col s12 input-field no-padding">
             <textarea class="materialize-textarea" name="comment" id="comment" cols="30" rows="10" minlength="1"
-                      required>${preset.getComment()}</textarea>
+                      required>${order.getComment()}</textarea>
             <label for="comment">Comment</label>
         </div>
     </div>
     <div class="row">
-        <div class="col s12 input-field no-padding">
-            <textarea class="materialize-textarea" name="description" id="description" cols="30" rows="10" minlength="1"
-                      required>${bottom.getDescription()}</textarea>
-            <label for="description">Description</label>
+        <div class="col s12 no-padding">
+            <c:set var="statuses" value="<%= Order.Status.values() %>"/>
+            <select name="status" id="status-select" required>
+                <c:forEach items="${statuses}" var="status">
+                    <option value="${status.getCode()}"
+                        ${order.getStatus().equals(status) ? 'selected' : ''}>
+                        <c:out value="${status.toString()}"/>
+                    </option>
+                </c:forEach>
+            </select>
         </div>
     </div>
-    <div class="row">
-        <div class="input-field col s12">
-            <input name="price" id="price" type="number" class="validate" value="${bottom.getPrice()}" required>
-            <label for="price">Price</label>
-        </div>
-    </div>
-    <img src="../images/bottoms/${bottom.getId()}.jpg" alt="">
-    <div class="row">
-        <div class="file-field input-field">
-            <div class="btn">
-                <span>Image</span>
-                <input name="image" id="image" type="file" accept="image/jpg," class="validate">
-            </div>
-            <div class="file-path-wrapper">
-                <input class="file-path validate" type="text">
-            </div>
-        </div>
-    </div>
+    <script>
+        $("#status-select").material_select();
+    </script>
     <div class="row">
         <input class="button-submit btn-large" type="submit" value="Update">
     </div>

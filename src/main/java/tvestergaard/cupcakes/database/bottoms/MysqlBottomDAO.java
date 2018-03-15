@@ -10,11 +10,6 @@ import java.util.List;
 public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
 {
 
-    private static final String ID_COLUMN          = "bottoms.id";
-    private static final String NAME_COLUMN        = "bottoms.name";
-    private static final String DESCRIPTION_COLUMN = "bottoms.description";
-    private static final String PRICE_COLUMN       = "bottoms.price";
-
     public MysqlBottomDAO(MysqlDataSource source)
     {
         super(source);
@@ -30,7 +25,7 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
     @Override public Bottom get(int id) throws SQLException
     {
         PreparedStatement statement = null;
-        ResultSet         results   = null;
+        ResultSet results = null;
 
         try {
 
@@ -53,9 +48,9 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
      */
     @Override public List<Bottom> get() throws SQLException
     {
-        List<Bottom>      list      = new ArrayList<>();
+        List<Bottom> list = new ArrayList<>();
         PreparedStatement statement = null;
-        ResultSet         results   = null;
+        ResultSet results = null;
 
         try {
 
@@ -77,21 +72,23 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
      * @param name        The name of the bottom to create.
      * @param description The description of the bottom to create.
      * @param price       The price of the bottom to create.
+     * @param active      Whether or not the bottom can be ordered.
      * @return The newly created {@link Bottom} representing the inserted bottom in the database.
      * @throws SQLException
      */
-    @Override public Bottom create(String name, String description, int price) throws SQLException
+    @Override public Bottom create(String name, String description, int price, boolean active) throws SQLException
     {
-        String            update     = "INSERT INTO bottoms (`name`, description, price) VALUES (?, ?, ?)";
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        String create = "INSERT INTO bottoms (`name`, description, price, active) VALUES (?, ?, ?, ?)";
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
-            statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS);
+            statement = connection.prepareStatement(create, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setString(2, description);
             statement.setInt(3, price);
+            statement.setBoolean(4, active);
 
             statement.executeUpdate();
 
@@ -101,7 +98,7 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
             int id = generatedKeys.getInt(1);
             connection.commit();
 
-            return new Bottom(id, name, description, price);
+            return new Bottom(id, name, description, price, active);
 
         } catch (SQLException e) {
             connection.rollback();
@@ -118,14 +115,15 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
      * @param name        The name to update to.
      * @param description The description to update to.
      * @param price       The price to update to.
+     * @param active      Whether or not the bottom can be ordered.
      * @return The bottom representing the updated bottom in the database.
      * @throws SQLException
      */
-    @Override public Bottom update(int id, String name, String description, int price) throws SQLException
+    @Override public Bottom update(int id, String name, String description, int price, boolean active) throws SQLException
     {
-        String            update     = "UPDATE bottoms SET `name` = ?, `description` = ?, `price` = ? WHERE id = ?";
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        String update = "UPDATE bottoms SET `name` = ?, `description` = ?, `price` = ?, `active` = ? WHERE id = ?";
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -133,12 +131,13 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
             statement.setString(1, name);
             statement.setString(2, description);
             statement.setInt(3, price);
-            statement.setInt(4, id);
+            statement.setBoolean(4, active);
+            statement.setInt(5, id);
 
             statement.executeUpdate();
             connection.commit();
 
-            return new Bottom(id, name, description, price);
+            return new Bottom(id, name, description, price, active);
 
         } catch (SQLException e) {
             connection.rollback();
@@ -158,8 +157,8 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
     @Override public boolean delete(int id) throws SQLException
     {
 
-        Connection        connection = getConnection();
-        PreparedStatement statement  = null;
+        Connection connection = getConnection();
+        PreparedStatement statement = null;
 
         try {
 
@@ -189,10 +188,11 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
     Bottom createBottom(ResultSet results) throws SQLException
     {
         return new Bottom(
-                results.getInt(ID_COLUMN),
-                results.getString(NAME_COLUMN),
-                results.getString(DESCRIPTION_COLUMN),
-                results.getInt(PRICE_COLUMN)
+                results.getInt("id"),
+                results.getString("name"),
+                results.getString("description"),
+                results.getInt("price"),
+                results.getBoolean("active")
         );
     }
 }

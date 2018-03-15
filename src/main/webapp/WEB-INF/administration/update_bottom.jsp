@@ -2,7 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="includes/header.jspf" %>
 <form class="main" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" value="${bottom.getId()}">
+    <div class="row">
+        <div class="input-field col s12">
+            <input disabled type="number" name="id" value="${bottom.getId()}">
+        </div>
+    </div>
     <div class="row">
         <div class="input-field col s12">
             <input name="name" id="name" type="text" class="validate" value="${bottom.getName()}" required>
@@ -21,6 +25,16 @@
             <input name="price" id="price" type="number" class="validate" value="${bottom.getPrice()}" required>
             <label for="price">Price</label>
         </div>
+    </div>
+    <div class="row">
+        <p>
+            <input name="active" type="radio" value="true" id="active-true" ${bottom.isActive() ? 'checked' : ''}/>
+            <label for="active-true">Active</label>
+        </p>
+        <p>
+            <input name="active" type="radio" value="false" id="active-false" ${bottom.isActive() ? '' : 'checked'}/>
+            <label for="active-false">Inactive</label>
+        </p>
     </div>
     <img src="../images/bottoms/${bottom.getId()}.jpg" alt="">
     <div class="row">

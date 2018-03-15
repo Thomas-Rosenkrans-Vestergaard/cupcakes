@@ -26,7 +26,7 @@ import static tvestergaard.cupcakes.Utility.referer;
 public class ToppingsServlet extends HttpServlet
 {
 
-    private static final String URL              = "administration/toppings";
+    private static final String URL              = "toppings";
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_UPDATE    = "update";
     private static final String ACTION_DELETE    = "delete";
@@ -36,13 +36,14 @@ public class ToppingsServlet extends HttpServlet
     private static final String PARAMETER_NAME        = "name";
     private static final String PARAMETER_DESCRIPTION = "description";
     private static final String PARAMETER_PRICE       = "price";
+    private static final String PARAMETER_ACTIVE      = "active";
     private static final String PARAMETER_IMAGE       = "image";
     private static final String PAGE                  = "toppings";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications  notifications  = new Notifications(request);
+        Notifications notifications = new Notifications(request);
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
@@ -98,7 +99,7 @@ public class ToppingsServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications  notifications  = new Notifications(request);
+        Notifications notifications = new Notifications(request);
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
@@ -141,11 +142,13 @@ public class ToppingsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         if (parameters.isEmpty(PARAMETER_NAME)
-            || parameters.isEmpty(PARAMETER_DESCRIPTION)
-            || parameters.isEmpty(PARAMETER_PRICE)
-            || parameters.notInt(PARAMETER_PRICE)
-            || parameters.isNegativeInt(PARAMETER_PRICE)
-            || parameters.notPresent(PARAMETER_IMAGE)) {
+                || parameters.isEmpty(PARAMETER_DESCRIPTION)
+                || parameters.isEmpty(PARAMETER_PRICE)
+                || parameters.notInt(PARAMETER_PRICE)
+                || parameters.isNegativeInt(PARAMETER_PRICE)
+                || parameters.isEmpty(PARAMETER_ACTIVE)
+                || parameters.notBoolean(PARAMETER_ACTIVE)
+                || parameters.notPresent(PARAMETER_IMAGE)) {
             notifications.error(INCOMPLETE_FORM_POST);
             response.sendRedirect(referer(request, URL));
             return;
@@ -155,7 +158,8 @@ public class ToppingsServlet extends HttpServlet
         Topping topping = toppingDAO.create(
                 parameters.getString(PARAMETER_NAME),
                 parameters.getString(PARAMETER_DESCRIPTION),
-                parameters.getInt(PARAMETER_PRICE)
+                parameters.getInt(PARAMETER_PRICE),
+                parameters.getBoolean(PARAMETER_ACTIVE)
         );
 
         if (topping == null) {
@@ -178,12 +182,15 @@ public class ToppingsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         if (parameters.isEmpty(PARAMETER_ID)
-            || parameters.notInt(PARAMETER_ID)
-            || parameters.isEmpty(PARAMETER_NAME)
-            || parameters.isEmpty(PARAMETER_DESCRIPTION)
-            || parameters.isEmpty(PARAMETER_PRICE)
-            || parameters.notInt(PARAMETER_PRICE)
-            || parameters.isNegativeInt(PARAMETER_PRICE)) {
+                || parameters.notInt(PARAMETER_ID)
+                || parameters.isEmpty(PARAMETER_NAME)
+                || parameters.isEmpty(PARAMETER_DESCRIPTION)
+                || parameters.isEmpty(PARAMETER_PRICE)
+                || parameters.notInt(PARAMETER_PRICE)
+                || parameters.isNegativeInt(PARAMETER_PRICE)
+                || parameters.isEmpty(PARAMETER_ACTIVE)
+                || parameters.notBoolean(PARAMETER_ACTIVE)) {
+
             notifications.error(INCOMPLETE_FORM_POST);
             response.sendRedirect(referer(request, URL));
             return;
@@ -195,7 +202,8 @@ public class ToppingsServlet extends HttpServlet
                 parameters.getInt(PARAMETER_ID),
                 parameters.getString(PARAMETER_NAME),
                 parameters.getString(PARAMETER_DESCRIPTION),
-                parameters.getInt(PARAMETER_PRICE)
+                parameters.getInt(PARAMETER_PRICE),
+                parameters.getBoolean(PARAMETER_ACTIVE)
         );
 
         if (topping == null) {
@@ -227,7 +235,7 @@ public class ToppingsServlet extends HttpServlet
         }
 
         ToppingDAO toppingDAO = new MysqlToppingDAO(new PrimaryDatabase());
-        boolean    deleted    = toppingDAO.delete(parameters.getInt(PARAMETER_ID));
+        boolean deleted = toppingDAO.delete(parameters.getInt(PARAMETER_ID));
 
         if (!deleted) {
             notifications.error(RECORD_DELETED_ERROR);

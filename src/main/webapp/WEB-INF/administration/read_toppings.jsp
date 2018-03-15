@@ -8,6 +8,8 @@
         <th>Name</th>
         <th>Description</th>
         <th>Price</th>
+        <th>Active</th>
+        <th>Image</th>
         <th>Delete</th>
     </tr>
     </thead>
@@ -20,6 +22,7 @@
                     <td><c:out value="${topping.getName()}"/></td>
                     <td><c:out value="${topping.getDescription()}"/></td>
                     <td><c:out value="${topping.getPrice()}"/></td>
+                    <td>${topping.isActive() ? 'true' : 'false'}</td>
                     <td class="table-image"><img src="../images/toppings/${topping.getId()}.jpg" alt=""></td>
                     <td>
                         <form class="main" method="post" action="toppings?action=delete">
