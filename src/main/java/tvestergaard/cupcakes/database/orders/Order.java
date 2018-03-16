@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents an order record in a database.
+ * Represents and order for a list of cupcakes placed by a user.
  */
 public class Order
 {

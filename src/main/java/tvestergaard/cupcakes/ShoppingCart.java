@@ -10,14 +10,40 @@ import java.util.NoSuchElementException;
 
 public class ShoppingCart implements Iterable<ShoppingCart.Item>
 {
+
+    /**
+     * The items contained in the shopping cart.
+     */
     private List<Item> items = new ArrayList<>();
 
+    /**
+     * Represents an item in the shopping cart.
+     */
     public static class Item
     {
-        private final Bottom  bottom;
-        private final Topping topping;
-        private final int     amount;
 
+        /**
+         * The bottom of the item.
+         */
+        private final Bottom bottom;
+
+        /**
+         * The topping of the item.
+         */
+        private final Topping topping;
+
+        /**
+         * The amount of cupcakes to order.
+         */
+        private final int amount;
+
+        /**
+         * Creates a new item.
+         *
+         * @param bottom  The bottom of the item.
+         * @param topping The topping of the item.
+         * @param amount  The amount of cupcakes to order.
+         */
         public Item(Bottom bottom, Topping topping, int amount)
         {
             this.bottom = bottom;
@@ -45,30 +71,17 @@ public class ShoppingCart implements Iterable<ShoppingCart.Item>
             return bottom.getPrice() + topping.getPrice();
         }
 
-        public String getFormattedUnitPrice()
-        {
-            int price   = getUnitPrice();
-            int cents   = price % 100;
-            int dollars = (price - cents) / 100;
-
-            return dollars + "." + (cents < 9 ? "0" + cents : cents);
-        }
-
         public int getTotalPrice()
         {
             return getUnitPrice() * amount;
         }
-
-        public String getFormattedTotalPrice()
-        {
-            int price   = getTotalPrice();
-            int cents   = price % 100;
-            int dollars = (price - cents) / 100;
-
-            return dollars + "." + (cents < 9 ? "0" + cents : cents);
-        }
     }
 
+    /**
+     * Returns the total price of the cart.
+     *
+     * @return The total price of the cart.
+     */
     public int getTotal()
     {
         int            total        = 0;
@@ -80,15 +93,9 @@ public class ShoppingCart implements Iterable<ShoppingCart.Item>
         return total;
     }
 
-    public String getFormattedTotal()
-    {
-        int price   = getTotal();
-        int cents   = price % 100;
-        int dollars = (price - cents) / 100;
-
-        return dollars + "." + (cents < 9 ? "0" + cents : cents);
-    }
-
+    /**
+     * Empties the cart, removing all items.
+     */
     public void clear()
     {
         this.items.clear();
@@ -140,11 +147,21 @@ public class ShoppingCart implements Iterable<ShoppingCart.Item>
         }
     }
 
+    /**
+     * Adds the provided item to the cart.
+     *
+     * @param item The item to add to the cart.
+     */
     public void addItem(Item item)
     {
         items.add(item);
     }
 
+    /**
+     * Returns the number of items in the cart.
+     *
+     * @return The number of items in the cart.
+     */
     public int size()
     {
         return items.size();
