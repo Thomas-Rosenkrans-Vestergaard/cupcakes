@@ -1,5 +1,6 @@
 package tvestergaard.cupcakes.servlets;
 
+import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.Parameters;
 import tvestergaard.cupcakes.Utility;
@@ -47,9 +48,8 @@ public class CustomServlet extends HttpServlet
             request.getRequestDispatcher("WEB-INF/custom.jsp").forward(request, response);
 
         } catch (Exception e) {
-            notifications.error("An error occurred that prevented the requested page from being rendered.");
+            notifications.error(Language.GENERAL_ERROR_RENDER);
             response.sendRedirect(Utility.referer(request, "shop"));
-            return;
         }
     }
 

@@ -41,11 +41,11 @@ public class BottomsServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications notifications = new Notifications(request);
+        Notifications  notifications  = new Notifications(request);
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
-            authentication.redirect(getRedirectURL((request)));
+            response.sendRedirect("../login?from=administration/bottoms");
             return;
         }
 
@@ -85,7 +85,7 @@ public class BottomsServlet extends HttpServlet
 
         if (parameters.isNull(PARAMETER_ID) || !parameters.isInt(PARAMETER_ID)) {
             notifications.error(MISSING_ID_PARAMETER);
-            authentication.redirect(referer(request, getRedirectURL(request)));
+            response.sendRedirect("bottoms");
             return;
         }
 
@@ -98,11 +98,11 @@ public class BottomsServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        Notifications notifications = new Notifications(request);
+        Notifications  notifications  = new Notifications(request);
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
-            authentication.redirect("administration/bottoms");
+            response.sendRedirect("../login?from=administration/bottoms");
             return;
         }
 
@@ -139,13 +139,13 @@ public class BottomsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         if (parameters.isEmpty(PARAMETER_NAME)
-                || parameters.isEmpty(PARAMETER_DESCRIPTION)
-                || parameters.isEmpty(PARAMETER_PRICE)
-                || parameters.notInt(PARAMETER_PRICE)
-                || parameters.isNegativeInt(PARAMETER_PRICE)
-                || parameters.isEmpty(PARAMETER_ACTIVE)
-                || parameters.notBoolean(PARAMETER_ACTIVE)
-                || parameters.notPresent(PARAMETER_IMAGE)) {
+            || parameters.isEmpty(PARAMETER_DESCRIPTION)
+            || parameters.isEmpty(PARAMETER_PRICE)
+            || parameters.notInt(PARAMETER_PRICE)
+            || parameters.isNegativeInt(PARAMETER_PRICE)
+            || parameters.isEmpty(PARAMETER_ACTIVE)
+            || parameters.notBoolean(PARAMETER_ACTIVE)
+            || parameters.notPresent(PARAMETER_IMAGE)) {
             notifications.error(INCOMPLETE_FORM_POST);
             response.sendRedirect(referer(request, "bottoms"));
             return;
@@ -179,14 +179,14 @@ public class BottomsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         if (parameters.isEmpty(PARAMETER_ID)
-                || parameters.notInt(PARAMETER_ID)
-                || parameters.isEmpty(PARAMETER_NAME)
-                || parameters.isEmpty(PARAMETER_DESCRIPTION)
-                || parameters.isEmpty(PARAMETER_PRICE)
-                || parameters.notInt(PARAMETER_PRICE)
-                || parameters.isEmpty(PARAMETER_ACTIVE)
-                || parameters.notBoolean(PARAMETER_ACTIVE)
-                || parameters.isNegativeInt(PARAMETER_PRICE)) {
+            || parameters.notInt(PARAMETER_ID)
+            || parameters.isEmpty(PARAMETER_NAME)
+            || parameters.isEmpty(PARAMETER_DESCRIPTION)
+            || parameters.isEmpty(PARAMETER_PRICE)
+            || parameters.notInt(PARAMETER_PRICE)
+            || parameters.isEmpty(PARAMETER_ACTIVE)
+            || parameters.notBoolean(PARAMETER_ACTIVE)
+            || parameters.isNegativeInt(PARAMETER_PRICE)) {
             notifications.error(INCOMPLETE_FORM_POST);
             response.sendRedirect(referer(request, "bottoms"));
             return;
@@ -231,7 +231,7 @@ public class BottomsServlet extends HttpServlet
         }
 
         BottomDAO bottomDAO = new MysqlBottomDAO(new PrimaryDatabase());
-        boolean deleted = bottomDAO.delete(parameters.getInt(PARAMETER_ID));
+        boolean   deleted   = bottomDAO.delete(parameters.getInt(PARAMETER_ID));
 
         if (!deleted) {
             notifications.error(RECORD_DELETED_ERROR);
@@ -241,12 +241,5 @@ public class BottomsServlet extends HttpServlet
 
         notifications.success(RECORD_DELETED_SUCCESS);
         response.sendRedirect(PAGE);
-    }
-
-    private String getRedirectURL(HttpServletRequest request)
-    {
-        String query = request.getQueryString();
-        if (query == null) query = "";
-        return query.isEmpty() ? "administration/bottoms" : "administration/bottoms" + '?' + query;
     }
 }

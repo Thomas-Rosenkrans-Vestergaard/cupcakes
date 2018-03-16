@@ -38,14 +38,6 @@ public class Authentication
         session.setAttribute(Config.USER_SESSION_KEY, null);
     }
 
-    /**
-     * Redirects the user to the login page.
-     */
-    public void redirect(String referer) throws ServletException, IOException
-    {
-        response.sendRedirect(path + "login?referer=" + URLEncoder.encode(referer, "UTF-8"));
-    }
-
     public User getUser()
     {
         return (User) session.getAttribute(Config.USER_SESSION_KEY);

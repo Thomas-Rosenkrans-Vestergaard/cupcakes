@@ -57,8 +57,8 @@
                             <div class="shop-item-details">
                                 <h2 class="shop-item-name"><c:out value="${preset.getName()}"/></h2>
                                 <p class="shop-item-description"><c:out value="${preset.getDescription()}"/></p>
-                                <p class="shop-item-price price">$<c:out
-                                        value="${preset.getPrice()}"/></p>
+                                <p class="shop-item-price price">$<c:out value="${preset.getPrice()}"/></p>
+                                <img src="images/presets/${preset.getId()}.jpg" alt="">
                             </div>
                             <a href="preset?id=${preset.getId()}" class="btn red">MORE</a>
                         </div>
@@ -85,8 +85,8 @@
                         <div class="shop-item-details">
                             <h2 class="shop-item-name"><c:out value="${bottom.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${bottom.getDescription()}"/></p>
-                            <p class="shop-item-price price">$<c:out
-                                    value="${bottom.getPrice()}"/></p>
+                            <p class="shop-item-price price">$<c:out value="${bottom.getPrice()}"/></p>
+                            <img src="images/bottoms/${bottom.getId()}.jpg" alt="">
                         </div>
                         <a href="custom?bottom=${bottom.getId()}" class="btn red">Customize</a>
                     </div>
@@ -115,8 +115,8 @@
                         <div class="shop-item-details">
                             <h2 class="shop-item-name"><c:out value="${topping.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${topping.getDescription()}"/></p>
-                            <p class="shop-item-price price">$<c:out
-                                    value="${topping.getPrice()}"/></p>
+                            <p class="shop-item-price price">$<c:out value="${topping.getPrice()}"/></p>
+                            <img src="images/toppings/${topping.getId()}.jpg" alt="">
                         </div>
                         <a href="custom?topping=${topping.getId()}" class="btn red">Customize</a>
                     </div>

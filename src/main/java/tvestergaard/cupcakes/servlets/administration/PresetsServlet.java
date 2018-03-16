@@ -53,7 +53,7 @@ public class PresetsServlet extends HttpServlet
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
-            authentication.redirect(getRedirectURL((request)));
+            response.sendRedirect("../login?from=administration/presets");
             return;
         }
 
@@ -99,7 +99,7 @@ public class PresetsServlet extends HttpServlet
 
         if (parameters.isNull(PARAMETER_ID) || !parameters.isInt(PARAMETER_ID)) {
             notifications.error(MISSING_ID_PARAMETER);
-            authentication.redirect(referer(request, getRedirectURL(request)));
+            response.sendRedirect("presets");
             return;
         }
 
@@ -120,7 +120,7 @@ public class PresetsServlet extends HttpServlet
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
-            authentication.redirect(URL);
+            response.sendRedirect("../login?from=administration/presets");
             return;
         }
 

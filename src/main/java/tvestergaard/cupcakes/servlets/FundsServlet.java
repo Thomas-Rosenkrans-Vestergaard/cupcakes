@@ -28,7 +28,7 @@ public class FundsServlet extends HttpServlet
         try {
 
             if (!authentication.isAuthenticated()) {
-                authentication.redirect("funds");
+                response.sendRedirect("login?from=funds");
                 return;
             }
 
@@ -58,9 +58,8 @@ public class FundsServlet extends HttpServlet
             notifications.success("You have added $" + amount + " in funds.");
             response.sendRedirect("funds");
         } catch (Exception e) {
-            notifications.error("An error occurred that prevented the requested page from being rendered.");
+            notifications.error(Language.GENERAL_ERROR_RENDER);
             response.sendRedirect(Utility.referer(request, "shop"));
-            return;
         }
     }
 
@@ -69,7 +68,7 @@ public class FundsServlet extends HttpServlet
         Authentication authentication = new Authentication(request, response);
 
         if (!authentication.isAuthenticated()) {
-            authentication.redirect("funds");
+            response.sendRedirect("login?from=funds");
             return;
         }
 

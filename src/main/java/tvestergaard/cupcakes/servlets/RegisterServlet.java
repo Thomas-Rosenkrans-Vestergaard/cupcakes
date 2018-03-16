@@ -1,6 +1,7 @@
 package tvestergaard.cupcakes.servlets;
 
 import org.mindrot.jbcrypt.BCrypt;
+import tvestergaard.cupcakes.Config;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
@@ -21,31 +22,6 @@ public class RegisterServlet extends HttpServlet
 {
 
     /**
-     * The success message provided to the user when successfully created a new user.
-     */
-    private static final String SUCCESS_MESSAGE = "You successfully created a new account.";
-
-    /**
-     * The page to redirect to on error.
-     */
-    private static final String REDIRECT_ON_ERROR = "register";
-
-    /**
-     * The page to redirect to on success.
-     */
-    private static final String REDIRECT_ON_SUCCESS = "shop";
-
-    /**
-     * The session key to store the user information under.
-     */
-    private static final String SESSION_KEY = "user";
-
-    /**
-     * The location of the jsp page to serve to GET requests.
-     */
-    private static final String REGISTER_JSP = "WEB-INF/register.jsp";
-
-    /**
      * Serves the /register page where the user can create a new user.
      *
      * @param request  The request.
@@ -56,7 +32,7 @@ public class RegisterServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         new Notifications(request);
-        request.getRequestDispatcher(REGISTER_JSP).forward(request, response);
+        request.getRequestDispatcher("WEB-INF/register.jsp").forward(request, response);
     }
 
     /**
@@ -69,9 +45,9 @@ public class RegisterServlet extends HttpServlet
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications             notifications = new Notifications(request);
-        MysqlUserDAO              userDAO       = new MysqlUserDAO(new PrimaryDatabase());
-        UserRequestInputValidator validator     = new UserRequestInputValidator(request);
+        Notifications notifications = new Notifications(request);
+        MysqlUserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
+        UserRequestInputValidator validator = new UserRequestInputValidator(request);
 
         notifications.record();
 
@@ -80,7 +56,7 @@ public class RegisterServlet extends HttpServlet
         validator.password(notifications, Language.USER_PASSWORD_ERRORS);
 
         if (notifications.hasNew()) {
-            response.sendRedirect(REDIRECT_ON_ERROR);
+            response.sendRedirect("registration");
             return;
         }
 
@@ -92,14 +68,14 @@ public class RegisterServlet extends HttpServlet
                     hash(validator.getPassword())
             );
 
-            notifications.success(SUCCESS_MESSAGE);
+            notifications.success(Language.REGISTRATION_SUCCESS);
             HttpSession session = request.getSession();
-            session.setAttribute(SESSION_KEY, user);
-            response.sendRedirect(REDIRECT_ON_SUCCESS);
+            session.setAttribute(Config.USER_SESSION_KEY, user);
+            response.sendRedirect("profile");
 
         } catch (Exception e) {
             notifications.info(Language.GENERAL_ERROR);
-            response.sendRedirect(REDIRECT_ON_ERROR);
+            response.sendRedirect("shop");
         }
     }
 

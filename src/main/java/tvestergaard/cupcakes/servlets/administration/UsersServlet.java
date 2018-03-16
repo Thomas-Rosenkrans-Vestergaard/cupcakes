@@ -37,7 +37,7 @@ public class UsersServlet extends HttpServlet
         Notifications  notifications  = new Notifications(request);
 
         if (!authentication.isAdministrator()) {
-            authentication.redirect(REFERER);
+            response.sendRedirect("../login?from=administration/users");
             return;
         }
 
@@ -203,7 +203,7 @@ public class UsersServlet extends HttpServlet
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
-            authentication.redirect(REFERER);
+            response.sendRedirect("../login?from=administration/users");
             return;
         }
 

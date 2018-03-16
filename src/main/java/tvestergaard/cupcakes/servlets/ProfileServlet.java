@@ -20,16 +20,6 @@ public class ProfileServlet extends HttpServlet
 {
 
     /**
-     * The page to redirect to on errors.
-     */
-    private static final String ERROR_REDIRECT = "login";
-
-    /**
-     * The location of the profile.jsp file displayed on GET requests.
-     */
-    private static final String PROFILE_JSP = "WEB-INF/profile.jsp";
-
-    /**
      * Serves the /shop page where users can see the products.
      *
      * @param request  The request.
@@ -37,12 +27,12 @@ public class ProfileServlet extends HttpServlet
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications  notifications  = new Notifications(request);
+        Notifications notifications = new Notifications(request);
         Authentication authentication = new Authentication(request, response);
 
         if (!authentication.isAuthenticated()) {
             notifications.warning(Language.ERROR_ACCESS_USER);
-            authentication.redirect("profile");
+            response.sendRedirect("login?from=profile");
             return;
         }
 
@@ -51,11 +41,10 @@ public class ProfileServlet extends HttpServlet
             OrderDAO orderDAO = new MysqlOrderDAO(new PrimaryDatabase());
             request.setAttribute("user", authentication.getUser());
             request.setAttribute("orders", orderDAO.get(authentication.getUser()));
-            request.getRequestDispatcher(PROFILE_JSP).forward(request, response);
+            request.getRequestDispatcher("WEB-INF/profile.jsp").forward(request, response);
         } catch (Exception e) {
-            notifications.error("An error occurred that prevented the requested page from being rendered.");
+            notifications.error(Language.GENERAL_ERROR_RENDER);
             response.sendRedirect(Utility.referer(request, "shop"));
-            return;
         }
     }
 
@@ -65,8 +54,7 @@ public class ProfileServlet extends HttpServlet
      * @param request  The request.
      * @param response The response.
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         doGet(request, response);
     }

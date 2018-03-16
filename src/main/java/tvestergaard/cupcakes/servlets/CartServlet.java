@@ -33,7 +33,7 @@ public class CartServlet extends HttpServlet
 
         if (!authentication.isAuthenticated()) {
             notifications.error(Language.ERROR_ACCESS_USER);
-            authentication.redirect(Utility.referer(request, "cart"));
+            response.sendRedirect("login?from=cart");
             return;
         }
 
@@ -55,7 +55,7 @@ public class CartServlet extends HttpServlet
 
         if (!authentication.isAuthenticated()) {
             notifications.error(Language.ERROR_ACCESS_USER);
-            authentication.redirect(Utility.referer(request, "cart"));
+            response.sendRedirect("login?from=cart");
             return;
         }
 
@@ -91,14 +91,12 @@ public class CartServlet extends HttpServlet
             }
 
             ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
-            int          amount       = parameters.getInt("amount");
-            shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, amount));
+            shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, parameters.getInt("amount")));
             response.sendRedirect("cart");
 
         } catch (Exception e) {
-            notifications.error("An error occurred that prevented the requested page from being rendered.");
+            notifications.error(Language.GENERAL_ERROR_RENDER);
             response.sendRedirect(Utility.referer(request, "shop"));
-            return;
         }
     }
 }

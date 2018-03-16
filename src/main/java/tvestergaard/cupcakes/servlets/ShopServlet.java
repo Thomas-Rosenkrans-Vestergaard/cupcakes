@@ -1,5 +1,6 @@
 package tvestergaard.cupcakes.servlets;
 
+import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.Utility;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
@@ -30,9 +31,9 @@ public class ShopServlet extends HttpServlet
 
         try {
 
-            PrimaryDatabase source     = new PrimaryDatabase();
-            MysqlPresetDAO  presetsDAO = new MysqlPresetDAO(source);
-            MysqlBottomDAO  bottomDAO  = new MysqlBottomDAO(source);
+            PrimaryDatabase source = new PrimaryDatabase();
+            MysqlPresetDAO presetsDAO = new MysqlPresetDAO(source);
+            MysqlBottomDAO bottomDAO = new MysqlBottomDAO(source);
             MysqlToppingDAO toppingDAO = new MysqlToppingDAO(source);
 
             request.setAttribute("presets", presetsDAO.get());
@@ -40,11 +41,10 @@ public class ShopServlet extends HttpServlet
             request.setAttribute("toppings", toppingDAO.get());
 
             request.getRequestDispatcher("WEB-INF/shop.jsp").forward(request, response);
+
         } catch (Exception e) {
-            throw new IllegalStateException(e);
-//            notifications.error("An error occurred that prevented the requested page from being rendered.");
-//            response.sendRedirect(Utility.referer(request, "shop"));
-//            return;
+            notifications.error(Language.GENERAL_ERROR_RENDER);
+            response.sendRedirect(Utility.referer(request, "shop"));
         }
     }
 

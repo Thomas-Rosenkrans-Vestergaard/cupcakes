@@ -1,9 +1,9 @@
 package tvestergaard.cupcakes.servlets;
 
 import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.ShoppingCart;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
+import tvestergaard.cupcakes.ShoppingCart;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.users.MysqlUserDAO;
 import tvestergaard.cupcakes.database.users.User;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static tvestergaard.cupcakes.Config.USER_SESSION_KEY;
-import static tvestergaard.cupcakes.Utility.referer;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet
@@ -90,7 +89,11 @@ public class LoginServlet extends HttpServlet
             notifications.success(SUCCESS_MESSAGE);
             session.setAttribute(USER_SESSION_KEY, user);
             session.setAttribute("cart", new ShoppingCart());
-            response.sendRedirect(referer(request, "shop"));
+            String from = request.getParameter("from");
+            if (from != null) {
+                response.sendRedirect(from != null ? from : "profile");
+                return;
+            }
 
         } catch (Exception e) {
             notifications.error(Language.GENERAL_ERROR);

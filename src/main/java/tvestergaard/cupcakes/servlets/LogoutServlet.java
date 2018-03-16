@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static tvestergaard.cupcakes.Language.LOGOUT_ERROR_NOTIFICATION;
 import static tvestergaard.cupcakes.Language.LOGOUT_SUCCESS_NOTIFICATION;
-import static tvestergaard.cupcakes.Utility.redirect;
 import static tvestergaard.cupcakes.Utility.referer;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = "/logout")
@@ -20,7 +18,7 @@ public class LogoutServlet extends HttpServlet
 {
 
     /**
-     * Logs out the user in the provided session.
+     * Logs out the user the sent the request.
      *
      * @param request  The request.
      * @param response The response.
@@ -28,13 +26,7 @@ public class LogoutServlet extends HttpServlet
     private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Authentication authentication = new Authentication(request, response);
-        Notifications notifications = new Notifications(request);
-
-        if (!authentication.isAuthenticated()) {
-            notifications.error(LOGOUT_ERROR_NOTIFICATION);
-            redirect(response, referer(request, "shop"));
-            return;
-        }
+        Notifications  notifications  = new Notifications(request);
 
         authentication.logout();
         notifications.success(LOGOUT_SUCCESS_NOTIFICATION);

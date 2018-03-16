@@ -28,11 +28,11 @@ public class OrdersServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications notifications = new Notifications(request);
+        Notifications  notifications  = new Notifications(request);
         Authentication authentication = new Authentication(request, response, "../");
 
         if (!authentication.isAdministrator()) {
-            authentication.redirect(getRedirectURL((request)));
+            response.sendRedirect("../login?from=administration/orders");
             return;
         }
 
@@ -60,9 +60,9 @@ public class OrdersServlet extends HttpServlet
             throws ServletException, IOException, SQLException
     {
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            MysqlDataSource source = new PrimaryDatabase();
-            OrderDAO orderDAO = new MysqlOrderDAO(source);
+            int             id       = Integer.parseInt(request.getParameter("id"));
+            MysqlDataSource source   = new PrimaryDatabase();
+            OrderDAO        orderDAO = new MysqlOrderDAO(source);
             request.setAttribute("order", orderDAO.get(id));
             request.getRequestDispatcher("/WEB-INF/administration/update_order.jsp").forward(request, response);
         } catch (NumberFormatException e) {
@@ -79,19 +79,19 @@ public class OrdersServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications notifications = new Notifications(request);
+        Notifications  notifications  = new Notifications(request);
         Authentication authentication = new Authentication(request, response);
-        String action = request.getParameter("action");
+        String         action         = request.getParameter("action");
 
         if (!authentication.isAdministrator()) {
-            authentication.redirect(Utility.referer(request, getRedirectURL(request)));
+            response.sendRedirect("../login?from=administration/orders");
             return;
         }
 
         try {
 
             if (ACTION_UPDATE.equals(action)) {
-                handleUpdate(request, response, notifications);
+                handleUpdate(request, response, authentication, notifications);
                 return;
             }
 
@@ -100,31 +100,27 @@ public class OrdersServlet extends HttpServlet
         }
     }
 
-    private void handleUpdate(HttpServletRequest request, HttpServletResponse response, Notifications notifications)
+    private void handleUpdate(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Notifications notifications)
             throws ServletException, IOException, SQLException
     {
         Parameters parameters = new Parameters(request);
 
         if (parameters.isEmpty("id")
-                || parameters.notInt("id")
-                || parameters.isNull("comment")
-                || parameters.isEmpty("comment")
-                || parameters.isNull("status")
-                || parameters.isEmpty("status")
-                || parameters.notInt("status")) {
+            || parameters.notInt("id")
+            || parameters.isNull("comment")
+            || parameters.isEmpty("comment")
+            || parameters.isNull("status")
+            || parameters.isEmpty("status")
+            || parameters.notInt("status")) {
             notifications.error("Incomplete form data.");
             response.sendRedirect(Utility.referer(request, "orders"));
             return;
         }
 
         OrderDAO orderDAO = new MysqlOrderDAO(new PrimaryDatabase());
-        orderDAO.update(parameters.getInt("id"), parameters.getInt("user"))
-    }
-
-    private String getRedirectURL(HttpServletRequest request)
-    {
-        String query = request.getQueryString();
-        if (query == null) query = "";
-        return "administration/orders" + (query.isEmpty() ? '?' + query : "");
+        orderDAO.update(parameters.getInt("id"),
+                        authentication.getUser(),
+                        parameters.getString("comment"),
+                        Order.Status.fromCode(parameters.getInt("status")));
     }
 }
