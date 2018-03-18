@@ -55,12 +55,12 @@
                     <c:forEach items="${presets}" var="preset">
                         <div class="col s4 shop-item">
                             <div class="shop-item-details">
+                                <img src="images/presets/${preset.getId()}.jpg" alt="<c:out value="${preset.getName()}"/>">
                                 <h2 class="shop-item-name"><c:out value="${preset.getName()}"/></h2>
                                 <p class="shop-item-description"><c:out value="${preset.getDescription()}"/></p>
-                                <p class="shop-item-price price">$<c:out value="${preset.getPrice()}"/></p>
-                                <img src="images/presets/${preset.getId()}.jpg" alt="">
+                                <p class="shop-item-price price">$<c:out value="${f:formatPrice(preset.getPrice())}"/></p>
                             </div>
-                            <a href="preset?id=${preset.getId()}" class="btn red">MORE</a>
+                            <a href="custom?bottom=${preset.getBottom().getId()}&topping=${preset.getTopping().getId()}" class="btn red">ADD TO CART</a>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -83,10 +83,10 @@
                 <c:forEach items="${bottoms}" var="bottom">
                     <div class="col s4 shop-item">
                         <div class="shop-item-details">
+                            <img src="images/bottoms/${bottom.getId()}.jpg" alt="<c:out value="${bottom.getName()}"/>">
                             <h2 class="shop-item-name"><c:out value="${bottom.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${bottom.getDescription()}"/></p>
-                            <p class="shop-item-price price">$<c:out value="${bottom.getPrice()}"/></p>
-                            <img src="images/bottoms/${bottom.getId()}.jpg" alt="">
+                            <p class="shop-item-price price">$<c:out value="${f:formatPrice(bottom.getPrice())}"/></p>
                         </div>
                         <a href="custom?bottom=${bottom.getId()}" class="btn red">Customize</a>
                     </div>
@@ -113,10 +113,10 @@
 
                     <div class="col s4 shop-item">
                         <div class="shop-item-details">
+                            <img src="images/toppings/${topping.getId()}.jpg" alt="<c:out value="${topping.getName()}"/>">
                             <h2 class="shop-item-name"><c:out value="${topping.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${topping.getDescription()}"/></p>
-                            <p class="shop-item-price price">$<c:out value="${topping.getPrice()}"/></p>
-                            <img src="images/toppings/${topping.getId()}.jpg" alt="">
+                            <p class="shop-item-price price">$<c:out value="${f:formatPrice(topping.getPrice())}"/></p>
                         </div>
                         <a href="custom?topping=${topping.getId()}" class="btn red">Customize</a>
                     </div>

@@ -5,7 +5,7 @@
 <form class="main" method="post">
     <div class="row">
         <div class="input-field col s12">
-            <input id="id" type="number" class="validate" value="${user.getId()}" disabled>
+            <input id="id" type="number" class="validate" value="${user.getId()}" readonly>
             <label for="id">ID</label>
         </div>
     </div>

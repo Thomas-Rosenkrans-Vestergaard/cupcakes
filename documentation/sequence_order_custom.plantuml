@@ -1,0 +1,31 @@
+@startuml
+
+title "Creating a custom cupcake, adding the cupcake to cart and placing an order for the cupcake (for authorized users)."
+
+entity "/custom" as custom_page
+entity "/cart" as cart_page
+entity "/order" as order_page
+entity "/profile" as profile_page
+control Backend as Backend
+control ShoppingCart as Cart
+entity MysqlOrderDAO as OrderDAO
+database MySQL as Database
+
+custom_page -> Backend : Customize cupcake and submit form to add to cart.
+Backend -> Cart : add(Item(topping, bottom, quantity))
+Cart -> Backend : void
+Backend -> cart_page : redirect
+cart_page -> order_page : Place the order by pressing "PLACE ORDER"
+order_page -> Backend : Add order details, press "CONFIRM"
+Backend -> OrderDAO : create(order, cart)
+OrderDAO -> Database : INSERT ORDER
+Database -> OrderDAO : new order id
+    loop each order item
+        OrderDAO -> Database : INSERT ORDER_ITEM
+        Database -> OrderDAO : new order id
+    end
+OrderDAO -> Backend : new Order
+Backend -> Cart : clear()
+Cart -> Backend : void
+Backend -> profile_page : redirect
+@enduml

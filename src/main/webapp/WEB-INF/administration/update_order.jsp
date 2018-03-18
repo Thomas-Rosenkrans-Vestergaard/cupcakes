@@ -2,10 +2,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="includes/header.jspf" %>
-<form class="main" method="post" enctype="multipart/form-data">
+<form class="main" method="post">
     <div class="row">
         <div class="input-field col s12">
-            <input disabled type="number" name="id" value="${order.getId()}">
+            <input readonly type="number" name="id" value="${order.getId()}">
         </div>
     </div>
     <div class="row">
@@ -32,6 +32,35 @@
                     </option>
                 </c:forEach>
             </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 no-padding">
+            <table class="order-items-table">
+                <caption>Items</caption>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Bottom</th>
+                    <th>Topping</th>
+                    <th>Quantity</th>
+                    <th>Unit price</th>
+                    <th>Total price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${order.getItems()}" var="item">
+                    <tr>
+                        <td><c:out value="${item.getId()}"/></td>
+                        <td><c:out value="${item.getBottom().getName()}"/></td>
+                        <td><c:out value="${item.getTopping().getName()}"/></td>
+                        <td><c:out value="${item.getQuantity()}"/></td>
+                        <td class="price">$<c:out value="${f:formatPrice(item.getUnitPrice())}"/></td>
+                        <td class="price">$<c:out value="${f:formatPrice(item.getTotalPrice())}"/></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
         </div>
     </div>
     <script>

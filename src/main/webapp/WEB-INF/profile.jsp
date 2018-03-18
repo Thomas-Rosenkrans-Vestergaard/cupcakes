@@ -40,7 +40,7 @@
                         <h4>Balance</h4>
                     </div>
                     <div class="col s6 no-padding">
-                        <p class="price">$<c:out value="${user.getBalance()}"/></p>
+                        <p class="price">$<c:out value="${f:formatPrice(user.getBalance())}"/></p>
                     </div>
                 </li>
                 <li class="collection-item row">
@@ -87,7 +87,7 @@
                             <tr class="expandable">
                                 <td><c:out value="${order.getId()}"/></td>
                                 <td><c:out value="${order.getComment()}"/></td>
-                                <td class="price">$<c:out value="${order.getTotal()}"/></td>
+                                <td class="price">$<c:out value="${f:formatPrice(order.getTotal())}"/></td>
                                 <td><c:out value="${order.getStatus()}"/></td>
                             </tr>
                             <tr class="order-items-row">
@@ -110,8 +110,8 @@
                                                 <td><c:out value="${item.getBottom().getName()}"/></td>
                                                 <td><c:out value="${item.getTopping().getName()}"/></td>
                                                 <td><c:out value="${item.getQuantity()}"/></td>
-                                                <td class="price">$<c:out value="${item.getUnitPrice()}"/></td>
-                                                <td class="price">$<c:out value="${item.getTotalPrice()}"/></td>
+                                                <td class="price">$<c:out value="${f:formatPrice(item.getUnitPrice())}"/></td>
+                                                <td class="price">$<c:out value="${f:formatPrice(item.getTotalPrice())}"/></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>

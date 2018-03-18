@@ -15,12 +15,11 @@ public class Language
 
     // Registration messages
     public final static String REGISTRATION_SUCCESS = "You successfully created a new user account.";
+    public final static String REGISTRATION_ERROR   = "The user account could not be created.";
 
-    // Order messages
-    public final static String ORDER_NO_ITEMS_ERROR   = "Your cart is currently empty, you cannot order with an empty cart.";
-    public final static String ORDER_NOT_ENOUGH_FUNDS = "You do not have enough funds to order the products in your cart.";
-    public final static String ORDER_SUCCESS          = "The order was successfully placed.";
-    public final static String ORDER_ERROR            = "The order could not be placed.";
+    // Login messages
+    public final static String LOGIN_ERROR   = "Incorrect username or password.";
+    public final static String LOGIN_SUCCESS = "You are now logged in.";
 
     // Database messages
     public final static String RECORD_CREATED_SUCCESS = "The record was successfully created.";
@@ -62,14 +61,4 @@ public class Language
             "User role field is required, but was not sent.",
             "User role was not one of the listed options.",
             };
-
-    public final static String[] ORDER_BOTTOM_ERRORS = {
-            "Bottom id field is required, but was not sent.",
-            "Bottom id must be a number."
-    };
-
-    public final static String[] ORDER_TOPPING_ERRORS = {
-            "Bottom id field is required, but was not sent.",
-            "Bottom id must be a number."
-    };
 }

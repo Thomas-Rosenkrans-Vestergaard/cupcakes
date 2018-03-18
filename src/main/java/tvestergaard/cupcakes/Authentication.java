@@ -2,71 +2,101 @@ package tvestergaard.cupcakes;
 
 import tvestergaard.cupcakes.database.users.User;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.net.URLEncoder;
 
+import static tvestergaard.cupcakes.database.users.User.Role;
+
+/**
+ * Helper class for user authentication operations.
+ */
 public class Authentication
 {
 
-    private final String              path;
-    private final HttpServletResponse response;
-    private final HttpSession         session;
+    /**
+     * The current session to perform authentication operations upon.
+     */
+    private final HttpSession session;
 
-    public Authentication(HttpServletRequest request, HttpServletResponse response)
-    {
-        this(request, response, "");
-    }
-
-    public Authentication(HttpServletRequest request, HttpServletResponse response, String path)
+    /**
+     * Creates a new {@link Authentication}.
+     *
+     * @param request The request to perform authentication operations upon.
+     */
+    public Authentication(HttpServletRequest request)
     {
         this.session = request.getSession();
-        this.response = response;
-        this.path = path;
     }
 
+    /**
+     * Updates the User object in session to the provided one.
+     *
+     * @param user The User object to update to.
+     */
     public void updateUser(User user)
     {
-        session.setAttribute(Config.USER_SESSION_KEY, user);
+        session.setAttribute("user", user);
     }
 
+    /**
+     * Logs out the user, by deleting the User object from session.
+     */
     public void logout()
     {
-        session.setAttribute(Config.USER_SESSION_KEY, null);
+        session.setAttribute("user", null);
     }
 
+    /**
+     * Returns the User object in session.
+     *
+     * @return The User object in session. {@code null} if the user is not authenticated.
+     */
     public User getUser()
     {
-        return (User) session.getAttribute(Config.USER_SESSION_KEY);
+        return (User) session.getAttribute("user");
     }
 
+    /**
+     * Checks if the user is authenticated (logged in).
+     *
+     * @return {@code true} when the user is authenticated, {@code false} otherwise.
+     */
     public boolean isAuthenticated()
     {
-        return session.getAttribute(Config.USER_SESSION_KEY) != null;
+        return session.getAttribute("user") != null;
     }
 
-    public boolean is(User.Role role)
+    /**
+     * Checks if the user is authenticated and of a role equal to or greater than the provided Role.
+     *
+     * @param role The lower bound Role.
+     * @return {@code true} of the user is authenticated and of a role equal to or greater than the provided Role,
+     * otherwise {@code false}.
+     */
+    public boolean is(Role role)
     {
         User user = getUser();
 
         return user != null && user.getRole().code >= role.code;
     }
 
+    /**
+     * Checks if the user is an administrator.
+     *
+     * @return {@code true} if the user is an administrator, otherwise {@code false}.
+     */
     public boolean isAdministrator()
     {
-        return is(User.Role.ADMINISTRATOR);
+        return is(Role.ADMINISTRATOR);
     }
 
-    public boolean isUser()
-    {
-        return is(User.Role.USER);
-    }
-
+    /**
+     * Checks if the user is an owner.
+     *
+     * @return {@code true} if the user is an owner, otherwise {@code false}.
+     */
     public boolean isOwner()
     {
-        return is(User.Role.OWNER);
+        return is(Role.OWNER);
     }
 }

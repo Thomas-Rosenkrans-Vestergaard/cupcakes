@@ -1,9 +1,8 @@
 package tvestergaard.cupcakes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayDeque;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 
 /**
@@ -14,30 +13,22 @@ import java.util.Queue;
 public class Notifications implements Iterator<Notification>
 {
 
-    private static final String SESSION_KEY = "notifications";
-
-    /**
-     * The user {@link HttpSession} of the user making a request.
-     */
-    private final HttpSession session;
-
     /**
      * The {@link Queue} of notifications to send to them.
      */
     private final Queue<Notification> notifications;
 
+    /**
+     * The number of notifications added since last call to {@link Notifications#record()}.
+     */
     private int recorded = 0;
 
     /**
      * Creates a new {@link Notifications}.
-     *
-     * @param request The {@link HttpServletRequest}.
      */
-    public Notifications(HttpServletRequest request)
+    public Notifications()
     {
-        this.session = request.getSession();
-        this.notifications = getStack();
-        request.setAttribute(SESSION_KEY, this);
+        this.notifications = new ArrayDeque<>();
     }
 
     /**
@@ -47,6 +38,7 @@ public class Notifications implements Iterator<Notification>
      */
     public void notify(Notification notification)
     {
+        recorded++;
         notifications.add(notification);
     }
 
@@ -90,15 +82,29 @@ public class Notifications implements Iterator<Notification>
         notify(Notification.error(message));
     }
 
-    @Override
-    public boolean hasNext()
+    /**
+     * Returns {@code true} if the iteration has more elements.
+     * (In other words, returns {@code true} if {@link #next} would
+     * return an element rather than throwing an exception.)
+     *
+     * @return {@code true} if the iteration has more elements
+     */
+    @Override public boolean hasNext()
     {
         return !notifications.isEmpty();
     }
 
-    @Override
-    public Notification next()
+    /**
+     * Returns the next element in the iteration.
+     *
+     * @return the next element in the iteration
+     * @throws NoSuchElementException if the iteration has no more elements
+     */
+    @Override public Notification next()
     {
+        if (notifications.isEmpty())
+            throw new NoSuchElementException();
+
         Notification notification = notifications.poll();
         if (notification != null)
             recorded--;
@@ -107,8 +113,8 @@ public class Notifications implements Iterator<Notification>
     }
 
     /**
-     * Records the current number of notifications. The {@link Notifications#hasNew()} method can then be used to see
-     * if the number of notifications in the queue has changed.
+     * Records the current number of getNotifications. The {@link Notifications#hasNew()} method can then be used to see
+     * if the number of getNotifications in the queue has changed.
      *
      * @see Notifications#hasNew()
      */
@@ -118,15 +124,27 @@ public class Notifications implements Iterator<Notification>
     }
 
     /**
-     * Checks if new notifications has been added to the queue since the last time the {@link Notifications#record()}
+     * Checks if new getNotifications has been added to the queue since the last time the {@link Notifications#record()}
      * method was called.
      *
-     * @return True is new notifications has been added to the queue since the last call to {@link Notifications#record()}.
+     * @return True is new getNotifications has been added to the queue since the last call to {@link Notifications#record()}.
      * @see Notifications#record()
      */
     public boolean hasNew()
     {
         return recorded != size();
+    }
+
+    /**
+     * Returns the number of notifications added since the last call to {@link Notifications#recorded()}.
+     *
+     * @return the number of notifications added since the last call to {@link Notifications#recorded()}.
+     * @see Notifications#record()
+     * @see Notifications#hasNew()
+     */
+    public int recorded()
+    {
+        return this.recorded;
     }
 
     /**
@@ -140,23 +158,20 @@ public class Notifications implements Iterator<Notification>
     }
 
     /**
-     * Retrieves the queue from the session, or creates a new one.
+     * Returns {@code true} if there are no Notification instances.
      *
-     * @return The queue.
+     * @return {@code true} if there are no Notification instances.
      */
-    private Queue<Notification> getStack()
+    public boolean isEmpty()
     {
+        return notifications.isEmpty();
+    }
 
-        Object attribute = session.getAttribute(SESSION_KEY);
-
-        if (attribute == null || !(attribute instanceof ArrayDeque)) {
-            Queue<Notification> messages = new ArrayDeque<>();
-            session.setAttribute(SESSION_KEY, messages);
-            return messages;
-        } else {
-            Queue<Notification> messages = (ArrayDeque<Notification>) attribute;
-            session.setAttribute(SESSION_KEY, messages);
-            return messages;
-        }
+    /**
+     * Removes all the notifications.
+     */
+    public void clear()
+    {
+        notifications.clear();
     }
 }

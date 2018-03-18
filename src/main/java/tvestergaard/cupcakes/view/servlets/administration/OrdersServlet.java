@@ -1,15 +1,16 @@
-package tvestergaard.cupcakes.servlets.administration;
+package tvestergaard.cupcakes.view.servlets.administration;
 
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import tvestergaard.cupcakes.Authentication;
+import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.Parameters;
-import tvestergaard.cupcakes.Utility;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.database.orders.Order;
 import tvestergaard.cupcakes.database.orders.OrderDAO;
+import tvestergaard.cupcakes.view.Parameters;
+import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,13 +26,22 @@ public class OrdersServlet extends HttpServlet
 
     private static final String ACTION_UPDATE = "update";
 
+    /**
+     * Handles GET requests to /administration/orders.
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications  notifications  = new Notifications(request);
-        Authentication authentication = new Authentication(request, response, "../");
+        Notifications  notifications  = ViewUtilities.getNotifications(request);
+        Authentication authentication = new Authentication(request);
 
         if (!authentication.isAdministrator()) {
+            notifications.error(Language.ERROR_ACCESS_ADMINISTRATOR);
             response.sendRedirect("../login?from=administration/orders");
             return;
         }
@@ -39,6 +49,7 @@ public class OrdersServlet extends HttpServlet
         try {
 
             String action = request.getParameter("action");
+            ViewUtilities.attach(request, notifications);
 
             if (ACTION_UPDATE.equals(action)) {
                 showUpdate(request, response, notifications);
@@ -79,11 +90,12 @@ public class OrdersServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications  notifications  = new Notifications(request);
-        Authentication authentication = new Authentication(request, response);
+        Notifications  notifications  = ViewUtilities.getNotifications(request);
+        Authentication authentication = new Authentication(request);
         String         action         = request.getParameter("action");
 
         if (!authentication.isAdministrator()) {
+            notifications.error(Language.ERROR_ACCESS_ADMINISTRATOR);
             response.sendRedirect("../login?from=administration/orders");
             return;
         }
@@ -95,8 +107,9 @@ public class OrdersServlet extends HttpServlet
                 return;
             }
 
-        } catch (SQLException e) {
-
+        } catch (Exception e) {
+            notifications.error(Language.GENERAL_ERROR_RENDER);
+            response.sendRedirect("presets");
         }
     }
 
@@ -106,21 +119,23 @@ public class OrdersServlet extends HttpServlet
         Parameters parameters = new Parameters(request);
 
         if (parameters.isEmpty("id")
-            || parameters.notInt("id")
-            || parameters.isNull("comment")
-            || parameters.isEmpty("comment")
-            || parameters.isNull("status")
-            || parameters.isEmpty("status")
-            || parameters.notInt("status")) {
+                || parameters.notInt("id")
+                || parameters.notPresent("comment")
+                || parameters.isEmpty("comment")
+                || parameters.notPresent("status")
+                || parameters.isEmpty("status")
+                || parameters.notInt("status")) {
             notifications.error("Incomplete form data.");
-            response.sendRedirect(Utility.referer(request, "orders"));
+            response.sendRedirect(ViewUtilities.referer(request, "orders"));
             return;
         }
 
         OrderDAO orderDAO = new MysqlOrderDAO(new PrimaryDatabase());
         orderDAO.update(parameters.getInt("id"),
-                        authentication.getUser(),
-                        parameters.getString("comment"),
-                        Order.Status.fromCode(parameters.getInt("status")));
+                authentication.getUser(),
+                parameters.getString("comment"),
+                Order.Status.fromCode(parameters.getInt("status")));
+
+        response.sendRedirect("orders?action=update&id=" + parameters.getInt("id"));
     }
 }

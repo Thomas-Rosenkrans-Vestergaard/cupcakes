@@ -1,5 +1,7 @@
 package tvestergaard.cupcakes;
 
+import java.util.Objects;
+
 /**
  * Represents a message sent to a visitor via the {@link Notifications} class.
  */
@@ -110,5 +112,19 @@ public class Notification
     public Level getLevel()
     {
         return this.level;
+    }
+
+    @Override public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof Notification)) return false;
+        Notification that = (Notification) o;
+        return Objects.equals(message, that.message) &&
+                level == that.level;
+    }
+
+    @Override public int hashCode()
+    {
+        return Objects.hash(message, level);
     }
 }

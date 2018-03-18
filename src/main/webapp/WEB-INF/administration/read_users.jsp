@@ -17,10 +17,10 @@
             <c:forEach items="${users}" var="user">
                 <tr>
                     <td><a href="users?action=update&id=${user.getId()}">${user.getId()}</a></td>
-                    <td>${user.getUsername()}</td>
-                    <td>${user.getEmail()}</td>
-                    <td>${user.getBalance()}</td>
-                    <td>${user.getRole()}</td>
+                    <td><c:out value="${user.getUsername()}"/></td>
+                    <td><c:out value="${user.getEmail()}"/></td>
+                    <td class="price">$<c:out value="${f:formatPrice(user.getBalance())}"/></td>
+                    <td><c:out value="${user.getRole()}"/></td>
                 </tr>
             </c:forEach>
         </c:when>

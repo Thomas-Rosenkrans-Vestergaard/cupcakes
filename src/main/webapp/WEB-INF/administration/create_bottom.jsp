@@ -23,11 +23,11 @@
     </div>
     <div class="row">
         <p>
-            <input name="active" type="radio" id="active-true" />
+            <input name="active" type="radio" value="true" id="active-true" />
             <label for="active-true">Active</label>
         </p>
         <p>
-            <input name="active" type="radio" id="active-false" />
+            <input name="active" type="radio" value="false" id="active-false" />
             <label for="active-false">Inactive</label>
         </p>
     </div>

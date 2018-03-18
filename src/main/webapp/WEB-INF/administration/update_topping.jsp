@@ -4,7 +4,7 @@
 <form class="main" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="input-field col s12">
-            <input disabled type="number" name="id" value="${topping.getId()}">
+            <input readonly type="number" name="id" value="${topping.getId()}">
         </div>
     </div>
     <div class="row">

@@ -1,13 +1,14 @@
-package tvestergaard.cupcakes.servlets;
+package tvestergaard.cupcakes.view.servlets;
 
 import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.Config;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.users.MysqlUserDAO;
 import tvestergaard.cupcakes.database.users.User;
+import tvestergaard.cupcakes.database.users.UserDAO;
 import tvestergaard.cupcakes.database.users.UserRequestInputValidator;
+import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +18,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Serves the /register page the users can create a new user account. Handles the form data sent from the registration
+ * form.
+ */
 @WebServlet(name = "RegisterServlet", urlPatterns = "/register")
 public class RegisterServlet extends HttpServlet
 {
+
+    /**
+     * The {@link UserDAO} used to retrieve user information when attempting to register accounts.
+     */
+    private final UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
 
     /**
      * Serves the /register page where the user can create a new user.
@@ -31,12 +41,19 @@ public class RegisterServlet extends HttpServlet
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        new Notifications(request);
-        request.getRequestDispatcher("WEB-INF/register.jsp").forward(request, response);
+        Notifications notifications = ViewUtilities.getNotifications(request);
+
+        try {
+            ViewUtilities.attach(request, notifications);
+            request.getRequestDispatcher("WEB-INF/register.jsp").forward(request, response);
+        } catch (Exception e) {
+            notifications.error(Language.GENERAL_ERROR_RENDER);
+            response.sendRedirect(ViewUtilities.referer(request, "shop"));
+        }
     }
 
     /**
-     * Handles the POST from the registration page.
+     * Handles the form data POST'ed from the /registration page.
      *
      * @param request  The request.
      * @param response The response.
@@ -45,9 +62,8 @@ public class RegisterServlet extends HttpServlet
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications notifications = new Notifications(request);
-        MysqlUserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
-        UserRequestInputValidator validator = new UserRequestInputValidator(request);
+        Notifications             notifications = ViewUtilities.getNotifications(request);
+        UserRequestInputValidator validator     = new UserRequestInputValidator(request);
 
         notifications.record();
 
@@ -62,20 +78,15 @@ public class RegisterServlet extends HttpServlet
 
         try {
 
-            User user = userDAO.create(
-                    validator.getUsername(),
-                    validator.getEmail(),
-                    hash(validator.getPassword())
-            );
-
+            User user = userDAO.create(validator.getUsername(), validator.getEmail(), hash(validator.getPassword()));
             notifications.success(Language.REGISTRATION_SUCCESS);
             HttpSession session = request.getSession();
-            session.setAttribute(Config.USER_SESSION_KEY, user);
+            session.setAttribute("user", user);
             response.sendRedirect("profile");
 
         } catch (Exception e) {
-            notifications.info(Language.GENERAL_ERROR);
-            response.sendRedirect("shop");
+            notifications.error(Language.GENERAL_ERROR_RENDER);
+            response.sendRedirect(ViewUtilities.referer(request, "shop"));
         }
     }
 

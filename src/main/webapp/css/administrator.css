@@ -25,3 +25,8 @@ a.add-record {
     max-height: 100px;
     max-width: 100px;
 }
+
+.price {
+    color: #fe4362;
+    font-weight: 800;
+}

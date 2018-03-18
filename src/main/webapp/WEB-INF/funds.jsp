@@ -9,7 +9,7 @@
         velit ante, efficitur vitae dapibus et, pretium at nisl. Fusce fringilla ligula purus, nec semper mi maximus
         lacinia. </p>
 
-    <p>You currently have <span class="price">$${user.getBalance()}</span> in funds.</p>
+    <p>You currently have <span class="price">$${f:formatPrice(user.getBalance())}</span> in funds.</p>
 </div>
 <div class="row">
     <h2>Add funds</h2>
@@ -22,13 +22,13 @@
     <form method="post" id="funds-form">
         <div class="row">
             <div class="col s12 input-field">
-                <input id="quantity-input" type="number" name="quantity" value="50" min="1" required>
-                <label for="quantity-input">Amount</label>
+                <input id="quantity-input" type="number" name="amount" value="50" min="1" required>
+                <label for="quantity-input">Amount (dollars)</label>
             </div>
         </div>
         <div class="row">
             <div class="col s12 input-field">
-                <input id="owner-input" type="text" name="quantity">
+                <input id="owner-input" type="text" name="owner">
                 <label for="owner-input">Owner</label>
             </div>
         </div>

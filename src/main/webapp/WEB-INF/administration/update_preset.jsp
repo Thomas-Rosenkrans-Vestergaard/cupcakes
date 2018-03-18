@@ -4,7 +4,7 @@
 <form class="main" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="input-field col s12">
-            <input disabled type="number" name="id" value="${preset.getId()}">
+            <input readonly type="number" name="id" value="${preset.getId()}">
         </div>
     </div>
     <div class="row">
@@ -63,7 +63,7 @@
         </div>
     </div>
     <div class="row">
-        <input class="button-submit btn-large" type="submit" value="Create">
+        <input class="button-submit btn-large" type="submit" value="Update">
     </div>
 </form>
 <%@ include file="includes/footer.jspf" %>

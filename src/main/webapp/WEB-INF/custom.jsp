@@ -16,7 +16,7 @@
                     <option value="${bottom.getId()}"
                             data-name="<c:out value="${bottom.getName()}"/>"
                             data-description="<c:out value="${bottom.getDescription()}"/>"
-                            data-price="<c:out value="${bottom.getPrice()}"/>"
+                            data-price="<c:out value="${f:formatPrice(bottom.getPrice())}"/>"
                         ${bottom.getId() == selectedBottom ? 'selected' : ''}
                     >
                         <c:out value="${bottom.getName()}"/>
@@ -51,7 +51,7 @@
                     <option value="${topping.getId()}"
                             data-name="<c:out value="${topping.getName()}"/>"
                             data-description="<c:out value="${topping.getDescription()}"/>"
-                            data-price="<c:out value="${topping.getPrice()}"/>"
+                            data-price="<c:out value="${f:formatPrice(topping.getPrice())}"/>"
                         ${topping.getId() == selectedTopping ? 'selected' : ''}
                     ><c:out value="${topping.getName()}"/></option>
                 </c:forEach>
@@ -83,9 +83,8 @@
         <input id="quantity" type="number" name="quantity" value="5" required>
     </div>
     <div class="row">
-        <input class="button-submit btn-large place-custom-order-submit" type="submit" value="Add to cart"> <span
-            class="price">Your total is <span
-            id="custom-total">$0</span>.</span>
+        <input class="button-submit btn-large place-custom-order-submit" type="submit" value="Add to cart">
+        <span class="price">Your total is <span id="custom-total">$0</span>.</span>
     </div>
 </form>
 <script>
