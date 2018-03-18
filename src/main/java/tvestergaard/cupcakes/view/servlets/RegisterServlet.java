@@ -7,7 +7,7 @@ import tvestergaard.cupcakes.database.PrimaryDatabase;
 import tvestergaard.cupcakes.database.users.MysqlUserDAO;
 import tvestergaard.cupcakes.database.users.User;
 import tvestergaard.cupcakes.database.users.UserDAO;
-import tvestergaard.cupcakes.database.users.UserRequestInputValidator;
+import tvestergaard.cupcakes.view.UserRequestInputValidator;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
