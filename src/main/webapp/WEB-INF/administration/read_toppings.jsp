@@ -35,7 +35,7 @@
         </c:when>
         <c:otherwise>
             <tr>
-                <p>There are currently no toppings.</p>
+                <td colspan="7">There are currently no toppings.</td>
             </tr>
         </c:otherwise>
     </c:choose>

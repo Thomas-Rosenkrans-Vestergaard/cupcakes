@@ -35,7 +35,7 @@
         </c:when>
         <c:otherwise>
             <tr>
-                <p>There are currently no presets.</p>
+                <td colspan="6">There are currently no presets.</td>
             </tr>
         </c:otherwise>
     </c:choose>

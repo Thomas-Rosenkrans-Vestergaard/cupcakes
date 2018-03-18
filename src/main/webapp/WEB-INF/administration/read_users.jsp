@@ -26,7 +26,7 @@
         </c:when>
         <c:otherwise>
             <tr>
-                <p>There are currently no users.</p>
+                <td colspan="5">There are currently no users.</td>
             </tr>
         </c:otherwise>
     </c:choose>
