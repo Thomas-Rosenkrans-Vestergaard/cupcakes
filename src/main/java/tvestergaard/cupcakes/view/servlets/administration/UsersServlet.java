@@ -1,7 +1,7 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.Authentication;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;

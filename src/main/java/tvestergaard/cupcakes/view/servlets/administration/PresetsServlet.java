@@ -1,8 +1,8 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import tvestergaard.cupcakes.Authentication;
-import tvestergaard.cupcakes.ImageUpload;
+import tvestergaard.cupcakes.view.Authentication;
+import tvestergaard.cupcakes.FileSaver;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
@@ -236,7 +236,7 @@ public class PresetsServlet extends HttpServlet
             return;
         }
 
-        ImageUpload upload = new ImageUpload(ViewUtilities.path(request, "/images/presets"));
+        FileSaver upload = new FileSaver(ViewUtilities.path(request, "/images/presets"));
         upload.saveAs(request.getPart("image").getInputStream(), preset.getId() + ".jpg");
 
         notifications.success(RECORD_CREATED_SUCCESS);
@@ -292,7 +292,7 @@ public class PresetsServlet extends HttpServlet
         }
 
         if (parameters.isPresent(PARAMETER_IMAGE)) {
-            ImageUpload upload = new ImageUpload(ViewUtilities.path(request, "/images/presets"));
+            FileSaver upload = new FileSaver(ViewUtilities.path(request, "/images/presets"));
             upload.saveAs(request.getPart("image").getInputStream(), preset.getId() + ".jpg");
         }
 

@@ -3,16 +3,35 @@ package tvestergaard.cupcakes;
 import javax.servlet.ServletException;
 import java.io.*;
 
-public class ImageUpload
+/**
+ * Helper class for saving {@link InputStream}s as files.
+ */
+public class FileSaver
 {
 
+    /**
+     * The destination directory.
+     */
     private File destination;
 
-    public ImageUpload(File destination)
+    /**
+     * Creates a new {@link FileSaver} helper.
+     *
+     * @param destination The destination directory.
+     */
+    public FileSaver(File destination)
     {
         this.destination = destination;
     }
 
+    /**
+     * Saves the provided {@link InputStream} as a file with the provided {@code name}.
+     *
+     * @param contents The contents to to save.
+     * @param name The name of the file to save the contents as.
+     * @throws IOException
+     * @throws ServletException
+     */
     public void saveAs(InputStream contents, String name) throws IOException, ServletException
     {
         destination.mkdirs();

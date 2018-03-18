@@ -2,7 +2,7 @@ package tvestergaard.cupcakes.view.servlets.administration;
 
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import tvestergaard.cupcakes.Authentication;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;

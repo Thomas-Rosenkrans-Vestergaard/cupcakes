@@ -1,6 +1,6 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.Authentication;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.view.ViewUtilities;
 

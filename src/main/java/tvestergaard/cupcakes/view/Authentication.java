@@ -1,4 +1,4 @@
-package tvestergaard.cupcakes;
+package tvestergaard.cupcakes.view;
 
 import tvestergaard.cupcakes.database.users.User;
 

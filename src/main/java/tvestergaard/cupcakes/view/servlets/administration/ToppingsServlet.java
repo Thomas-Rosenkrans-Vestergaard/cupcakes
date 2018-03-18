@@ -1,8 +1,8 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 
-import tvestergaard.cupcakes.Authentication;
-import tvestergaard.cupcakes.ImageUpload;
+import tvestergaard.cupcakes.view.Authentication;
+import tvestergaard.cupcakes.FileSaver;
 import tvestergaard.cupcakes.Language;
 import tvestergaard.cupcakes.Notifications;
 import tvestergaard.cupcakes.database.PrimaryDatabase;
@@ -206,7 +206,7 @@ public class ToppingsServlet extends HttpServlet
             return;
         }
 
-        ImageUpload upload = new ImageUpload(ViewUtilities.path(request, "/images/toppings"));
+        FileSaver upload = new FileSaver(ViewUtilities.path(request, "/images/toppings"));
         upload.saveAs(request.getPart("image").getInputStream(), topping.getId() + ".jpg");
 
         notifications.success(RECORD_CREATED_SUCCESS);
@@ -246,7 +246,7 @@ public class ToppingsServlet extends HttpServlet
         }
 
         if (parameters.isPresent(PARAMETER_IMAGE)) {
-            ImageUpload upload = new ImageUpload(ViewUtilities.path(request, "/images/toppings"));
+            FileSaver upload = new FileSaver(ViewUtilities.path(request, "/images/toppings"));
             upload.saveAs(request.getPart("image").getInputStream(), topping.getId() + ".jpg");
         }
 
