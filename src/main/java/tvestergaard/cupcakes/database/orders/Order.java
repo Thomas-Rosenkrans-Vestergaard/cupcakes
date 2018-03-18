@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents and order for a list of cupcakes placed by a user.
+ * Represents an order placed by a user. Contains one or more {@link Item}s (products).
  */
 public class Order
 {

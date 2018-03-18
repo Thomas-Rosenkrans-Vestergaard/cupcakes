@@ -4,7 +4,7 @@ import tvestergaard.cupcakes.database.bottoms.Bottom;
 import tvestergaard.cupcakes.database.toppings.Topping;
 
 /**
- * Entity representing a row from the presets table in the database.
+ * A purchasable predefined bottom and topping pair.
  */
 public class Preset
 {

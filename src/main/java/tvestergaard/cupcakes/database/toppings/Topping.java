@@ -3,7 +3,7 @@ package tvestergaard.cupcakes.database.toppings;
 import java.util.Objects;
 
 /**
- * Entity representing a topping from a database.
+ * One of the components of a cupcake. The other being the {@link tvestergaard.cupcakes.database.bottoms.Bottom}.
  */
 public final class Topping
 {

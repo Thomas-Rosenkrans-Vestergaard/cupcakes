@@ -3,7 +3,7 @@ package tvestergaard.cupcakes.database.bottoms;
 import java.util.Objects;
 
 /**
- * Represents a bottom record in a database.
+ * One of the components of a cupcake. The other being the {@link tvestergaard.cupcakes.database.toppings.Topping}.
  */
 public final class Bottom
 {
