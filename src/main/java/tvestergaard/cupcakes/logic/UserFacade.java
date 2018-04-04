@@ -1,11 +1,14 @@
 package tvestergaard.cupcakes.logic;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.mindrot.jbcrypt.BCrypt;
 import tvestergaard.cupcakes.data.DAOException;
 import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.data.users.UserDAO;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * API for performing various operations related to users.
@@ -34,7 +37,7 @@ public class UserFacade
      * @param password The password to hash.
      * @return The resulting digest.
      */
-    private String hash(String password)
+    public String hash(String password)
     {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
@@ -72,7 +75,7 @@ public class UserFacade
      * <code>null</code> if the provided id doesn't match a user in the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public User get(int id) throws ApplicationException
+    public User get(int id)
     {
         try {
             return dao.get(id);
@@ -89,7 +92,7 @@ public class UserFacade
      * <code>null</code> if the provided username doesn't match a user in the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public User getFromUsername(String username) throws ApplicationException
+    public User getFromUsername(String username)
     {
         try {
             return dao.getFromUsername(username);
@@ -105,7 +108,7 @@ public class UserFacade
      * @return The user with the provided email.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public User getFromEmail(String email) throws ApplicationException
+    public User getFromEmail(String email)
     {
         try {
             return dao.getFromEmail(email);
@@ -120,7 +123,7 @@ public class UserFacade
      * @return A list of all the users in the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public List<User> get() throws ApplicationException
+    public List<User> get()
     {
         try {
             return dao.get();
@@ -136,15 +139,12 @@ public class UserFacade
      * @param email    The email of the user to create.
      * @param password The password of the user to create.
      * @return An {@link User} object representing the newly created user record.
-     * @throws ApplicationException When an error occurs during the operation.
+     * @throws ApplicationException  When an error occurs during the operation.
+     * @throws UserCreationException When the provided details could not be created into a new user.
      */
-    public User create(String username, String email, String password) throws ApplicationException
+    public User create(String username, String email, String password) throws UserCreationException
     {
-        try {
-            return dao.create(username, email, password);
-        } catch (DAOException e) {
-            throw new ApplicationException(e);
-        }
+        return create(username, email, password, 0, User.Role.USER);
     }
 
     /**
@@ -156,11 +156,42 @@ public class UserFacade
      * @param balance  The initial balance of the user to create.
      * @param role     The role of the user to create.
      * @return A {@link User} entity representing the newly inserted user.
-     * @throws ApplicationException When an error occurs during the operation.
+     * @throws ApplicationException  When an error occurs during the operation.
+     * @throws UserCreationException When the provided details could not be created into a new user.
      */
-    public User create(String username, String email, String password, int balance, User.Role role) throws ApplicationException
+    public User create(String username, String email, String password, int balance, User.Role role) throws UserCreationException
     {
         try {
+
+            Set<UserCreationException.Reason> reasons = new HashSet<>();
+
+            // Username length
+            if (username.length() < 3)
+                reasons.add(UserCreationException.Reason.USERNAME_SHORTER_THAN_3);
+            else {
+                // Username availability
+                User usernameUser = dao.getFromUsername(username);
+                if (usernameUser != null)
+                    reasons.add(UserCreationException.Reason.USERNAME_TAKEN);
+            }
+
+            // Email format
+            if (!EmailValidator.getInstance().isValid(email))
+                reasons.add(UserCreationException.Reason.EMAIL_FORMAT);
+            else {
+                // Email availability
+                User emailUser = dao.getFromEmail(email);
+                if (emailUser != null)
+                    reasons.add(UserCreationException.Reason.EMAIL_TAKEN);
+            }
+
+            // Password length
+            if (password.length() < 4)
+                reasons.add(UserCreationException.Reason.PASSWORD_SHORTER_THAN_4);
+
+            if (reasons.size() > 0)
+                throw new UserCreationException(reasons);
+
             return dao.create(username, email, hash(password), balance, role);
         } catch (DAOException e) {
             throw new ApplicationException(e);
@@ -178,10 +209,41 @@ public class UserFacade
      * @param role     The role to update to.
      * @return A {@link User} entity representing the updated user.
      * @throws ApplicationException When an error occurs during the operation.
+     * @throws UserUpdateException  When the provided information is not legal.
      */
-    public User update(int id, String username, String email, String password, int balance, User.Role role) throws ApplicationException
+    public User update(int id, String username, String email, String password, int balance, User.Role role) throws UserUpdateException
     {
         try {
+
+            Set<UserUpdateException.Reason> reasons = new HashSet<>();
+
+            // Username length
+            if (username.length() < 3)
+                reasons.add(UserUpdateException.Reason.USERNAME_SHORTER_THAN_3);
+            else {
+                // Username availability
+                User usernameUser = dao.getFromUsername(username);
+                if (usernameUser != null && usernameUser.getId() != id)
+                    reasons.add(UserUpdateException.Reason.USERNAME_TAKEN);
+            }
+
+            // Email format
+            if (!EmailValidator.getInstance().isValid(email))
+                reasons.add(UserUpdateException.Reason.EMAIL_FORMAT);
+            else {
+                // Email availability
+                User emailUser = dao.getFromEmail(email);
+                if (emailUser != null && emailUser.getId() != id)
+                    reasons.add(UserUpdateException.Reason.EMAIL_TAKEN);
+            }
+
+            // Password length
+            if (password.length() < 4)
+                reasons.add(UserUpdateException.Reason.PASSWORD_SHORTER_THAN_4);
+
+            if (reasons.size() > 0)
+                throw new UserUpdateException(reasons);
+
             return dao.update(id, username, email, password, balance, role);
         } catch (DAOException e) {
             throw new ApplicationException(e);
@@ -195,7 +257,7 @@ public class UserFacade
      * @return {@code true} if the user record was deleted, {@code false} if the user record was not deleted.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public boolean delete(int id) throws ApplicationException
+    public boolean delete(int id)
     {
         try {
             return dao.delete(id);
@@ -211,7 +273,7 @@ public class UserFacade
      * @return {@code true} if the user record was deleted, {@code false} if the user record was not deleted.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public boolean delete(User user) throws ApplicationException
+    public boolean delete(User user)
     {
         try {
             return dao.delete(user);

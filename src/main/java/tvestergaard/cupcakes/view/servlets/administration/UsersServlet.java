@@ -3,11 +3,9 @@ package tvestergaard.cupcakes.view.servlets.administration;
 import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.logic.Language;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.logic.UserFacade;
+import tvestergaard.cupcakes.logic.*;
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.UserRequestInputValidator;
+import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
@@ -140,7 +138,7 @@ public class UsersServlet extends HttpServlet
 
         String action = request.getParameter(ACTION_PARAMETER);
 
-        if (ACTION_UPDATE.equals(action)) {
+        if (ACTION_CREATE.equals(action)) {
             handleCreate(request, response, notifications);
             return;
         }
@@ -172,35 +170,57 @@ public class UsersServlet extends HttpServlet
             throws ServletException, IOException
     {
         try {
-
-            UserRequestInputValidator validator = new UserRequestInputValidator(request);
             notifications.record();
-
-            validator.username(userFacade, notifications, Language.USER_USERNAME_ERRORS);
-            validator.email(userFacade, notifications, Language.USER_EMAIL_ERRORS);
-            validator.password(notifications, Language.USER_PASSWORD_ERRORS);
-            validator.balance(notifications, Language.USER_BALANCE_ERRORS);
-            validator.role(notifications, Language.USER_TYPE_ERRORS);
-
+            Parameters parameters = new Parameters(request);
+            validateCreateParameters(notifications, parameters);
             if (notifications.hasNew()) {
                 response.sendRedirect("users?action=new");
                 return;
             }
 
             User user = userFacade.create(
-                    validator.getUsername(),
-                    validator.getEmail(),
-                    validator.getPassword(),
-                    validator.getBalance(),
-                    validator.getRole());
+                    parameters.getString("username"),
+                    parameters.getString("email"),
+                    parameters.getString("password"),
+                    parameters.getInt("balance"),
+                    User.Role.code(parameters.getInt("role")));
 
             notifications.success(Language.RECORD_CREATED_SUCCESS);
             response.sendRedirect("users?action=update&id=" + user.getId());
 
+        } catch (UserCreationException e) {
+            if (e.has(UserCreationException.Reason.EMAIL_TAKEN))
+                notifications.error("That email is already in use.");
+            if (e.has(UserCreationException.Reason.USERNAME_TAKEN))
+                notifications.error("That username is already in use.");
+            response.sendRedirect(ViewUtilities.referer(request, "administration/users"));
         } catch (Exception e) {
             notifications.error(Language.RECORD_CREATED_ERROR);
             response.sendRedirect("users?action=new");
             return;
+        }
+    }
+
+    public void validateCreateParameters(Notifications notifications, Parameters parameters)
+    {
+        if (parameters.notPresent("username")) {
+            notifications.error("No username provided.");
+        }
+
+        if (parameters.notPresent("email")) {
+            notifications.error("No email provided.");
+        }
+
+        if (parameters.notPresent("password")) {
+            notifications.error("No password provided.");
+        }
+
+        if (parameters.notPresent("balance") || parameters.notInt("balance")) {
+            notifications.error("No balance provided.");
+        }
+
+        if (parameters.notPresent("role") || parameters.notInt("role")) {
+            notifications.error("No role provided.");
         }
     }
 
@@ -225,45 +245,60 @@ public class UsersServlet extends HttpServlet
         }
 
         try {
-
-            UserRequestInputValidator validator = new UserRequestInputValidator(request);
             notifications.record();
-
-            if (validator.usernameWasSent(notifications, Language.USER_USERNAME_ERRORS[0]))
-                validator.usernameLength(notifications, Language.USER_USERNAME_ERRORS[1]);
-            if (validator.emailWasSent(notifications, Language.USER_EMAIL_ERRORS[0]))
-                validator.emailFormat(notifications, Language.USER_EMAIL_ERRORS[1]);
-            if (validator.passwordWasSent())
-                validator.password(notifications, Language.USER_PASSWORD_ERRORS);
-            validator.balance(notifications, Language.USER_BALANCE_ERRORS);
-            validator.role(notifications, Language.USER_TYPE_ERRORS);
-
+            Parameters parameters = new Parameters(request);
+            validateUpdateParameters(notifications, parameters);
             if (notifications.hasNew()) {
-                request.getRequestDispatcher("/WEB-INF/administration/create_user.jsp").forward(request, response);
+                response.sendRedirect(request.getRequestURL().toString());
                 return;
             }
 
             id = Integer.parseInt(request.getParameter("id"));
 
-            User user = userFacade.update(
-                    id,
-                    validator.getUsername(),
-                    validator.getEmail(),
-                    validator.getPassword(),
-                    validator.getBalance(),
-                    validator.getRole());
+            String    username = parameters.getString("username");
+            String    email    = parameters.getString("email");
+            String    password = parameters.getString("password");
+            int       balance  = parameters.getInt("balance");
+            User.Role role     = User.Role.code(parameters.getInt("role"));
 
+            if (password.equals(""))
+                password = userFacade.get(id).getPassword();
+
+            User user = userFacade.update(id, username, email, password, balance, role);
             notifications.success(Language.RECORD_UPDATED_SUCCESS);
             response.sendRedirect("users?action=update&id=" + user.getId());
 
         } catch (NumberFormatException e) {
             notifications.error(Language.MALFORMED_ID_PARAMETER);
             response.sendRedirect("users");
-            return;
+        } catch (UserUpdateException e) {
+            if (e.has(UserUpdateException.Reason.EMAIL_TAKEN))
+                notifications.error("That email is already in use.");
+            if (e.has(UserUpdateException.Reason.USERNAME_TAKEN))
+                notifications.error("That username is already in use.");
+            response.sendRedirect("users?action=update&id=" + id);
         } catch (Exception e) {
             notifications.error(Language.RECORD_UPDATED_ERROR);
             response.sendRedirect("users?action=update&id=" + id);
-            return;
+        }
+    }
+
+    public void validateUpdateParameters(Notifications notifications, Parameters parameters)
+    {
+        if (parameters.notPresent("username")) {
+            notifications.error("No username provided.");
+        }
+
+        if (parameters.notPresent("email")) {
+            notifications.error("No email provided.");
+        }
+
+        if (parameters.notPresent("balance") || parameters.notInt("balance")) {
+            notifications.error("No balance provided.");
+        }
+
+        if (parameters.notPresent("role") || parameters.notInt("role")) {
+            notifications.error("No role provided.");
         }
     }
 

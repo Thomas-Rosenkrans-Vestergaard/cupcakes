@@ -36,7 +36,7 @@ public class OrderFacade
      * @return The {@link Order} representing the order with the provided id in the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Order get(int id) throws ApplicationException
+    public Order get(int id)
     {
         try {
             return dao.get(id);
@@ -52,7 +52,7 @@ public class OrderFacade
      * @return The orders placed by the provided user.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public List<Order> get(User user) throws ApplicationException
+    public List<Order> get(User user)
     {
         try {
             return dao.get(user);
@@ -67,7 +67,7 @@ public class OrderFacade
      * @return A list containing all the orders in the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public List<Order> get() throws ApplicationException
+    public List<Order> get()
     {
         try {
             return dao.get();
@@ -85,7 +85,7 @@ public class OrderFacade
      * @return An {@link Order} instance representing the newly inserted row.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Order create(User user, Iterable<ShoppingCart.Item> items, String comment) throws ApplicationException
+    public Order create(User user, Iterable<ShoppingCart.Item> items, String comment)
     {
         try {
             return dao.create(user, items, comment);
@@ -104,7 +104,7 @@ public class OrderFacade
      * @return An entity representing the updated row.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Order update(int id, User user, String comment, Order.Status status) throws ApplicationException
+    public Order update(int id, User user, String comment, Order.Status status)
     {
         try {
             return dao.update(id, user, comment, status);

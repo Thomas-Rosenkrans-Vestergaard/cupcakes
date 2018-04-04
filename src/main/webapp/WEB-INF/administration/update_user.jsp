@@ -23,14 +23,8 @@
     </div>
     <div class="row">
         <div class="input-field col s12">
-            <input name="password" id="password" type="password" pattern="{8,}" class="validate">
+            <input name="password" id="password" type="password" pattern="{4,}" class="validate">
             <label for="password">Password</label>
-        </div>
-    </div>
-    <div class="row">
-        <div class="input-field col s12">
-            <input name="repeat-password" id="repeat-password" type="password" pattern="{8,}" class="validate">
-            <label for="repeat-password">Repeat password</label>
         </div>
     </div>
     <div class="row">
@@ -57,9 +51,5 @@
     <div class="row">
         <input class="button-submit btn-large" type="submit" value="Update">
     </div>
-</form>
-<form class="main" method="post" action="users?action=delete">
-    <input name="id" type="hidden" value="${user.getId()}">
-    <input class="button-submit btn-large" type="submit" value="Delete">
 </form>
 <%@ include file="includes/footer.jspf" %>

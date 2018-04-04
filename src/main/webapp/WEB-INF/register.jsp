@@ -19,13 +19,8 @@
                 <label for="email-input">Email</label>
             </div>
             <div class="input-field col s12">
-                <input type="password" id="password-input" name="password" class="validate" pattern="{8,}" required>
+                <input type="password" id="password-input" name="password" class="validate" pattern="{4,}" required>
                 <label for="password-input">Password</label>
-            </div>
-            <div class="input-field col s12">
-                <input type="password" id="password-repeat-input" name="repeat-password" class="validate" pattern="{8,}"
-                       required>
-                <label for="password-repeat-input">Repeat password</label>
             </div>
             <input class="button-submit btn-large" type="submit" value="Register">
         </div>

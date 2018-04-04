@@ -5,8 +5,9 @@ import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.logic.Language;
 import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.logic.UserCreationException;
 import tvestergaard.cupcakes.logic.UserFacade;
-import tvestergaard.cupcakes.view.UserRequestInputValidator;
+import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
@@ -61,31 +62,53 @@ public class RegisterServlet extends HttpServlet
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        Notifications             notifications = ViewUtilities.getNotifications(request);
-        UserRequestInputValidator validator     = new UserRequestInputValidator(request);
+        Notifications notifications = ViewUtilities.getNotifications(request);
+        Parameters    parameters    = new Parameters(request);
 
         notifications.record();
-
-        validator.username(userFacade, notifications, Language.USER_USERNAME_ERRORS);
-        validator.email(userFacade, notifications, Language.USER_EMAIL_ERRORS);
-        validator.password(notifications, Language.USER_PASSWORD_ERRORS);
+        validateParameters(notifications, parameters);
 
         if (notifications.hasNew()) {
             response.sendRedirect("registration");
             return;
         }
 
+        String username = parameters.getString("username");
+        String email    = parameters.getString("email");
+        String password = parameters.getString("password");
+
         try {
 
-            User user = userFacade.create(validator.getUsername(), validator.getEmail(), validator.getPassword());
+            User user = userFacade.create(username, email, password);
             notifications.success(Language.REGISTRATION_SUCCESS);
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             response.sendRedirect("profile");
 
+        } catch (UserCreationException e) {
+            if (e.has(UserCreationException.Reason.EMAIL_TAKEN))
+                notifications.error("That email is already in use.");
+            if (e.has(UserCreationException.Reason.USERNAME_TAKEN))
+                notifications.error("That username is already in use.");
+            response.sendRedirect(ViewUtilities.referer(request, "shop"));
         } catch (Exception e) {
             notifications.error(Language.GENERAL_ERROR_RENDER);
             response.sendRedirect(ViewUtilities.referer(request, "shop"));
+        }
+    }
+
+    private void validateParameters(Notifications notifications, Parameters parameters)
+    {
+        if (parameters.notPresent("username")) {
+            notifications.error("No username provided.");
+        }
+
+        if (parameters.notPresent("email")) {
+            notifications.error("No email provided.");
+        }
+
+        if (parameters.notPresent("password")) {
+            notifications.error("No password provided.");
         }
     }
 }

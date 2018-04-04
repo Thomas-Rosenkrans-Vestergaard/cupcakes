@@ -21,6 +21,12 @@
                     <td><c:out value="${user.getEmail()}"/></td>
                     <td class="price">$<c:out value="${f:formatPrice(user.getBalance())}"/></td>
                     <td><c:out value="${user.getRole()}"/></td>
+                    <td>
+                        <form class="main" method="post" action="users?action=delete">
+                            <input name="id" type="hidden" value="${user.getId()}">
+                            <input class="button-submit btn" type="submit" value="Delete">
+                        </form>
+                    </td>
                 </tr>
             </c:forEach>
         </c:when>

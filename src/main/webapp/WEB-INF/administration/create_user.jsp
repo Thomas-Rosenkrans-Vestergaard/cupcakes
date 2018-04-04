@@ -17,14 +17,8 @@
     </div>
     <div class="row">
         <div class="input-field col s12">
-            <input name="password" id="password" type="password" pattern="{8,}" class="validate" required>
+            <input name="password" id="password" type="password" pattern="{4,}" class="validate" required>
             <label for="password">Password</label>
-        </div>
-    </div>
-    <div class="row">
-        <div class="input-field col s12">
-            <input name="repeat-password" id="repeat-password" type="password" pattern="{8,}" class="validate" required>
-            <label for="repeat-password">Repeat Password</label>
         </div>
     </div>
     <div class="row">

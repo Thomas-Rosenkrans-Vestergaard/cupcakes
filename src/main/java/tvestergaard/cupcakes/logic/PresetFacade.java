@@ -36,7 +36,7 @@ public class PresetFacade
      * @return The {@link Preset} entity representing the preset with the provided id.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Preset get(int id) throws ApplicationException
+    public Preset get(int id)
     {
         try {
             return dao.get(id);
@@ -51,7 +51,7 @@ public class PresetFacade
      * @return The list of all the presets in the persistent storage source.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public List<Preset> get() throws ApplicationException
+    public List<Preset> get()
     {
         try {
             return dao.get();
@@ -70,7 +70,7 @@ public class PresetFacade
      * @return A new {@link Preset} representing the newly inserted row.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Preset create(String name, String description, Bottom bottom, Topping topping) throws ApplicationException
+    public Preset create(String name, String description, Bottom bottom, Topping topping)
     {
         try {
             return dao.create(name, description, bottom, topping);
@@ -90,7 +90,7 @@ public class PresetFacade
      * @return The entity representing the newly inserted row.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Preset update(int id, String name, String description, Bottom bottom, Topping topping) throws ApplicationException
+    public Preset update(int id, String name, String description, Bottom bottom, Topping topping)
     {
         try {
             return dao.update(id, name, description, bottom, topping);
@@ -106,7 +106,7 @@ public class PresetFacade
      * @return {@code true} if the preset is deleted, {@code false} if the preset was not deleted.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public boolean delete(Preset preset) throws ApplicationException
+    public boolean delete(Preset preset)
     {
         try {
             return dao.delete(preset);
@@ -122,7 +122,7 @@ public class PresetFacade
      * @return {@code true} if the preset is deleted, {@code false} if the preset was not deleted.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public boolean delete(int id) throws ApplicationException
+    public boolean delete(int id)
     {
         try {
             return dao.delete(id);

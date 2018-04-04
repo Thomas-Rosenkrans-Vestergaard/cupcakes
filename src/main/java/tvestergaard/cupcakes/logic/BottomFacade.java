@@ -35,7 +35,7 @@ public class BottomFacade
      * @return The {@link Bottom} representing the bottom with the provided {@code id} from the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Bottom get(int id) throws ApplicationException
+    public Bottom get(int id)
     {
         try {
             return dao.get(id);
@@ -50,7 +50,7 @@ public class BottomFacade
      * @return The list of all the bottoms in the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public List<Bottom> get() throws ApplicationException
+    public List<Bottom> get()
     {
         try {
             return dao.get();
@@ -69,7 +69,7 @@ public class BottomFacade
      * @return The newly created {@link Bottom} representing the inserted bottom in the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Bottom create(String name, String description, int price, boolean active) throws ApplicationException
+    public Bottom create(String name, String description, int price, boolean active)
     {
         try {
             return dao.create(name, description, price, active);
@@ -89,7 +89,7 @@ public class BottomFacade
      * @return The bottom representing the updated bottom in the application.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Bottom update(int id, String name, String description, int price, boolean active) throws ApplicationException
+    public Bottom update(int id, String name, String description, int price, boolean active)
     {
         try {
             return dao.update(id, name, description, price, active);
@@ -105,7 +105,7 @@ public class BottomFacade
      * @return {@code true} when the record was successfully deleted, {@code false} when the record was not deleted.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public boolean delete(Topping topping) throws ApplicationException
+    public boolean delete(Topping topping)
     {
         try {
             return dao.delete(topping);
@@ -121,7 +121,7 @@ public class BottomFacade
      * @return {@code true} when the record was successfully deleted, {@code false} when the record was not deleted.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public boolean delete(int id) throws ApplicationException
+    public boolean delete(int id)
     {
         try {
             return dao.delete(id);

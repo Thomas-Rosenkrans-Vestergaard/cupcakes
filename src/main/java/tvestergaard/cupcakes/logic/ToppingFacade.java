@@ -34,7 +34,7 @@ public class ToppingFacade
      * @return The entity representing the topping with the provided id.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Topping get(int id) throws ApplicationException
+    public Topping get(int id)
     {
         try {
             return dao.get(id);
@@ -49,7 +49,7 @@ public class ToppingFacade
      * @return The list of all the toppings in the database.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public List<Topping> get() throws ApplicationException
+    public List<Topping> get()
     {
         try {
             return dao.get();
@@ -68,7 +68,7 @@ public class ToppingFacade
      * @return The new entity representing the newly inserted topping.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Topping create(String name, String description, int price, boolean active) throws ApplicationException
+    public Topping create(String name, String description, int price, boolean active)
     {
         try {
             return dao.create(name, description, price, active);
@@ -88,7 +88,7 @@ public class ToppingFacade
      * @return An entity representing the updated row.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public Topping update(int id, String name, String description, int price, boolean active) throws ApplicationException
+    public Topping update(int id, String name, String description, int price, boolean active)
     {
         try {
             return dao.update(id, name, description, price, active);
@@ -104,7 +104,7 @@ public class ToppingFacade
      * @return {@code true} if the row was successfully deleted, {@code false} if the row was not deleted.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public boolean delete(Topping topping) throws ApplicationException
+    public boolean delete(Topping topping)
     {
         try {
             return dao.delete(topping);
@@ -120,7 +120,7 @@ public class ToppingFacade
      * @return {@code true} if the row was successfully deleted, {@code false} if the row was not deleted.
      * @throws ApplicationException When an error occurs during the operation.
      */
-    public boolean delete(int id) throws ApplicationException
+    public boolean delete(int id)
     {
         try {
             return dao.delete(id);
