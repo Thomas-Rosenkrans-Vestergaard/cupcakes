@@ -22,7 +22,7 @@
                     <td><c:out value="${preset.getDescription()}"/></td>
                     <td><c:out value="${preset.getBottom().getName()}"/></td>
                     <td><c:out value="${preset.getTopping().getName()}"/></td>
-                    <td><c:out value="${preset.getPrice()}"/></td>
+                    <td class="price">$<c:out value="${f:formatPrice(preset.getPrice())}"/></td>
                     <td class="table-image"><img src="../images/presets/${preset.getId()}.jpg" alt=""></td>
                     <td>
                         <form class="main" method="post" action="presets?action=delete">

@@ -21,7 +21,7 @@
                     <td><a href="toppings?action=update&id=${topping.getId()}">${topping.getId()}</a></td>
                     <td><c:out value="${topping.getName()}"/></td>
                     <td><c:out value="${topping.getDescription()}"/></td>
-                    <td><c:out value="${topping.getPrice()}"/></td>
+                    <td class="price">$<c:out value="${f:formatPrice(topping.getPrice())}"/></td>
                     <td>${topping.isActive() ? 'true' : 'false'}</td>
                     <td class="table-image"><img src="../images/toppings/${topping.getId()}.jpg" alt=""></td>
                     <td>
