@@ -95,6 +95,6 @@ public class LoginServlet extends HttpServlet
         if (from == null)
             return "profile";
 
-        return "profile?from=" + from;
+        return "login?from=" + from;
     }
 }
