@@ -282,9 +282,9 @@ public class Order
         }
 
         /**
-         * Returns the price
+         * Returns the total price of the {@link Order}.
          *
-         * @return
+         * @return The total price of the {@link Order}.
          */
         public int getTotalPrice()
         {

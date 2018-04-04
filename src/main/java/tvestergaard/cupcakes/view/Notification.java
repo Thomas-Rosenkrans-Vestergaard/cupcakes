@@ -86,7 +86,6 @@ public class Notification
      *
      * @param message The message to forward to the user.
      * @param level   The level of the notification to create.
-     * @return The newly created notification.
      */
     public Notification(String message, Level level)
     {

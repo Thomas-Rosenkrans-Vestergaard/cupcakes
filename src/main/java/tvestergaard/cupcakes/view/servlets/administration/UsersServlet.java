@@ -30,10 +30,8 @@ public class UsersServlet extends HttpServlet
     /**
      * Handles GET requests to /administration/users.
      *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * @param request  The request.
+     * @param response The response.
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -73,10 +71,8 @@ public class UsersServlet extends HttpServlet
     /**
      * Shows the form where administrators can create new users.
      *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * @param request  The request.
+     * @param response The response.
      */
     private void showCreate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -118,10 +114,8 @@ public class UsersServlet extends HttpServlet
     /**
      * Handles POST requests to /administration/users.
      *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * @param request  The request.
+     * @param response The response.
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {

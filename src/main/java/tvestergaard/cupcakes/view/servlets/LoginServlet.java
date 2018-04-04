@@ -86,8 +86,8 @@ public class LoginServlet extends HttpServlet
     /**
      * Returns the location to redirect to in case of errors during login POST requests.
      *
-     * @param request
-     * @return
+     * @param request The current servlet request.
+     * @return The location to redirect to in case of errors during login POST requests.
      */
     private String getErrorLocation(HttpServletRequest request)
     {

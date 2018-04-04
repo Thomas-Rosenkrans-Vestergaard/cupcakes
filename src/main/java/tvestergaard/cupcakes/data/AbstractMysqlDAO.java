@@ -35,6 +35,7 @@ public abstract class AbstractMysqlDAO
      * returned, even after multiple calls to the {@link AbstractMysqlDAO#getConnection()} method.
      *
      * @return The {@link Connection} used by descendants of the {@link AbstractMysqlDAO}.
+     * @throws SQLException When an exception occurs while creating the connection.
      */
     protected final Connection getConnection() throws SQLException
     {

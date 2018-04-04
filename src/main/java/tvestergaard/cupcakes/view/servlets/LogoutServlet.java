@@ -21,10 +21,8 @@ public class LogoutServlet extends HttpServlet
     /**
      * Logs out the current user.
      *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * @param request  The request.
+     * @param response The response.
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {

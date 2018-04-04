@@ -4,9 +4,9 @@ import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.logic.BottomFacade;
+import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.view.Notifications;
-import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -62,17 +62,5 @@ public class CustomServlet extends HttpServlet
             notifications.error(Language.GENERAL_ERROR_RENDER);
             response.sendRedirect(ViewUtilities.referer(request, "shop"));
         }
-    }
-
-    /**
-     * Serves the /custom page where users can create their own cupcake. The url parameters 'bottom' and 'topping' can
-     * be use to fill the selection.
-     *
-     * @param request  The request.
-     * @param response The response.
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-        doGet(request, response);
     }
 }

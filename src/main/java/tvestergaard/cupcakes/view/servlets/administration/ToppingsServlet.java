@@ -49,11 +49,6 @@ public class ToppingsServlet extends HttpServlet
 
     /**
      * Handles GET requests to /administration/bottoms.
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -132,10 +127,8 @@ public class ToppingsServlet extends HttpServlet
     /**
      * Handles POST requests to /administration/toppings.
      *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
+     * @param request  The request.
+     * @param response The response.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

@@ -1,6 +1,5 @@
 package tvestergaard.cupcakes.logic;
 
-import javax.servlet.ServletException;
 import java.io.*;
 
 /**
@@ -28,11 +27,10 @@ public class FileSaver
      * Saves the provided {@link InputStream} as a file with the provided {@code name}.
      *
      * @param contents The contents to to save.
-     * @param name The name of the file to save the contents as.
-     * @throws IOException
-     * @throws ServletException
+     * @param name     The name of the file to save the contents as.
+     * @throws IOException When an io related exception occurs while saving the file.
      */
-    public void saveAs(InputStream contents, String name) throws IOException, ServletException
+    public void saveAs(InputStream contents, String name) throws IOException
     {
         destination.mkdirs();
         try (OutputStream output = new FileOutputStream(destination.getAbsolutePath() + "/" + name)) {

@@ -1,14 +1,10 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.logic.UserFacade;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.view.Parameters;
-import tvestergaard.cupcakes.view.ViewUtilities;
+import tvestergaard.cupcakes.logic.UserFacade;
+import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,8 +30,6 @@ public class FundsServlet extends HttpServlet
      *
      * @param request  The request.
      * @param response The response.
-     * @throws ServletException
-     * @throws IOException
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -57,8 +51,6 @@ public class FundsServlet extends HttpServlet
      *
      * @param request  The request.
      * @param response The response.
-     * @throws ServletException
-     * @throws IOException
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {

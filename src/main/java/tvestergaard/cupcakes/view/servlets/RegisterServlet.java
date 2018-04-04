@@ -36,8 +36,6 @@ public class RegisterServlet extends HttpServlet
      *
      * @param request  The request.
      * @param response The response.
-     * @throws ServletException
-     * @throws IOException
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -57,8 +55,6 @@ public class RegisterServlet extends HttpServlet
      *
      * @param request  The request.
      * @param response The response.
-     * @throws ServletException
-     * @throws IOException
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
