@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static tvestergaard.cupcakes.logic.Language.LOGOUT_SUCCESS_NOTIFICATION;
+import static tvestergaard.cupcakes.view.Language.LOGOUT_SUCCESS_NOTIFICATION;
 import static tvestergaard.cupcakes.view.ViewUtilities.referer;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = "/logout")

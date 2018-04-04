@@ -4,10 +4,9 @@ import tvestergaard.cupcakes.logic.*;
 import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
-import tvestergaard.cupcakes.data.orders.OrderDAO;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.data.users.UserDAO;
+import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static tvestergaard.cupcakes.logic.Language.ERROR_ACCESS_USER;
+import static tvestergaard.cupcakes.view.Language.ERROR_ACCESS_USER;
 
 /**
  * Serves the /order page where users can place orders. Handles the form data submitted from the /order page.

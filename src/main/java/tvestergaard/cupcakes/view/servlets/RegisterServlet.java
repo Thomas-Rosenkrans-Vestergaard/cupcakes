@@ -3,7 +3,7 @@ package tvestergaard.cupcakes.view.servlets;
 import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.logic.Notifications;
 import tvestergaard.cupcakes.logic.UserCreationException;
 import tvestergaard.cupcakes.logic.UserFacade;

@@ -4,7 +4,7 @@ package tvestergaard.cupcakes.view.servlets.administration;
 import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.data.orders.Order;
-import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.logic.Notifications;
 import tvestergaard.cupcakes.logic.OrderFacade;
 import tvestergaard.cupcakes.view.Authentication;

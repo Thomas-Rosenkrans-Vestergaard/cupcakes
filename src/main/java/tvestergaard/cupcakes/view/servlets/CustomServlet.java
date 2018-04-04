@@ -4,7 +4,7 @@ import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.logic.BottomFacade;
-import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.logic.Notifications;
 import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.Parameters;

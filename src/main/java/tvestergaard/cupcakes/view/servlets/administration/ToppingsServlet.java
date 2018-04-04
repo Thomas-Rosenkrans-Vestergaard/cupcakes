@@ -5,7 +5,7 @@ import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
 import tvestergaard.cupcakes.logic.FileSaver;
-import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.logic.Notifications;
 import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.Authentication;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static tvestergaard.cupcakes.logic.Language.*;
+import static tvestergaard.cupcakes.view.Language.*;
 import static tvestergaard.cupcakes.view.ViewUtilities.referer;
 
 @WebServlet(name = "ToppingsServlet", urlPatterns = "/administration/toppings")

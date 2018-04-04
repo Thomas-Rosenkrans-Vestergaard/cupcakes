@@ -5,6 +5,7 @@ import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.logic.*;
 import tvestergaard.cupcakes.view.Authentication;
+import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 

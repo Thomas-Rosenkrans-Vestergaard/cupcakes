@@ -8,10 +8,7 @@ import tvestergaard.cupcakes.data.presets.Preset;
 import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
 import tvestergaard.cupcakes.logic.*;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.MultipartParameters;
-import tvestergaard.cupcakes.view.Parameters;
-import tvestergaard.cupcakes.view.ViewUtilities;
+import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -22,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static tvestergaard.cupcakes.logic.Language.*;
+import static tvestergaard.cupcakes.view.Language.*;
 import static tvestergaard.cupcakes.view.ViewUtilities.referer;
 
 @WebServlet(name = "PresetsServlet", urlPatterns = "/administration/presets")

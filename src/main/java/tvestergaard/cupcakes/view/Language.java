@@ -1,4 +1,4 @@
-package tvestergaard.cupcakes.logic;
+package tvestergaard.cupcakes.view;
 
 public class Language
 {
