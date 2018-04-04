@@ -10,7 +10,7 @@ import java.util.Queue;
  *
  * @author Thomas
  */
-public class Notifications implements Iterator<Notification>
+public class Notifications implements Iterable<Notification>
 {
 
     /**
@@ -83,33 +83,46 @@ public class Notifications implements Iterator<Notification>
     }
 
     /**
-     * Returns {@code true} if the iteration has more elements.
-     * (In other words, returns {@code true} if {@link #next} would
-     * return an element rather than throwing an exception.)
+     * Returns an iterator over elements of type {@code T}.
      *
-     * @return {@code true} if the iteration has more elements
+     * @return an Iterator.
      */
-    @Override public boolean hasNext()
+    @Override public Iterator<Notification> iterator()
     {
-        return !notifications.isEmpty();
+        return new NotificationIterator();
     }
 
-    /**
-     * Returns the next element in the iteration.
-     *
-     * @return the next element in the iteration
-     * @throws NoSuchElementException if the iteration has no more elements
-     */
-    @Override public Notification next()
+    private class NotificationIterator implements Iterator<Notification>
     {
-        if (notifications.isEmpty())
-            throw new NoSuchElementException();
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         * (In other words, returns {@code true} if {@link #next} would
+         * return an element rather than throwing an exception.)
+         *
+         * @return {@code true} if the iteration has more elements
+         */
+        @Override public boolean hasNext()
+        {
+            return !notifications.isEmpty();
+        }
 
-        Notification notification = notifications.poll();
-        if (notification != null)
-            recorded--;
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        @Override public Notification next()
+        {
+            if (notifications.isEmpty())
+                throw new NoSuchElementException();
 
-        return notification;
+            Notification notification = notifications.poll();
+            if (notification != null)
+                recorded--;
+
+            return notification;
+        }
     }
 
     /**

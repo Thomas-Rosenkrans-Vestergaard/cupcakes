@@ -38,6 +38,6 @@
     </c:choose>
     </tbody>
 </table>
-<a class="btn-floating btn-large waves-effect waves-light red right add-record" href="users?action=new"><i
+<a class="btn-floating btn-large waves-effect waves-light red right add-record" href="users?action=create"><i
         class="material-icons">add</i></a>
 <%@ include file="includes/footer.jspf" %>

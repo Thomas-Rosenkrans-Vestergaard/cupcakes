@@ -3,7 +3,7 @@
 <c:if test="${not notifications.isEmpty()}">
     <script>
         $(document).ready(function () {
-            <c:forEach items="${notifications}" var="notification">
+            <c:forEach items="${notifications.iterator()}" var="notification">
             Materialize.toast("${notification.getMessage()}", 10000, '${notification.getLevel()}');
             </c:forEach>
         });
