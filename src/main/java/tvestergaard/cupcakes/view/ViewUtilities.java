@@ -1,7 +1,5 @@
 package tvestergaard.cupcakes.view;
 
-import tvestergaard.cupcakes.logic.Notifications;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;

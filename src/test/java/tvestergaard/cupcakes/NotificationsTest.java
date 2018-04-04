@@ -2,8 +2,8 @@ package tvestergaard.cupcakes;
 
 import org.junit.Before;
 import org.junit.Test;
-import tvestergaard.cupcakes.logic.Notification;
-import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.view.Notification;
+import tvestergaard.cupcakes.view.Notifications;
 
 import java.util.Iterator;
 

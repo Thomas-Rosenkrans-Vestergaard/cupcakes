@@ -1,7 +1,7 @@
 package tvestergaard.cupcakes.view.servlets;
 
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;

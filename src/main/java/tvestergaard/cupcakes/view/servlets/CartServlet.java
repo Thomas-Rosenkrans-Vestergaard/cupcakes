@@ -6,10 +6,7 @@ import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
 import tvestergaard.cupcakes.logic.*;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.view.Parameters;
-import tvestergaard.cupcakes.view.ViewUtilities;
+import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

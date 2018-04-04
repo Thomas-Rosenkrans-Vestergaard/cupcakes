@@ -4,10 +4,7 @@ import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.logic.*;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.view.Parameters;
-import tvestergaard.cupcakes.view.ViewUtilities;
+import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

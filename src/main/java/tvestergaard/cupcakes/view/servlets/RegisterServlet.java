@@ -4,7 +4,7 @@ import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.logic.UserCreationException;
 import tvestergaard.cupcakes.logic.UserFacade;
 import tvestergaard.cupcakes.view.Parameters;

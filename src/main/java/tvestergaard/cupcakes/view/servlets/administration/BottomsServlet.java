@@ -7,7 +7,7 @@ import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.logic.BottomFacade;
 import tvestergaard.cupcakes.logic.FileSaver;
 import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.view.MultipartParameters;
 import tvestergaard.cupcakes.view.Parameters;

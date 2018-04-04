@@ -5,7 +5,7 @@ import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.data.orders.Order;
 import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.logic.OrderFacade;
 import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.view.Parameters;
