@@ -1,15 +1,15 @@
 package tvestergaard.cupcakes.view.servlets;
 
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.Language;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.ShoppingCart;
-import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.orders.MysqlOrderDAO;
-import tvestergaard.cupcakes.database.orders.OrderDAO;
-import tvestergaard.cupcakes.database.users.MysqlUserDAO;
-import tvestergaard.cupcakes.database.users.User;
-import tvestergaard.cupcakes.database.users.UserDAO;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.logic.ShoppingCart;
+import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
+import tvestergaard.cupcakes.data.orders.OrderDAO;
+import tvestergaard.cupcakes.data.users.MysqlUserDAO;
+import tvestergaard.cupcakes.data.users.User;
+import tvestergaard.cupcakes.data.users.UserDAO;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static tvestergaard.cupcakes.Language.ERROR_ACCESS_USER;
+import static tvestergaard.cupcakes.logic.Language.ERROR_ACCESS_USER;
 
 /**
  * Serves the /order page where users can place orders. Handles the form data submitted from the /order page.

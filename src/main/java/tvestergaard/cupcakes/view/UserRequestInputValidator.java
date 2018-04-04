@@ -1,10 +1,10 @@
 package tvestergaard.cupcakes.view;
 
 import org.apache.commons.validator.routines.EmailValidator;
-import tvestergaard.cupcakes.Notification;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.database.users.User;
-import tvestergaard.cupcakes.database.users.UserDAO;
+import tvestergaard.cupcakes.logic.Notification;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.data.users.User;
+import tvestergaard.cupcakes.data.users.UserDAO;
 
 import javax.servlet.http.HttpServletRequest;
 

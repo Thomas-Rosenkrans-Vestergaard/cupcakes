@@ -1,11 +1,11 @@
-package tvestergaard.cupcakes.database.orders;
+package tvestergaard.cupcakes.data.orders;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import tvestergaard.cupcakes.ShoppingCart;
-import tvestergaard.cupcakes.database.AbstractMysqlDAO;
-import tvestergaard.cupcakes.database.bottoms.Bottom;
-import tvestergaard.cupcakes.database.toppings.Topping;
-import tvestergaard.cupcakes.database.users.User;
+import tvestergaard.cupcakes.logic.ShoppingCart;
+import tvestergaard.cupcakes.data.AbstractMysqlDAO;
+import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.toppings.Topping;
+import tvestergaard.cupcakes.data.users.User;
 
 import java.sql.*;
 import java.util.ArrayList;

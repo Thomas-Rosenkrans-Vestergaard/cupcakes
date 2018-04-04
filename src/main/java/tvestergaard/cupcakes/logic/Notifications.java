@@ -1,4 +1,4 @@
-package tvestergaard.cupcakes;
+package tvestergaard.cupcakes.logic;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;

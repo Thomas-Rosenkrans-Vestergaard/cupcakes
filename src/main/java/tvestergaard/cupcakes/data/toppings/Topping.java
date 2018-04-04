@@ -1,9 +1,9 @@
-package tvestergaard.cupcakes.database.toppings;
+package tvestergaard.cupcakes.data.toppings;
 
 import java.util.Objects;
 
 /**
- * One of the components of a cupcake. The other being the {@link tvestergaard.cupcakes.database.bottoms.Bottom}.
+ * One of the components of a cupcake. The other being the {@link tvestergaard.cupcakes.data.bottoms.Bottom}.
  */
 public final class Topping
 {

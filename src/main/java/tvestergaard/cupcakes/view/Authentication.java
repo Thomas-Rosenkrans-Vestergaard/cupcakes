@@ -1,11 +1,11 @@
 package tvestergaard.cupcakes.view;
 
-import tvestergaard.cupcakes.database.users.User;
+import tvestergaard.cupcakes.data.users.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static tvestergaard.cupcakes.database.users.User.Role;
+import static tvestergaard.cupcakes.data.users.User.Role;
 
 /**
  * Helper class for user authentication operations.

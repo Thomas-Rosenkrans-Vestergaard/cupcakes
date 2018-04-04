@@ -1,6 +1,6 @@
-package tvestergaard.cupcakes.database.bottoms;
+package tvestergaard.cupcakes.data.bottoms;
 
-import tvestergaard.cupcakes.database.toppings.Topping;
+import tvestergaard.cupcakes.data.toppings.Topping;
 
 import java.sql.SQLException;
 import java.util.List;

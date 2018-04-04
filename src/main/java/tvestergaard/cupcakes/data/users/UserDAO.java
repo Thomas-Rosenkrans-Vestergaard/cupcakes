@@ -1,4 +1,4 @@
-package tvestergaard.cupcakes.database.users;
+package tvestergaard.cupcakes.data.users;
 
 import java.sql.SQLException;
 import java.util.List;

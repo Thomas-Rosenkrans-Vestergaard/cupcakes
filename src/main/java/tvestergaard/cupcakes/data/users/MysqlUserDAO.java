@@ -1,7 +1,7 @@
-package tvestergaard.cupcakes.database.users;
+package tvestergaard.cupcakes.data.users;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import tvestergaard.cupcakes.database.AbstractMysqlDAO;
+import tvestergaard.cupcakes.data.AbstractMysqlDAO;
 
 import java.sql.*;
 import java.util.ArrayList;

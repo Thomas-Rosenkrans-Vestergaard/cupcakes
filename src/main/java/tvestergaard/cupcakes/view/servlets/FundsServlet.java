@@ -1,12 +1,12 @@
 package tvestergaard.cupcakes.view.servlets;
 
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.Language;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.users.MysqlUserDAO;
-import tvestergaard.cupcakes.database.users.User;
-import tvestergaard.cupcakes.database.users.UserDAO;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.users.MysqlUserDAO;
+import tvestergaard.cupcakes.data.users.User;
+import tvestergaard.cupcakes.data.users.UserDAO;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static tvestergaard.cupcakes.Language.GENERAL_ERROR_RENDER;
-import static tvestergaard.cupcakes.Language.INCOMPLETE_FORM_POST;
+import static tvestergaard.cupcakes.logic.Language.GENERAL_ERROR_RENDER;
+import static tvestergaard.cupcakes.logic.Language.INCOMPLETE_FORM_POST;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = "/funds")
 public class FundsServlet extends HttpServlet

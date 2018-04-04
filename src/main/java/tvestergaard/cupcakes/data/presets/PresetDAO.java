@@ -1,7 +1,7 @@
-package tvestergaard.cupcakes.database.presets;
+package tvestergaard.cupcakes.data.presets;
 
-import tvestergaard.cupcakes.database.bottoms.Bottom;
-import tvestergaard.cupcakes.database.toppings.Topping;
+import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.toppings.Topping;
 
 import java.sql.SQLException;
 import java.util.List;

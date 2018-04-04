@@ -1,14 +1,14 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.Language;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.bottoms.BottomDAO;
-import tvestergaard.cupcakes.database.bottoms.MysqlBottomDAO;
-import tvestergaard.cupcakes.database.presets.MysqlPresetDAO;
-import tvestergaard.cupcakes.database.presets.PresetDAO;
-import tvestergaard.cupcakes.database.toppings.MysqlToppingDAO;
-import tvestergaard.cupcakes.database.toppings.ToppingDAO;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.bottoms.BottomDAO;
+import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
+import tvestergaard.cupcakes.data.presets.MysqlPresetDAO;
+import tvestergaard.cupcakes.data.presets.PresetDAO;
+import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
+import tvestergaard.cupcakes.data.toppings.ToppingDAO;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;

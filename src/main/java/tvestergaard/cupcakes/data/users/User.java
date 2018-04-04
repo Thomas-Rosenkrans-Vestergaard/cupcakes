@@ -1,4 +1,4 @@
-package tvestergaard.cupcakes.database.users;
+package tvestergaard.cupcakes.data.users;
 
 import java.util.Objects;
 

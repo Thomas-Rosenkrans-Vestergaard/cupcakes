@@ -1,12 +1,12 @@
 package tvestergaard.cupcakes.view.servlets;
 
 import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.ShoppingCart;
-import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.users.MysqlUserDAO;
-import tvestergaard.cupcakes.database.users.User;
-import tvestergaard.cupcakes.database.users.UserDAO;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.logic.ShoppingCart;
+import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.users.MysqlUserDAO;
+import tvestergaard.cupcakes.data.users.User;
+import tvestergaard.cupcakes.data.users.UserDAO;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static tvestergaard.cupcakes.Language.*;
+import static tvestergaard.cupcakes.logic.Language.*;
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet

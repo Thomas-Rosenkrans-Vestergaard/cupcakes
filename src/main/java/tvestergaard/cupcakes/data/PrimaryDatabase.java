@@ -1,4 +1,4 @@
-package tvestergaard.cupcakes.database;
+package tvestergaard.cupcakes.data;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 

@@ -1,8 +1,8 @@
-package tvestergaard.cupcakes.database.orders;
+package tvestergaard.cupcakes.data.orders;
 
-import tvestergaard.cupcakes.database.bottoms.Bottom;
-import tvestergaard.cupcakes.database.toppings.Topping;
-import tvestergaard.cupcakes.database.users.User;
+import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.toppings.Topping;
+import tvestergaard.cupcakes.data.users.User;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package tvestergaard.cupcakes;
+package tvestergaard.cupcakes.logic;
 
 import javax.servlet.ServletException;
 import java.io.*;

@@ -2,12 +2,12 @@ package tvestergaard.cupcakes.view.servlets.administration;
 
 import org.mindrot.jbcrypt.BCrypt;
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.Language;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.users.MysqlUserDAO;
-import tvestergaard.cupcakes.database.users.User;
-import tvestergaard.cupcakes.database.users.UserDAO;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.users.MysqlUserDAO;
+import tvestergaard.cupcakes.data.users.User;
+import tvestergaard.cupcakes.data.users.UserDAO;
 import tvestergaard.cupcakes.view.UserRequestInputValidator;
 import tvestergaard.cupcakes.view.ViewUtilities;
 

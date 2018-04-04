@@ -2,19 +2,19 @@ package tvestergaard.cupcakes.view.servlets.administration;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.FileSaver;
-import tvestergaard.cupcakes.Language;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.bottoms.Bottom;
-import tvestergaard.cupcakes.database.bottoms.BottomDAO;
-import tvestergaard.cupcakes.database.bottoms.MysqlBottomDAO;
-import tvestergaard.cupcakes.database.presets.MysqlPresetDAO;
-import tvestergaard.cupcakes.database.presets.Preset;
-import tvestergaard.cupcakes.database.presets.PresetDAO;
-import tvestergaard.cupcakes.database.toppings.MysqlToppingDAO;
-import tvestergaard.cupcakes.database.toppings.Topping;
-import tvestergaard.cupcakes.database.toppings.ToppingDAO;
+import tvestergaard.cupcakes.logic.FileSaver;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.bottoms.BottomDAO;
+import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
+import tvestergaard.cupcakes.data.presets.MysqlPresetDAO;
+import tvestergaard.cupcakes.data.presets.Preset;
+import tvestergaard.cupcakes.data.presets.PresetDAO;
+import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
+import tvestergaard.cupcakes.data.toppings.Topping;
+import tvestergaard.cupcakes.data.toppings.ToppingDAO;
 import tvestergaard.cupcakes.view.MultipartParameters;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static tvestergaard.cupcakes.Language.*;
+import static tvestergaard.cupcakes.logic.Language.*;
 import static tvestergaard.cupcakes.view.ViewUtilities.referer;
 
 @WebServlet(name = "PresetsServlet", urlPatterns = "/administration/presets")

@@ -2,13 +2,13 @@ package tvestergaard.cupcakes.view.servlets.administration;
 
 
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.FileSaver;
-import tvestergaard.cupcakes.Language;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.bottoms.Bottom;
-import tvestergaard.cupcakes.database.bottoms.BottomDAO;
-import tvestergaard.cupcakes.database.bottoms.MysqlBottomDAO;
+import tvestergaard.cupcakes.logic.FileSaver;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.bottoms.BottomDAO;
+import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.view.MultipartParameters;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static tvestergaard.cupcakes.Language.*;
+import static tvestergaard.cupcakes.logic.Language.*;
 import static tvestergaard.cupcakes.view.ViewUtilities.referer;
 
 @WebServlet(name = "BottomsServlet", urlPatterns = "/administration/bottoms")

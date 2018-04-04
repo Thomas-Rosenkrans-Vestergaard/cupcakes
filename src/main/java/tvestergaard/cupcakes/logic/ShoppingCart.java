@@ -1,7 +1,7 @@
-package tvestergaard.cupcakes;
+package tvestergaard.cupcakes.logic;
 
-import tvestergaard.cupcakes.database.bottoms.Bottom;
-import tvestergaard.cupcakes.database.toppings.Topping;
+import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.toppings.Topping;
 
 import java.util.ArrayList;
 import java.util.Iterator;

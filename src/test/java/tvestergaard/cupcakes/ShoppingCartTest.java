@@ -2,8 +2,9 @@ package tvestergaard.cupcakes;
 
 import org.junit.Before;
 import org.junit.Test;
-import tvestergaard.cupcakes.database.bottoms.Bottom;
-import tvestergaard.cupcakes.database.toppings.Topping;
+import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.toppings.Topping;
+import tvestergaard.cupcakes.logic.ShoppingCart;
 
 import java.util.Iterator;
 import java.util.List;

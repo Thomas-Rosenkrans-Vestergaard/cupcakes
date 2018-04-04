@@ -3,12 +3,12 @@ package tvestergaard.cupcakes.view.servlets.administration;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.Language;
-import tvestergaard.cupcakes.Notifications;
-import tvestergaard.cupcakes.database.PrimaryDatabase;
-import tvestergaard.cupcakes.database.orders.MysqlOrderDAO;
-import tvestergaard.cupcakes.database.orders.Order;
-import tvestergaard.cupcakes.database.orders.OrderDAO;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
+import tvestergaard.cupcakes.data.orders.Order;
+import tvestergaard.cupcakes.data.orders.OrderDAO;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
