@@ -2,14 +2,23 @@ package tvestergaard.cupcakes.data.bottoms;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import tvestergaard.cupcakes.data.AbstractMysqlDAO;
+import tvestergaard.cupcakes.data.MysqlDAOException;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Provides CRUD functionality for a MySQL database containing {@link Bottom}s.
+ */
 public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
 {
 
+    /**
+     * Creates a new {@link MysqlBottomDAO}.
+     *
+     * @param source The {@link MysqlDataSource} serving as the source for the persistent storage being queried.
+     */
     public MysqlBottomDAO(MysqlDataSource source)
     {
         super(source);
@@ -20,23 +29,19 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
      *
      * @param id The id of the bottom to return from the database.
      * @return The {@link Bottom} representing the bottom with the provided {@code id} from the database.
-     * @throws SQLException
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public Bottom get(int id) throws SQLException
+    @Override public Bottom get(int id) throws MysqlDAOException
     {
-        PreparedStatement statement = null;
-        ResultSet results = null;
-
         try {
-
-            statement = getConnection().prepareStatement("SELECT * FROM bottoms WHERE id = ?");
-            statement.setInt(1, id);
-            results = statement.executeQuery();
-            return !results.first() ? null : createBottom(results);
-
-        } finally {
-            if (statement != null) statement.close();
-            if (results != null) results.close();
+            String SQL = "SELECT * FROM bottoms WHERE id = ?";
+            try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
+                statement.setInt(1, id);
+                ResultSet results = statement.executeQuery();
+                return !results.first() ? null : createBottom(results);
+            }
+        } catch (SQLException e) {
+            throw new MysqlDAOException(e);
         }
     }
 
@@ -44,25 +49,23 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
      * Returns a list of all the bottoms in the database.
      *
      * @return The list of all the bottoms in the database.
-     * @throws SQLException
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public List<Bottom> get() throws SQLException
+    @Override public List<Bottom> get() throws MysqlDAOException
     {
+        String       SQL  = "SELECT * FROM bottoms";
         List<Bottom> list = new ArrayList<>();
-        PreparedStatement statement = null;
-        ResultSet results = null;
 
         try {
+            try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
+                ResultSet results = statement.executeQuery();
+                while (results.next())
+                    list.add(createBottom(results));
 
-            statement = getConnection().prepareStatement("SELECT * FROM bottoms");
-            results = statement.executeQuery();
-            while (results.next()) list.add(createBottom(results));
-
-            return list;
-
-        } finally {
-            if (statement != null) statement.close();
-            if (results != null) results.close();
+                return list;
+            }
+        } catch (SQLException e) {
+            throw new MysqlDAOException(e);
         }
     }
 
@@ -74,37 +77,37 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
      * @param price       The price of the bottom to create.
      * @param active      Whether or not the bottom can be ordered.
      * @return The newly created {@link Bottom} representing the inserted bottom in the database.
-     * @throws SQLException
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public Bottom create(String name, String description, int price, boolean active) throws SQLException
+    @Override public Bottom create(String name, String description, int price, boolean active) throws MysqlDAOException
     {
-        String create = "INSERT INTO bottoms (`name`, description, price, active) VALUES (?, ?, ?, ?)";
-        Connection connection = getConnection();
-        PreparedStatement statement = null;
+        String SQL = "INSERT INTO bottoms (`name`, description, price, active) VALUES (?, ?, ?, ?)";
 
         try {
+            Connection connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
 
-            statement = connection.prepareStatement(create, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, name);
-            statement.setString(2, description);
-            statement.setInt(3, price);
-            statement.setBoolean(4, active);
+                statement.setString(1, name);
+                statement.setString(2, description);
+                statement.setInt(3, price);
+                statement.setBoolean(4, active);
 
-            statement.executeUpdate();
+                statement.executeUpdate();
 
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            generatedKeys.first();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                generatedKeys.first();
 
-            int id = generatedKeys.getInt(1);
-            connection.commit();
+                int id = generatedKeys.getInt(1);
+                connection.commit();
 
-            return new Bottom(id, name, description, price, active);
+                return new Bottom(id, name, description, price, active);
 
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            if (statement != null) statement.close();
+            throw new MysqlDAOException(e);
         }
     }
 
@@ -117,33 +120,32 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
      * @param price       The price to update to.
      * @param active      Whether or not the bottom can be ordered.
      * @return The bottom representing the updated bottom in the database.
-     * @throws SQLException
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public Bottom update(int id, String name, String description, int price, boolean active) throws SQLException
+    @Override public Bottom update(int id, String name, String description, int price, boolean active) throws MysqlDAOException
     {
-        String update = "UPDATE bottoms SET `name` = ?, `description` = ?, `price` = ?, `active` = ? WHERE id = ?";
-        Connection connection = getConnection();
-        PreparedStatement statement = null;
+        String SQL = "UPDATE bottoms SET `name` = ?, `description` = ?, `price` = ?, `active` = ? WHERE id = ?";
 
         try {
+            Connection connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SQL)) {
+                statement.setString(1, name);
+                statement.setString(2, description);
+                statement.setInt(3, price);
+                statement.setBoolean(4, active);
+                statement.setInt(5, id);
 
-            statement = connection.prepareStatement(update);
-            statement.setString(1, name);
-            statement.setString(2, description);
-            statement.setInt(3, price);
-            statement.setBoolean(4, active);
-            statement.setInt(5, id);
+                statement.executeUpdate();
+                connection.commit();
 
-            statement.executeUpdate();
-            connection.commit();
+                return new Bottom(id, name, description, price, active);
 
-            return new Bottom(id, name, description, price, active);
-
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            if (statement != null) statement.close();
+            throw new MysqlDAOException(e);
         }
     }
 
@@ -152,29 +154,27 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
      *
      * @param id The id of the topping to delete from the database.
      * @return {@code true} when the record was successfully deleted, {@code false} when the record was not deleted.
-     * @throws SQLException
      */
-    @Override public boolean delete(int id) throws SQLException
+    @Override public boolean delete(int id)
     {
-
-        Connection connection = getConnection();
-        PreparedStatement statement = null;
+        String SQL = "DELETE FROM bottoms WHERE id = ?";
 
         try {
+            Connection connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SQL)) {
+                statement.setInt(1, id);
 
-            statement = connection.prepareStatement("DELETE FROM bottoms WHERE id = ?");
-            statement.setInt(1, id);
+                int deleted = statement.executeUpdate();
+                connection.commit();
 
-            int deleted = statement.executeUpdate();
-            connection.commit();
+                return deleted > 0;
 
-            return deleted > 0;
-
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            if (statement != null) statement.close();
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,10 +1,8 @@
 package tvestergaard.cupcakes.view.servlets;
 
+import tvestergaard.cupcakes.logic.*;
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.logic.Language;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.logic.ShoppingCart;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.data.orders.OrderDAO;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
@@ -49,14 +47,14 @@ public class OrderServlet extends HttpServlet
     private final static String ORDER_ERROR = "The order could not be placed.";
 
     /**
-     * The {@link UserDAO} used when updating the balance of a user once an order is placed.
+     * Facade for performing various operations related to users.
      */
-    private final UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
+    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.singleton()));
 
     /**
-     * The {@link OrderDAO} used to persist orders to the database.
+     * Facade for performing various operations related to orders.
      */
-    private final OrderDAO orderDAO = new MysqlOrderDAO(new PrimaryDatabase());
+    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.singleton()));
 
     /**
      * Serves the /order page where users can see information about and confirm their order.
@@ -127,10 +125,10 @@ public class OrderServlet extends HttpServlet
         }
 
         try {
-            orderDAO.create(authentication.getUser(), shoppingCart, request.getParameter("comment"));
-            User user = userDAO.get(authentication.getUser().getId());
+            orderFacade.create(authentication.getUser(), shoppingCart, request.getParameter("comment"));
+            User user = userFacade.get(authentication.getUser().getId());
             notifications.success(ORDER_SUCCESS);
-            user = userDAO.update(
+            user = userFacade.update(
                     user.getId(),
                     user.getUsername(),
                     user.getEmail(),

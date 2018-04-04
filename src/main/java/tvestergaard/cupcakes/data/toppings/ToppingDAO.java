@@ -1,8 +1,12 @@
 package tvestergaard.cupcakes.data.toppings;
 
-import java.sql.SQLException;
+import tvestergaard.cupcakes.data.DAOException;
+
 import java.util.List;
 
+/**
+ * Provides CRUD functionality for a persistent storage engine containing {@link Topping}s.
+ */
 public interface ToppingDAO
 {
 
@@ -11,17 +15,17 @@ public interface ToppingDAO
      *
      * @param id The id of the topping to return an entity of.
      * @return The entity representing the topping with the provided id.
-     * @throws SQLException
+     * @throws DAOException When an error occurs during the operation.
      */
-    Topping get(int id) throws SQLException;
+    Topping get(int id) throws DAOException;
 
     /**
      * Returns a list of all the toppings in the database.
      *
      * @return The list of all the toppings in the database.
-     * @throws SQLException
+     * @throws DAOException When an error occurs during the operation.
      */
-    List<Topping> get() throws SQLException;
+    List<Topping> get() throws DAOException;
 
     /**
      * Inserts a new topping into the database.
@@ -31,9 +35,9 @@ public interface ToppingDAO
      * @param price       The price of the topping to insert (in cents).
      * @param active      Whether or not the topping can be ordered.
      * @return The new entity representing the newly inserted topping.
-     * @throws SQLException
+     * @throws DAOException When an error occurs during the operation.
      */
-    Topping create(String name, String description, int price, boolean active) throws SQLException;
+    Topping create(String name, String description, int price, boolean active) throws DAOException;
 
     /**
      * Updates the topping with the provided id in the database.
@@ -44,18 +48,18 @@ public interface ToppingDAO
      * @param price       The price to update to (in cents).
      * @param active      Whether or not the topping can be ordered.
      * @return An entity representing the updated row.
-     * @throws SQLException
+     * @throws DAOException When an error occurs during the operation.
      */
-    Topping update(int id, String name, String description, int price, boolean active) throws SQLException;
+    Topping update(int id, String name, String description, int price, boolean active) throws DAOException;
 
     /**
      * Deletes the row of the provided entity.
      *
      * @param topping The topping to delete from the database.
      * @return {@code true} if the row was successfully deleted, {@code false} if the row was not deleted.
-     * @throws SQLException
+     * @throws DAOException When an error occurs during the operation.
      */
-    default boolean delete(Topping topping) throws SQLException
+    default boolean delete(Topping topping) throws DAOException
     {
         return delete(topping.getId());
     }
@@ -65,7 +69,7 @@ public interface ToppingDAO
      *
      * @param id The id of the topping to delete from the database.
      * @return {@code true} if the row was successfully deleted, {@code false} if the row was not deleted.
-     * @throws SQLException
+     * @throws DAOException When an error occurs during the operation.
      */
-    boolean delete(int id) throws SQLException;
+    boolean delete(int id) throws DAOException;
 }

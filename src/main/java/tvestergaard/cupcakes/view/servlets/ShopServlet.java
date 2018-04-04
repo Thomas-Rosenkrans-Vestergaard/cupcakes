@@ -1,14 +1,10 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.logic.Language;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
-import tvestergaard.cupcakes.data.bottoms.BottomDAO;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.data.presets.MysqlPresetDAO;
-import tvestergaard.cupcakes.data.presets.PresetDAO;
 import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
-import tvestergaard.cupcakes.data.toppings.ToppingDAO;
+import tvestergaard.cupcakes.logic.*;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
@@ -27,22 +23,20 @@ import java.io.IOException;
 public class ShopServlet extends HttpServlet
 {
 
-    private final PrimaryDatabase source = new PrimaryDatabase();
+    /**
+     * Facade for performing various operations related to presets.
+     */
+    private final PresetFacade presetFacade = new PresetFacade(new MysqlPresetDAO(ProductionDatabaseSource.singleton()));
 
     /**
-     * The {@link PresetDAO} used to retrieve presets from the database, to be shown on the /shop page.
+     * Facade for performing various operations related to bottoms.
      */
-    private PresetDAO presetDAO = new MysqlPresetDAO(source);
+    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.singleton()));
 
     /**
-     * The {@link BottomDAO} used to retrieve bottoms from the database, to be shown on the /shop page.
+     * Facade for performing various operations related to toppings.
      */
-    private BottomDAO bottomDAO = new MysqlBottomDAO(source);
-
-    /**
-     * The {@link ToppingDAO} used to retrieve toppings from the database, to be shown on the /shop page.
-     */
-    private final ToppingDAO toppingDAO = new MysqlToppingDAO(source);
+    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.singleton()));
 
     /**
      * Serves the /shop page where users can see the products of the shop.
@@ -56,9 +50,9 @@ public class ShopServlet extends HttpServlet
 
         try {
 
-            request.setAttribute("presets", presetDAO.get());
-            request.setAttribute("bottoms", bottomDAO.get());
-            request.setAttribute("toppings", toppingDAO.get());
+            request.setAttribute("presets", presetFacade.get());
+            request.setAttribute("bottoms", bottomFacade.get());
+            request.setAttribute("toppings", toppingFacade.get());
             ViewUtilities.attach(request, notifications);
             request.getRequestDispatcher("WEB-INF/shop.jsp").forward(request, response);
 

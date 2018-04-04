@@ -1,14 +1,14 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 
-import tvestergaard.cupcakes.view.Authentication;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
+import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
+import tvestergaard.cupcakes.logic.BottomFacade;
 import tvestergaard.cupcakes.logic.FileSaver;
 import tvestergaard.cupcakes.logic.Language;
 import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
-import tvestergaard.cupcakes.data.bottoms.Bottom;
-import tvestergaard.cupcakes.data.bottoms.BottomDAO;
-import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.view.MultipartParameters;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
@@ -30,7 +30,10 @@ import static tvestergaard.cupcakes.view.ViewUtilities.referer;
 public class BottomsServlet extends HttpServlet
 {
 
-    private final BottomDAO bottomDAO = new MysqlBottomDAO(new PrimaryDatabase());
+    /**
+     * Facade for performing various operations related to bottoms.
+     */
+    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.singleton()));
 
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_UPDATE    = "update";
@@ -74,7 +77,7 @@ public class BottomsServlet extends HttpServlet
                 return;
             }
 
-            request.setAttribute("bottoms", bottomDAO.get());
+            request.setAttribute("bottoms", bottomFacade.get());
             request.getRequestDispatcher("/WEB-INF/administration/read_bottoms.jsp").forward(request, response);
         } catch (SQLException e) {
             notifications.error("A database error occurred.");
@@ -106,7 +109,7 @@ public class BottomsServlet extends HttpServlet
             return;
         }
 
-        request.setAttribute("bottom", bottomDAO.get(parameters.getInt(PARAMETER_ID)));
+        request.setAttribute("bottom", bottomFacade.get(parameters.getInt(PARAMETER_ID)));
         ViewUtilities.attach(request, notifications);
         request.getRequestDispatcher("/WEB-INF/administration/update_bottom.jsp").forward(request, response);
     }
@@ -168,7 +171,7 @@ public class BottomsServlet extends HttpServlet
             return;
         }
 
-        Bottom bottom = bottomDAO.create(
+        Bottom bottom = bottomFacade.create(
                 parameters.getString(PARAMETER_NAME),
                 parameters.getString(PARAMETER_DESCRIPTION),
                 parameters.getInt(PARAMETER_PRICE),
@@ -201,7 +204,7 @@ public class BottomsServlet extends HttpServlet
             return;
         }
 
-        Bottom bottom = bottomDAO.update(
+        Bottom bottom = bottomFacade.update(
                 parameters.getInt(PARAMETER_ID),
                 parameters.getString(PARAMETER_NAME),
                 parameters.getString(PARAMETER_DESCRIPTION),
@@ -237,7 +240,7 @@ public class BottomsServlet extends HttpServlet
             return;
         }
 
-        boolean deleted = bottomDAO.delete(parameters.getInt(PARAMETER_ID));
+        boolean deleted = bottomFacade.delete(parameters.getInt(PARAMETER_ID));
 
         if (!deleted) {
             notifications.error(RECORD_DELETED_ERROR);

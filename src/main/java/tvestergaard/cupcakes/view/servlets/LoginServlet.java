@@ -1,12 +1,11 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.logic.ShoppingCart;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.data.users.UserDAO;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.logic.ShoppingCart;
+import tvestergaard.cupcakes.logic.UserFacade;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -25,9 +24,9 @@ public class LoginServlet extends HttpServlet
 {
 
     /**
-     * The {@link UserDAO} used to retrieve user information when users attempt to log in.
+     * Facade for performing various operations related to users.
      */
-    private final UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
+    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.singleton()));
 
     /**
      * Serves the /login page where anonymous users can log in to their user account.
@@ -63,10 +62,10 @@ public class LoginServlet extends HttpServlet
             String username = parameters.getString("username");
             String password = parameters.getString("password");
 
-            User   user = userDAO.getFromUsername(username);
+            User   user = userFacade.authenticate(username, password);
             String from = request.getParameter("from");
 
-            if (user == null || !BCrypt.checkpw(password, user.getPassword())) {
+            if (user == null) {
                 notifications.warning(LOGIN_ERROR);
                 response.sendRedirect(getErrorLocation(request));
                 return;

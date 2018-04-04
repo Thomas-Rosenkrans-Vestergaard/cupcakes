@@ -1,16 +1,12 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.logic.Language;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.logic.ShoppingCart;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.Bottom;
-import tvestergaard.cupcakes.data.bottoms.BottomDAO;
 import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
-import tvestergaard.cupcakes.data.toppings.ToppingDAO;
+import tvestergaard.cupcakes.logic.*;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -29,9 +25,15 @@ import java.io.IOException;
 public class CartServlet extends HttpServlet
 {
 
-    private final PrimaryDatabase source     = new PrimaryDatabase();
-    private final BottomDAO       bottomDAO  = new MysqlBottomDAO(source);
-    private final ToppingDAO      toppingDAO = new MysqlToppingDAO(source);
+    /**
+     * Facade for performing various operations related to bottoms.
+     */
+    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.singleton()));
+
+    /**
+     * Facade for performing various operations related to toppings.
+     */
+    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.singleton()));
 
     /**
      * Serves the /custom page where users can create their own cupcake.
@@ -95,8 +97,8 @@ public class CartServlet extends HttpServlet
 
         try {
 
-            Bottom  bottom  = bottomDAO.get(parameters.getInt(PARAMETER_BOTTOM));
-            Topping topping = toppingDAO.get(parameters.getInt(PARAMETER_TOPPING));
+            Bottom  bottom  = bottomFacade.get(parameters.getInt(PARAMETER_BOTTOM));
+            Topping topping = toppingFacade.get(parameters.getInt(PARAMETER_TOPPING));
 
             if (bottom == null) {
                 notifications.error("Bottom doesn't exist.");

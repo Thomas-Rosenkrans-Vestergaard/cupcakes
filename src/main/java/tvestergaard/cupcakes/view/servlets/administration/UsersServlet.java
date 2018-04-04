@@ -1,13 +1,12 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
-import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.logic.Language;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.data.users.UserDAO;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.logic.UserFacade;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.view.UserRequestInputValidator;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -22,7 +21,10 @@ import java.io.IOException;
 public class UsersServlet extends HttpServlet
 {
 
-    private final UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
+    /**
+     * Facade for performing various operations related to users.
+     */
+    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.singleton()));
 
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_PARAMETER = "action";
@@ -63,7 +65,7 @@ public class UsersServlet extends HttpServlet
                 return;
             }
 
-            request.setAttribute("users", userDAO.get());
+            request.setAttribute("users", userFacade.get());
             request.getRequestDispatcher("/WEB-INF/administration/read_users.jsp").forward(request, response);
         } catch (Exception e) {
             notifications.error(Language.GENERAL_ERROR_RENDER);
@@ -100,7 +102,7 @@ public class UsersServlet extends HttpServlet
         try {
 
             int  id   = Integer.parseInt(request.getParameter("id"));
-            User user = userDAO.get(id);
+            User user = userFacade.get(id);
 
             if (user == null) {
                 notifications.error("Unknown user.");
@@ -171,12 +173,11 @@ public class UsersServlet extends HttpServlet
     {
         try {
 
-            UserDAO                   userDAO   = new MysqlUserDAO(new PrimaryDatabase());
             UserRequestInputValidator validator = new UserRequestInputValidator(request);
             notifications.record();
 
-            validator.username(userDAO, notifications, Language.USER_USERNAME_ERRORS);
-            validator.email(userDAO, notifications, Language.USER_EMAIL_ERRORS);
+            validator.username(userFacade, notifications, Language.USER_USERNAME_ERRORS);
+            validator.email(userFacade, notifications, Language.USER_EMAIL_ERRORS);
             validator.password(notifications, Language.USER_PASSWORD_ERRORS);
             validator.balance(notifications, Language.USER_BALANCE_ERRORS);
             validator.role(notifications, Language.USER_TYPE_ERRORS);
@@ -186,13 +187,12 @@ public class UsersServlet extends HttpServlet
                 return;
             }
 
-            User user = userDAO.create(
+            User user = userFacade.create(
                     validator.getUsername(),
                     validator.getEmail(),
-                    hash(validator.getPassword()),
+                    validator.getPassword(),
                     validator.getBalance(),
-                    validator.getRole()
-                                      );
+                    validator.getRole());
 
             notifications.success(Language.RECORD_CREATED_SUCCESS);
             response.sendRedirect("users?action=update&id=" + user.getId());
@@ -202,17 +202,6 @@ public class UsersServlet extends HttpServlet
             response.sendRedirect("users?action=new");
             return;
         }
-    }
-
-    /**
-     * Hashes the provided password using B-crypt.
-     *
-     * @param password The password to hash.
-     * @return The resulting hash.
-     */
-    private String hash(String password)
-    {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     /**
@@ -237,7 +226,6 @@ public class UsersServlet extends HttpServlet
 
         try {
 
-            UserDAO                   userDAO   = new MysqlUserDAO(new PrimaryDatabase());
             UserRequestInputValidator validator = new UserRequestInputValidator(request);
             notifications.record();
 
@@ -257,11 +245,11 @@ public class UsersServlet extends HttpServlet
 
             id = Integer.parseInt(request.getParameter("id"));
 
-            User user = userDAO.update(
+            User user = userFacade.update(
                     id,
                     validator.getUsername(),
                     validator.getEmail(),
-                    hash(validator.getPassword()),
+                    validator.getPassword(),
                     validator.getBalance(),
                     validator.getRole());
 
@@ -299,9 +287,8 @@ public class UsersServlet extends HttpServlet
 
         try {
 
-            int     id      = Integer.parseInt(request.getParameter("id"));
-            UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
-            boolean result  = userDAO.delete(id);
+            int     id     = Integer.parseInt(request.getParameter("id"));
+            boolean result = userFacade.delete(id);
 
             if (!result) {
                 notifications.error(Language.RECORD_DELETED_ERROR);

@@ -1,9 +1,10 @@
 package tvestergaard.cupcakes.view.servlets;
 
+import tvestergaard.cupcakes.logic.UserFacade;
 import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.logic.Language;
 import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.data.users.UserDAO;
@@ -25,9 +26,9 @@ public class FundsServlet extends HttpServlet
 {
 
     /**
-     * The {@link UserDAO} used to update the balance of users using the "add funds" form.
+     * Facade for performing various operations related to users.
      */
-    private final UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
+    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.singleton()));
 
     /**
      * Renders the /funds page where users can see their balance, and add more funds.
@@ -80,15 +81,15 @@ public class FundsServlet extends HttpServlet
         try {
 
             int  amount = parameters.getInt("amount");
-            User user   = userDAO.get(authentication.getUser().getId());
-            user = userDAO.update(
+            User user   = userFacade.get(authentication.getUser().getId());
+            user = userFacade.update(
                     user.getId(),
                     user.getUsername(),
                     user.getEmail(),
                     user.getPassword(),
                     user.getBalance() + amount * 100,
                     user.getRole()
-                                 );
+                                    );
 
             authentication.updateUser(user);
             notifications.success("You have added $" + amount + " in funds to your wallet.");

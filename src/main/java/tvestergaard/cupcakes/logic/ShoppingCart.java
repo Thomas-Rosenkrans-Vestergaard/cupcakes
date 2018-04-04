@@ -16,6 +16,92 @@ public class ShoppingCart implements Iterable<ShoppingCart.Item>
     private List<Item> items = new ArrayList<>();
 
     /**
+     * Returns the total price of the cart.
+     *
+     * @return The total price of the cart.
+     */
+    public int getTotal()
+    {
+        int            total        = 0;
+        Iterator<Item> itemIterator = iterator();
+        while (itemIterator.hasNext()) {
+            total += itemIterator.next().getTotalPrice();
+        }
+
+        return total;
+    }
+
+    /**
+     * Empties the cart, removing all items.
+     */
+    public void clear()
+    {
+        this.items.clear();
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @Override public Iterator<Item> iterator()
+    {
+        return items.iterator();
+    }
+
+    /**
+     * Checks that the shopping cart is empty.
+     *
+     * @return {@code true} if the shopping cart is empty, otherwise {@code false}.
+     */
+    public boolean isEmpty()
+    {
+        return size() == 0;
+    }
+
+    /**
+     * Adds the provided item to the cart. When an item with the same bottom and topping already exists in the
+     * {@link ShoppingCart}, the quantity of that item is instead increased.
+     *
+     * @param item The item to add to the cart.
+     */
+    public void addItem(Item item)
+    {
+        Bottom  bottom  = item.getBottom();
+        Topping topping = item.getTopping();
+
+        for (int x = 0; x < items.size(); x++) {
+            Item forItem = items.get(x);
+            if (forItem.getBottom().equals(bottom) && forItem.getTopping().equals(topping)) {
+                items.set(x, new Item(bottom, topping, forItem.quantity + item.quantity));
+                return;
+            }
+        }
+
+        items.add(item);
+    }
+
+    /**
+     * Returns the number of items in the cart.
+     *
+     * @return The number of items in the cart.
+     */
+    public int size()
+    {
+        return items.size();
+    }
+
+    /**
+     * Returns a list of the items in the shopping cart.
+     *
+     * @return The list of the items in the shopping cart.
+     */
+    public List<Item> getItems()
+    {
+        return new ArrayList<>(items);
+    }
+
+    /**
      * Represents an item in the shopping cart. An item consists of a product (bottom and topping) and the number of
      * that product to be ordered.
      */
@@ -100,91 +186,5 @@ public class ShoppingCart implements Iterable<ShoppingCart.Item>
         {
             return getUnitPrice() * quantity;
         }
-    }
-
-    /**
-     * Returns the total price of the cart.
-     *
-     * @return The total price of the cart.
-     */
-    public int getTotal()
-    {
-        int            total        = 0;
-        Iterator<Item> itemIterator = iterator();
-        while (itemIterator.hasNext()) {
-            total += itemIterator.next().getTotalPrice();
-        }
-
-        return total;
-    }
-
-    /**
-     * Empties the cart, removing all items.
-     */
-    public void clear()
-    {
-        this.items.clear();
-    }
-
-    /**
-     * Returns an iterator over elements of type {@code T}.
-     *
-     * @return an Iterator.
-     */
-    @Override public Iterator<Item> iterator()
-    {
-        return items.iterator();
-    }
-
-    /**
-     * Checks that the shopping cart is empty.
-     *
-     * @return {@code true} if the shopping cart is empty, otherwise {@code false}.
-     */
-    public boolean isEmpty()
-    {
-        return size() == 0;
-    }
-
-    /**
-     * Adds the provided item to the cart. When an item with the same bottom and topping already exists in the
-     * {@link ShoppingCart}, the quantity of that item is instead increased.
-     *
-     * @param item The item to add to the cart.
-     */
-    public void addItem(Item item)
-    {
-        Bottom  bottom  = item.getBottom();
-        Topping topping = item.getTopping();
-
-        for (int x = 0; x < items.size(); x++) {
-            Item forItem = items.get(x);
-            if (forItem.getBottom().equals(bottom) && forItem.getTopping().equals(topping)) {
-                items.set(x, new Item(bottom, topping, forItem.quantity + item.quantity));
-                return;
-            }
-        }
-
-        items.add(item);
-    }
-
-    /**
-     * Returns the number of items in the cart.
-     *
-     * @return The number of items in the cart.
-     */
-    public int size()
-    {
-        return items.size();
-    }
-
-    /**
-     * Returns a list of the items in the shopping cart.
-     *
-     * @return The list of the items in the shopping cart.
-     */
-    public List<Item> getItems()
-    {
-        return new ArrayList<>(items);
     }
 }

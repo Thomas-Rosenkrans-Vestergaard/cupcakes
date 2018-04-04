@@ -1,23 +1,27 @@
 package tvestergaard.cupcakes.data.orders;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import tvestergaard.cupcakes.logic.ShoppingCart;
 import tvestergaard.cupcakes.data.AbstractMysqlDAO;
+import tvestergaard.cupcakes.data.MysqlDAOException;
 import tvestergaard.cupcakes.data.bottoms.Bottom;
 import tvestergaard.cupcakes.data.toppings.Topping;
 import tvestergaard.cupcakes.data.users.User;
+import tvestergaard.cupcakes.logic.ShoppingCart;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Provides CRUD functionality for a MySQL database containing {@link Order}s.
+ */
 public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
 {
 
     /**
-     * Creates a new {@link MysqlOrderDAO} using the provided {@link MysqlDataSource}.
+     * Creates a new {@link MysqlOrderDAO}.
      *
-     * @param source The source to operate on.
+     * @param source The {@link MysqlDataSource} serving as the source for the persistent storage being queried.
      */
     public MysqlOrderDAO(MysqlDataSource source)
     {
@@ -25,33 +29,35 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     }
 
     /**
-     * Returns an {@link Order} representing the order with the provided id in the database.
+     * Returns an {@link Order} representing the order with the provided id in the persistent storage source.
      *
      * @param id The id of the order to retrieve.
-     * @return The {@link Order} representing the order with the provided id in the database.
-     * @throws SQLException
+     * @return The {@link Order} representing the order with the provided id in the persistent storage source.
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public Order get(int id) throws SQLException
+    @Override public Order get(int id) throws MysqlDAOException
     {
-        String sql = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
+        String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
                 "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
                 "INNER JOIN users ON `user` = users.id " +
                 "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
                 "INNER JOIN toppings ON toppings.id = order_items.topping " +
                 "WHERE orders.id = ?";
 
-        PreparedStatement statement = getConnection().prepareStatement(sql);
-        statement.setInt(1, id);
-        ResultSet results = statement.executeQuery();
-        if (!results.first())
-            return null;
+        try {
+            try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
+                statement.setInt(1, id);
+                ResultSet results = statement.executeQuery();
+                if (!results.first())
+                    return null;
 
-        Order order = createOrder(results);
+                Order order = createOrder(results);
 
-        results.close();
-        statement.close();
-
-        return order;
+                return order;
+            }
+        } catch (SQLException e) {
+            throw new MysqlDAOException(e);
+        }
     }
 
     /**
@@ -59,163 +65,161 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
      *
      * @param user The user to retrieve the orders of.
      * @return The orders placed by the provided user.
-     * @throws SQLException
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public List<Order> get(User user) throws SQLException
+    @Override public List<Order> get(User user) throws MysqlDAOException
     {
-
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
+        String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
                 "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
                 "INNER JOIN users ON `user` = users.id " +
                 "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
                 "INNER JOIN toppings ON toppings.id = order_items.topping " +
                 "WHERE `user` = ?";
 
-        PreparedStatement statement = getConnection().prepareStatement(sql);
-        statement.setInt(1, user.getId());
-        ResultSet results = statement.executeQuery();
-        if (!results.first())
-            return null;
+        try {
+            try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
+                statement.setInt(1, user.getId());
+                ResultSet results = statement.executeQuery();
+                if (!results.first())
+                    return null;
 
-        int currentId = results.getInt("orders.id");
-        orders.add(createOrder(results));
-        while (results.next()) {
-            if (currentId != results.getInt("orders.id")) {
-                currentId = results.getInt("orders.id");
+                int currentId = results.getInt("orders.id");
                 orders.add(createOrder(results));
+                while (results.next()) {
+                    if (currentId != results.getInt("orders.id")) {
+                        currentId = results.getInt("orders.id");
+                        orders.add(createOrder(results));
+                    }
+                }
+
+                return orders;
+
             }
+        } catch (SQLException e) {
+            throw new MysqlDAOException(e);
         }
-
-        results.close();
-        statement.close();
-
-        return orders;
     }
 
     /**
-     * Returns all the orders in the database.
+     * Returns all the orders in the persistent storage source.
      *
-     * @return A list containing all the orders in the database.
-     * @throws SQLException
+     * @return A list containing all the orders in the persistent storage source.
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public List<Order> get() throws SQLException
+    @Override public List<Order> get() throws MysqlDAOException
     {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
+        String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
                 "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
                 "INNER JOIN users ON `user` = users.id " +
                 "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
                 "INNER JOIN toppings ON toppings.id = order_items.topping";
 
-        PreparedStatement statement = getConnection().prepareStatement(sql);
-        ResultSet results = statement.executeQuery();
-        if (!results.first())
-            return null;
+        try {
+            try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
+                ResultSet results = statement.executeQuery();
+                if (!results.first())
+                    return null;
 
-        int currentId = results.getInt("orders.id");
-        orders.add(createOrder(results));
-        while (results.next()) {
-            if (currentId != results.getInt("orders.id")) {
-                currentId = results.getInt("orders.id");
+                int currentId = results.getInt("orders.id");
                 orders.add(createOrder(results));
+                while (results.next()) {
+                    if (currentId != results.getInt("orders.id")) {
+                        currentId = results.getInt("orders.id");
+                        orders.add(createOrder(results));
+                    }
+                }
             }
+            return orders;
+
+        } catch (SQLException e) {
+            throw new MysqlDAOException(e);
         }
-
-        results.close();
-        statement.close();
-
-        return orders;
     }
 
     /**
-     * Inserts a new order into the database using the provided information.
+     * Inserts a new order into the persistent storage source using the provided information.
      *
      * @param user    The user placing the order.
      * @param items   The order items to insert.
      * @param comment A comment provided by the user.
      * @return An {@link Order} instance representing the newly inserted row.
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public Order create(User user, Iterable<ShoppingCart.Item> items, String comment) throws SQLException
+    @Override public Order create(User user, Iterable<ShoppingCart.Item> items, String comment) throws MysqlDAOException
     {
-
-        String update = "INSERT INTO orders (`user`, comment) VALUES (?, ?)";
-        Connection connection = getConnection();
-        PreparedStatement statement = null;
-
+        String SQL = "INSERT INTO orders (`user`, comment) VALUES (?, ?)";
         try {
+            Connection connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setInt(1, user.getId());
+                statement.setString(2, comment);
 
-            statement = connection.prepareStatement(update, Statement.RETURN_GENERATED_KEYS);
-            statement.setInt(1, user.getId());
-            statement.setString(2, comment);
+                statement.executeUpdate();
 
-            statement.executeUpdate();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                generatedKeys.first();
 
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            generatedKeys.first();
+                int               id            = generatedKeys.getInt(1);
+                String            sql           = "INSERT INTO order_items (`order`, bottom, topping, quantity, unit_price) " + "VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement itemStatement = connection.prepareStatement(sql);
 
-            int id = generatedKeys.getInt(1);
-            String sql = "INSERT INTO order_items (`order`, bottom, topping, quantity, unit_price) " +
-                    "VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement itemStatement = connection.prepareStatement(sql);
+                for (ShoppingCart.Item item : items) {
+                    itemStatement.setInt(1, id);
+                    itemStatement.setInt(2, item.getBottom().getId());
+                    itemStatement.setInt(3, item.getTopping().getId());
+                    itemStatement.setInt(4, item.getQuantity());
+                    itemStatement.setInt(5, item.getUnitPrice());
+                    itemStatement.executeUpdate();
+                }
 
-            for (ShoppingCart.Item item : items) {
-                itemStatement.setInt(1, id);
-                itemStatement.setInt(2, item.getBottom().getId());
-                itemStatement.setInt(3, item.getTopping().getId());
-                itemStatement.setInt(4, item.getQuantity());
-                itemStatement.setInt(5, item.getUnitPrice());
-                itemStatement.executeUpdate();
+                connection.commit();
+
+                return get(id);
+
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
             }
-
-            connection.commit();
-
-            return get(id);
-
         } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            if (statement != null)
-                statement.close();
+            throw new MysqlDAOException(e);
         }
     }
 
     /**
-     * Updates the order with the provided id in the database.
+     * Updates the order with the provided id in the persistent storage source.
      *
      * @param id      The id of the order to update.
      * @param user    The user to update to.
      * @param comment The comment to update to.
      * @param status  The status to update to.
      * @return An entity representing the updated row.
-     * @throws SQLException
+     * @throws MysqlDAOException When an error occurs during the operation.
      */
-    @Override public Order update(int id, User user, String comment, Order.Status status) throws SQLException
+    @Override public Order update(int id, User user, String comment, Order.Status status) throws MysqlDAOException
     {
-        String update = "UPDATE orders  SET `user` = ?, comment = ?, status = ? WHERE id = ?";
-        Connection connection = getConnection();
-        PreparedStatement statement = null;
+        String SQL = "UPDATE orders  SET `user` = ?, comment = ?, status = ? WHERE id = ?";
 
         try {
+            Connection connection = getConnection();
+            try (PreparedStatement statement = connection.prepareStatement(SQL)) {
+                statement.setInt(1, user.getId());
+                statement.setString(2, comment);
+                statement.setInt(3, status.getCode());
+                statement.setInt(4, id);
 
-            statement = connection.prepareStatement(update);
-            statement.setInt(1, user.getId());
-            statement.setString(2, comment);
-            statement.setInt(3, status.getCode());
-            statement.setInt(4, id);
+                statement.executeUpdate();
+                connection.commit();
 
-            statement.executeUpdate();
-            connection.commit();
+                return get(id);
 
-            return get(id);
-
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            if (statement != null)
-                statement.close();
+            throw new MysqlDAOException(e);
         }
     }
 

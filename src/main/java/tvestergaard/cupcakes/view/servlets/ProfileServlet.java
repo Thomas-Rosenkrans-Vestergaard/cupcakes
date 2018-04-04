@@ -1,11 +1,11 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.view.Authentication;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
+import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.logic.Language;
 import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
-import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
-import tvestergaard.cupcakes.data.orders.OrderDAO;
+import tvestergaard.cupcakes.logic.OrderFacade;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
@@ -23,9 +23,9 @@ public class ProfileServlet extends HttpServlet
 {
 
     /**
-     * The {@link OrderDAO} used to retrieve the orders placed by the user shown.
+     * Facade for performing various operations related to orders.
      */
-    private final OrderDAO orderDAO = new MysqlOrderDAO(new PrimaryDatabase());
+    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.singleton()));
 
     /**
      * Serves the /shop page where users can see the products.
@@ -46,7 +46,7 @@ public class ProfileServlet extends HttpServlet
 
         try {
             request.setAttribute("user", authentication.getUser());
-            request.setAttribute("orders", orderDAO.get(authentication.getUser()));
+            request.setAttribute("orders", orderFacade.get(authentication.getUser()));
             ViewUtilities.attach(request, notifications);
             request.getRequestDispatcher("WEB-INF/profile.jsp").forward(request, response);
         } catch (Exception e) {

@@ -1,10 +1,10 @@
 package tvestergaard.cupcakes.view;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.logic.Notification;
 import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.data.users.UserDAO;
+import tvestergaard.cupcakes.logic.UserFacade;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,16 +27,16 @@ public class UserRequestInputValidator
         this.request = request;
     }
 
-    public boolean username(UserDAO userDAO)
+    public boolean username(UserFacade userFacade)
     {
-        return usernameWasSent() && usernameLength() && usernameAvailable(userDAO);
+        return usernameWasSent() && usernameLength() && usernameAvailable(userFacade);
     }
 
-    public boolean username(UserDAO userDAO, Notifications notifications, String[] errors)
+    public boolean username(UserFacade userFacade, Notifications notifications, String[] errors)
     {
         return usernameWasSent(notifications, errors[0]) &&
                 usernameLength(notifications, errors[1]) &&
-                usernameAvailable(userDAO, notifications, errors[2]);
+                usernameAvailable(userFacade, notifications, errors[2]);
     }
 
     public boolean usernameWasSent()
@@ -73,16 +73,16 @@ public class UserRequestInputValidator
         return true;
     }
 
-    public boolean usernameAvailable(UserDAO userDAO)
+    public boolean usernameAvailable(UserFacade userFacade)
     {
         String username = request.getParameter(usernameParameter);
 
-        return userDAO == null ? false : userDAO.getFromUsername(username) == null;
+        return userFacade == null ? false : userFacade.getFromUsername(username) == null;
     }
 
-    public boolean usernameAvailable(UserDAO userDAO, Notifications notifications, String error)
+    public boolean usernameAvailable(UserFacade userFacade, Notifications notifications, String error)
     {
-        if (!usernameAvailable(userDAO)) {
+        if (!usernameAvailable(userFacade)) {
             notifications.notify(Notification.of(error, errorLevel));
             return false;
         }
@@ -90,16 +90,16 @@ public class UserRequestInputValidator
         return true;
     }
 
-    public boolean email(UserDAO userDAO)
+    public boolean email(UserFacade userFacade)
     {
-        return emailWasSent() && emailFormat() && emailAvailable(userDAO);
+        return emailWasSent() && emailFormat() && emailAvailable(userFacade);
     }
 
-    public boolean email(UserDAO userDAO, Notifications notifications, String[] errors)
+    public boolean email(UserFacade userFacade, Notifications notifications, String[] errors)
     {
         return emailWasSent(notifications, errors[0]) &&
                 emailFormat(notifications, errors[1]) &&
-                emailAvailable(userDAO, notifications, errors[2]);
+                emailAvailable(userFacade, notifications, errors[2]);
     }
 
     public boolean emailWasSent()
@@ -136,16 +136,16 @@ public class UserRequestInputValidator
         return true;
     }
 
-    public boolean emailAvailable(UserDAO userDAO)
+    public boolean emailAvailable(UserFacade userFacade)
     {
         String email = request.getParameter(emailParameter);
 
-        return email == null ? false : userDAO.getFromEmail(email) == null;
+        return email == null ? false : userFacade.getFromEmail(email) == null;
     }
 
-    public boolean emailAvailable(UserDAO userDAO, Notifications notifications, String error)
+    public boolean emailAvailable(UserFacade userFacade, Notifications notifications, String error)
     {
-        if (!emailAvailable(userDAO)) {
+        if (!emailAvailable(userFacade)) {
             notifications.notify(Notification.of(error, errorLevel));
             return false;
         }

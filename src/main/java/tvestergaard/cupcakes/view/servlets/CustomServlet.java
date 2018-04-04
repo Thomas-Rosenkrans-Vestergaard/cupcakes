@@ -1,12 +1,12 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.logic.Language;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
-import tvestergaard.cupcakes.data.bottoms.BottomDAO;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
-import tvestergaard.cupcakes.data.toppings.ToppingDAO;
+import tvestergaard.cupcakes.logic.BottomFacade;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -21,17 +21,15 @@ import java.io.IOException;
 public class CustomServlet extends HttpServlet
 {
 
-    private final PrimaryDatabase source = new PrimaryDatabase();
+    /**
+     * Facade for performing various operations related to bottoms.
+     */
+    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.singleton()));
 
     /**
-     * The {@link BottomDAO} used to retrieve bottoms from the database.
+     * Facade for performing various operations related to toppings.
      */
-    private final BottomDAO bottomDAO = new MysqlBottomDAO(source);
-
-    /**
-     * The {@link ToppingDAO} used to retrieve toppings from the database.
-     */
-    private final ToppingDAO toppingDAO = new MysqlToppingDAO(source);
+    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.singleton()));
 
     /**
      * Serves the /custom page where users can create their own cupcake. Parameters 'bottom' and 'topping' can be provided The url parameters 'bottom' and 'topping' can
@@ -48,8 +46,8 @@ public class CustomServlet extends HttpServlet
 
         try {
 
-            request.setAttribute("bottoms", bottomDAO.get());
-            request.setAttribute("toppings", toppingDAO.get());
+            request.setAttribute("bottoms", bottomFacade.get());
+            request.setAttribute("toppings", toppingFacade.get());
 
 
             if (parameters.isPresent("bottom") && parameters.isInt("bottom"))

@@ -1,14 +1,13 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 
-import com.mysql.cj.jdbc.MysqlDataSource;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.logic.Language;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.data.orders.Order;
-import tvestergaard.cupcakes.data.orders.OrderDAO;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.logic.OrderFacade;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -23,6 +22,11 @@ import java.sql.SQLException;
 @WebServlet(name = "OrdersServlet", urlPatterns = "/administration/orders")
 public class OrdersServlet extends HttpServlet
 {
+
+    /**
+     * Facade for performing various operations related to orders.
+     */
+    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.singleton()));
 
     private static final String ACTION_UPDATE = "update";
 
@@ -56,8 +60,7 @@ public class OrdersServlet extends HttpServlet
                 return;
             }
 
-            OrderDAO ordersDAO = new MysqlOrderDAO(new PrimaryDatabase());
-            request.setAttribute("orders", ordersDAO.get());
+            request.setAttribute("orders", orderFacade.get());
             request.getRequestDispatcher("/WEB-INF/administration/read_orders.jsp").forward(request, response);
 
         } catch (SQLException e) {
@@ -71,10 +74,8 @@ public class OrdersServlet extends HttpServlet
             throws ServletException, IOException, SQLException
     {
         try {
-            int             id       = Integer.parseInt(request.getParameter("id"));
-            MysqlDataSource source   = new PrimaryDatabase();
-            OrderDAO        orderDAO = new MysqlOrderDAO(source);
-            request.setAttribute("order", orderDAO.get(id));
+            int id = Integer.parseInt(request.getParameter("id"));
+            request.setAttribute("order", orderFacade.get(id));
             request.getRequestDispatcher("/WEB-INF/administration/update_order.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             notifications.warning("Bad id parameter.");
@@ -130,8 +131,7 @@ public class OrdersServlet extends HttpServlet
             return;
         }
 
-        OrderDAO orderDAO = new MysqlOrderDAO(new PrimaryDatabase());
-        orderDAO.update(parameters.getInt("id"),
+        orderFacade.update(parameters.getInt("id"),
                 authentication.getUser(),
                 parameters.getString("comment"),
                 Order.Status.fromCode(parameters.getInt("status")));

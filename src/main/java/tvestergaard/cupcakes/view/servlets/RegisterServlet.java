@@ -1,12 +1,11 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import org.mindrot.jbcrypt.BCrypt;
-import tvestergaard.cupcakes.logic.Language;
-import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.data.users.UserDAO;
+import tvestergaard.cupcakes.logic.Language;
+import tvestergaard.cupcakes.logic.Notifications;
+import tvestergaard.cupcakes.logic.UserFacade;
 import tvestergaard.cupcakes.view.UserRequestInputValidator;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -27,9 +26,9 @@ public class RegisterServlet extends HttpServlet
 {
 
     /**
-     * The {@link UserDAO} used to retrieve user information when attempting to register accounts.
+     * Facade for performing various operations related to users.
      */
-    private final UserDAO userDAO = new MysqlUserDAO(new PrimaryDatabase());
+    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.singleton()));
 
     /**
      * Serves the /register page where the user can create a new user.
@@ -67,8 +66,8 @@ public class RegisterServlet extends HttpServlet
 
         notifications.record();
 
-        validator.username(userDAO, notifications, Language.USER_USERNAME_ERRORS);
-        validator.email(userDAO, notifications, Language.USER_EMAIL_ERRORS);
+        validator.username(userFacade, notifications, Language.USER_USERNAME_ERRORS);
+        validator.email(userFacade, notifications, Language.USER_EMAIL_ERRORS);
         validator.password(notifications, Language.USER_PASSWORD_ERRORS);
 
         if (notifications.hasNew()) {
@@ -78,7 +77,7 @@ public class RegisterServlet extends HttpServlet
 
         try {
 
-            User user = userDAO.create(validator.getUsername(), validator.getEmail(), hash(validator.getPassword()));
+            User user = userFacade.create(validator.getUsername(), validator.getEmail(), validator.getPassword());
             notifications.success(Language.REGISTRATION_SUCCESS);
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
@@ -88,16 +87,5 @@ public class RegisterServlet extends HttpServlet
             notifications.error(Language.GENERAL_ERROR_RENDER);
             response.sendRedirect(ViewUtilities.referer(request, "shop"));
         }
-    }
-
-    /**
-     * Hashes the provided password using the b-crypt hashing function.
-     *
-     * @param password The password to hash.
-     * @return The resulting digest.
-     */
-    private String hash(String password)
-    {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 }

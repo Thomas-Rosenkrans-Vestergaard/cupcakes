@@ -1,14 +1,14 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 
-import tvestergaard.cupcakes.view.Authentication;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
+import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
+import tvestergaard.cupcakes.data.toppings.Topping;
 import tvestergaard.cupcakes.logic.FileSaver;
 import tvestergaard.cupcakes.logic.Language;
 import tvestergaard.cupcakes.logic.Notifications;
-import tvestergaard.cupcakes.data.PrimaryDatabase;
-import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
-import tvestergaard.cupcakes.data.toppings.Topping;
-import tvestergaard.cupcakes.data.toppings.ToppingDAO;
+import tvestergaard.cupcakes.logic.ToppingFacade;
+import tvestergaard.cupcakes.view.Authentication;
 import tvestergaard.cupcakes.view.MultipartParameters;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
@@ -30,7 +30,10 @@ import static tvestergaard.cupcakes.view.ViewUtilities.referer;
 public class ToppingsServlet extends HttpServlet
 {
 
-    private final ToppingDAO toppingDAO = new MysqlToppingDAO(new PrimaryDatabase());
+    /**
+     * Facade for performing various operations related to toppings.
+     */
+    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.singleton()));
 
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_UPDATE    = "update";
@@ -79,7 +82,7 @@ public class ToppingsServlet extends HttpServlet
                 return;
             }
 
-            request.setAttribute("toppings", toppingDAO.get());
+            request.setAttribute("toppings", toppingFacade.get());
             request.getRequestDispatcher("/WEB-INF/administration/read_toppings.jsp").forward(request, response);
         } catch (SQLException e) {
             notifications.error("A database error occurred.");
@@ -122,7 +125,7 @@ public class ToppingsServlet extends HttpServlet
             return;
         }
 
-        request.setAttribute("topping", toppingDAO.get(parameters.getInt(PARAMETER_ID)));
+        request.setAttribute("topping", toppingFacade.get(parameters.getInt(PARAMETER_ID)));
         request.getRequestDispatcher("/WEB-INF/administration/update_topping.jsp").forward(request, response);
     }
 
@@ -194,7 +197,7 @@ public class ToppingsServlet extends HttpServlet
         }
 
         MultipartParameters parameters = new MultipartParameters(request);
-        Topping topping = toppingDAO.create(
+        Topping topping = toppingFacade.create(
                 parameters.getString(PARAMETER_NAME),
                 parameters.getString(PARAMETER_DESCRIPTION),
                 parameters.getInt(PARAMETER_PRICE),
@@ -232,7 +235,7 @@ public class ToppingsServlet extends HttpServlet
             return;
         }
 
-        Topping topping = toppingDAO.update(
+        Topping topping = toppingFacade.update(
                 parameters.getInt(PARAMETER_ID),
                 parameters.getString(PARAMETER_NAME),
                 parameters.getString(PARAMETER_DESCRIPTION),
@@ -274,7 +277,7 @@ public class ToppingsServlet extends HttpServlet
             return;
         }
 
-        boolean deleted = toppingDAO.delete(parameters.getInt(PARAMETER_ID));
+        boolean deleted = toppingFacade.delete(parameters.getInt(PARAMETER_ID));
 
         if (!deleted) {
             notifications.error(RECORD_DELETED_ERROR);
