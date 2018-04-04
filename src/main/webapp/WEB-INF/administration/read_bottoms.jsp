@@ -21,7 +21,7 @@
                     <td><a href="bottoms?action=update&id=${bottom.getId()}">${bottom.getId()}</a></td>
                     <td><c:out value="${bottom.getName()}"/></td>
                     <td><c:out value="${bottom.getDescription()}"/></td>
-                    <td><c:out value="${bottom.getPrice()}"/></td>
+                    <td class="price">$<c:out value="${f:formatPrice(bottom.getPrice())}"/></td>
                     <td>${bottom.isActive() ? "true" : "false"}</td>
                     <td class="table-image"><img src="../images/bottoms/${bottom.getId()}.jpg" alt=""></td>
                     <td>
