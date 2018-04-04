@@ -15,8 +15,8 @@
 <body>
 <nav>
     <ul id="nav-mobile">
-        <li><a href="orders"><i class="material-icons left">book</i>Orders</a></li>
-        <li><a href="users"><i class="material-icons left">account_circle</i>Users</a></li>
+        <li><a href="orders">Orders</a></li>
+        <li><a href="users">Users</a></li>
         <li><a href="presets">Presets</a></li>
         <li><a href="bottoms">Bottoms</a></li>
         <li><a href="toppings">Toppings</a></li>
