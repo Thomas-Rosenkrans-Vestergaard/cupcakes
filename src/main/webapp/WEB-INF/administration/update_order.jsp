@@ -5,7 +5,8 @@
 <form class="main" method="post">
     <div class="row">
         <div class="input-field col s12">
-            <input readonly type="number" name="id" value="${order.getId()}">
+            <input readonly type="number" name="id" id="id" value="${order.getId()}">
+            <label for="id">ID</label>
         </div>
     </div>
     <div class="row">
@@ -19,6 +20,12 @@
             <textarea class="materialize-textarea" name="comment" id="comment" cols="30" rows="10" minlength="1"
                       required>${order.getComment()}</textarea>
             <label for="comment">Comment</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <input readonly type="text" id="created_at" value="${order.getCreatedAt()}">
+            <label for="created_at">Created at</label>
         </div>
     </div>
     <div class="row">

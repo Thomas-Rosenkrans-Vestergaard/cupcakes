@@ -4,7 +4,8 @@
 <form class="main" method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="input-field col s12">
-            <input readonly type="number" name="id" value="${bottom.getId()}">
+            <input readonly type="number" name="id" id="id" value="${bottom.getId()}">
+            <label for="id">ID</label>
         </div>
     </div>
     <div class="row">
