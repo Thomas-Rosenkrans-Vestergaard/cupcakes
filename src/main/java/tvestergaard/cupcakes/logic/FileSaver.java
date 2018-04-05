@@ -32,7 +32,7 @@ public class FileSaver
      * @throws IOException
      * @throws ServletException
      */
-    public void saveAs(InputStream contents, String name) throws IOException, ServletException
+    public void saveAs(InputStream contents, String name) throws IOException
     {
         destination.mkdirs();
         try (OutputStream output = new FileOutputStream(destination.getAbsolutePath() + "/" + name)) {
