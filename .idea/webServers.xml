@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a4340540-797f-4ea9-b782-1fa00d446a5a" name="Remote" url="http://159.89.107.247">
+        <fileTransfer host="159.89.107.247" port="22" privateKey="C:\Users\Skole\.ssh\id_rsa" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

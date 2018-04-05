@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="css/materialize.min.css"/>
     <link rel="stylesheet" href="css/main.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f"
+            crossorigin="anonymous"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
