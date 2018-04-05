@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet
     /**
      * Facade for performing various operations related to users.
      */
-    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.singleton()));
+    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.get()));
 
     /**
      * Serves the /login page where anonymous users can log in to their user account.

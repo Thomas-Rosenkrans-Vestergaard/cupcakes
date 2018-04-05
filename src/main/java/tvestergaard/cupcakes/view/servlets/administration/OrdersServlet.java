@@ -26,7 +26,7 @@ public class OrdersServlet extends HttpServlet
     /**
      * Facade for performing various operations related to orders.
      */
-    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.singleton()));
+    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.get()));
 
     private static final String ACTION_UPDATE = "update";
 

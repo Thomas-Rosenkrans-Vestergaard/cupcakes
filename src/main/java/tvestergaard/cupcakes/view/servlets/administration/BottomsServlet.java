@@ -33,7 +33,7 @@ public class BottomsServlet extends HttpServlet
     /**
      * Facade for performing various operations related to bottoms.
      */
-    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.singleton()));
+    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.get()));
 
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_UPDATE    = "update";

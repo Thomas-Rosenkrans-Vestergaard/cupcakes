@@ -25,7 +25,7 @@ public class ProfileServlet extends HttpServlet
     /**
      * Facade for performing various operations related to orders.
      */
-    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.singleton()));
+    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.get()));
 
     /**
      * Serves the /shop page where users can see the products.

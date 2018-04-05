@@ -29,7 +29,7 @@ public class RegisterServlet extends HttpServlet
     /**
      * Facade for performing various operations related to users.
      */
-    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.singleton()));
+    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.get()));
 
     /**
      * Serves the /register page where the user can create a new user.
