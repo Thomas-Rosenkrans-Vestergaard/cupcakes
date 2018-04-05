@@ -38,11 +38,11 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     @Override public Order get(int id) throws MysqlDAOException
     {
         String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                "INNER JOIN users ON `user` = users.id " +
-                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                "INNER JOIN toppings ON toppings.id = order_items.topping " +
-                "WHERE orders.id = ?";
+                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                     "INNER JOIN users ON `user` = users.id " +
+                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                     "INNER JOIN toppings ON toppings.id = order_items.topping " +
+                     "WHERE orders.id = ?";
 
         try {
             try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
@@ -71,18 +71,19 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     {
         List<Order> orders = new ArrayList<>();
         String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                "INNER JOIN users ON `user` = users.id " +
-                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                "INNER JOIN toppings ON toppings.id = order_items.topping " +
-                "WHERE `user` = ?";
+                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                     "INNER JOIN users ON `user` = users.id " +
+                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                     "INNER JOIN toppings ON toppings.id = order_items.topping " +
+                     "WHERE `user` = ?";
 
         try {
             try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
                 statement.setInt(1, user.getId());
                 ResultSet results = statement.executeQuery();
+
                 if (!results.first())
-                    return null;
+                    return orders;
 
                 int currentId = results.getInt("orders.id");
                 orders.add(createOrder(results));
@@ -111,10 +112,10 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     {
         List<Order> orders = new ArrayList<>();
         String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                "INNER JOIN users ON `user` = users.id " +
-                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                "INNER JOIN toppings ON toppings.id = order_items.topping";
+                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                     "INNER JOIN users ON `user` = users.id " +
+                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                     "INNER JOIN toppings ON toppings.id = order_items.topping";
 
         try {
             try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {

@@ -1,6 +1,7 @@
 package tvestergaard.cupcakes.view.servlets;
 
 import tvestergaard.cupcakes.data.users.User;
+import tvestergaard.cupcakes.logic.NotEnoughFundsException;
 import tvestergaard.cupcakes.logic.OrderFacade;
 import tvestergaard.cupcakes.logic.ShoppingCart;
 import tvestergaard.cupcakes.logic.UserFacade;
@@ -115,27 +116,21 @@ public class OrderServlet extends HttpServlet
             return;
         }
 
+        ViewUtilities.attach(request, notifications);
+
         try {
+            User user = authentication.getUser();
             orderFacade.create(authentication.getUser(), shoppingCart, request.getParameter("comment"));
-            User user = userFacade.get(authentication.getUser().getId());
+            authentication.updateUser(userFacade.get(user.getId()));
             notifications.success(ORDER_SUCCESS);
-            user = userFacade.update(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getPassword(),
-                    user.getBalance() - shoppingCart.getTotal(),
-                    user.getRole());
-
-            authentication.updateUser(user);
-            shoppingCart.clear();
-
             response.sendRedirect("profile");
 
+        } catch (NotEnoughFundsException e) {
+            notifications.error("Not enough funds.");
+            response.sendRedirect(ViewUtilities.referer(request, "cart"));
         } catch (Exception e) {
             notifications.error(ORDER_ERROR);
             response.sendRedirect(ViewUtilities.referer(request, "cart"));
-            return;
         }
     }
 }

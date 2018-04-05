@@ -6,7 +6,9 @@ import tvestergaard.cupcakes.data.bottoms.BottomDAO;
 import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.data.orders.Order;
 import tvestergaard.cupcakes.data.orders.OrderDAO;
+import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
+import tvestergaard.cupcakes.data.users.UserDAO;
 
 import java.util.List;
 
@@ -91,15 +93,31 @@ public class OrderFacade
      * Inserts a new order into the application using the provided information.
      *
      * @param user    The user placing the order.
-     * @param items   The order items to insert.
+     * @param cart    The shopping cart to order.
      * @param comment A comment provided by the user.
      * @return An {@link Order} instance representing the newly inserted row.
-     * @throws ApplicationException When an error occurs during the operation.
+     * @throws ApplicationException    When an error occurs during the operation.
+     * @throws NotEnoughFundsException When the user does not have enough funds to place the order.
      */
-    public Order create(User user, Iterable<ShoppingCart.Item> items, String comment)
+    public Order create(User user, ShoppingCart cart, String comment) throws NotEnoughFundsException
     {
         try {
-            return dao.create(user, items, comment);
+
+            UserDAO userDAO = new MysqlUserDAO(ProductionDatabaseSource.get());
+
+            Order result = dao.create(user, cart, comment);
+            userDAO.update(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getPassword(),
+                    user.getBalance() - cart.getTotal(),
+                    user.getRole());
+
+            cart.clear();
+
+            return result;
+
         } catch (DAOException e) {
             throw new ApplicationException(e);
         }

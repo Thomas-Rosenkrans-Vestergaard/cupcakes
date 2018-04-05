@@ -102,6 +102,7 @@ public class CartServlet extends HttpServlet
             return;
         }
 
+        notifications.success("The item was added to the cart.");
         ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
         shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, parameters.getInt("quantity")));
         response.sendRedirect("cart");
