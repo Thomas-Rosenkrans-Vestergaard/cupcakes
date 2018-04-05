@@ -1,10 +1,9 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.data.bottoms.Bottom;
-import tvestergaard.cupcakes.data.toppings.Topping;
-import tvestergaard.cupcakes.logic.BottomFacade;
+import tvestergaard.cupcakes.logic.NoSuchBottomException;
+import tvestergaard.cupcakes.logic.NoSuchToppingException;
 import tvestergaard.cupcakes.logic.ShoppingCart;
-import tvestergaard.cupcakes.logic.ToppingFacade;
+import tvestergaard.cupcakes.logic.ShoppingCartFacade;
 import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
@@ -23,14 +22,9 @@ public class CartServlet extends HttpServlet
 {
 
     /**
-     * Facade for performing various operations related to bottoms.
+     * Facade for performing various operations related to shopping carts.
      */
-    private final BottomFacade bottomFacade = new BottomFacade();
-
-    /**
-     * Facade for performing various operations related to toppings.
-     */
-    private final ToppingFacade toppingFacade = new ToppingFacade();
+    private final ShoppingCartFacade shoppingCartFacade = new ShoppingCartFacade();
 
     /**
      * Serves the /custom page where users can create their own cupcake.
@@ -87,24 +81,23 @@ public class CartServlet extends HttpServlet
             return;
         }
 
-        Bottom  bottom  = bottomFacade.get(parameters.getInt(PARAMETER_BOTTOM));
-        Topping topping = toppingFacade.get(parameters.getInt(PARAMETER_TOPPING));
+        try {
 
-        if (bottom == null) {
-            notifications.error("Bottom doesn't exist.");
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
-            return;
+            int bottom   = parameters.getInt("bottom");
+            int topping  = parameters.getInt("topping");
+            int quantity = parameters.getInt("quantity");
+
+            ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
+            shoppingCartFacade.addToCart(shoppingCart, bottom, topping, quantity);
+            notifications.success("The item was added to the cart.");
+            response.sendRedirect("cart");
+
+        } catch (NoSuchBottomException e) {
+            notifications.error("No such bottom with the provided id.");
+            response.sendRedirect("shop");
+        } catch (NoSuchToppingException e) {
+            notifications.error("No such topping with the provided id.");
+            response.sendRedirect("shop");
         }
-
-        if (topping == null) {
-            notifications.error("Bottom doesn't exist.");
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
-            return;
-        }
-
-        notifications.success("The item was added to the cart.");
-        ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
-        shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, parameters.getInt("quantity")));
-        response.sendRedirect("cart");
     }
 }
