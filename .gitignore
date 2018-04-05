@@ -115,4 +115,5 @@ gradle-app.setting
 
 
 #ProductDatabaseSource local
-ProductionDatabaseSource
+ProductionDatabaseSource.java
+.idea/inspectionProfiles/
