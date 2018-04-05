@@ -10,8 +10,9 @@ public class ProductionDatabaseSource extends MysqlDataSource
      */
     public ProductionDatabaseSource()
     {
-        setUser("cupcakes");
-        setDatabaseName("cupcakes");
+        setUser("root");
+        setPassword("Hightech4u");
+        setDatabaseName("t_cupcakedb");
     }
 
     /**
