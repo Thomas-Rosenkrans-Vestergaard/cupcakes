@@ -1,10 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `cupcakes` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE  IF NOT EXISTS `cupcakes` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_bin */;
 USE `cupcakes`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: cupcakes
 -- ------------------------------------------------------
--- Server version	5.6.37
+-- Server version	5.7.20-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -67,7 +67,7 @@ CREATE TABLE `order_items` (
   CONSTRAINT `fk_order_id` FOREIGN KEY (`order`) REFERENCES `orders` (`id`),
   CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`bottom`) REFERENCES `bottoms` (`id`),
   CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`topping`) REFERENCES `toppings` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +76,6 @@ CREATE TABLE `order_items` (
 
 LOCK TABLES `order_items` WRITE;
 /*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
-INSERT INTO `order_items` VALUES (13,18,2,3,5,1000),(14,19,1,1,5,1000),(15,20,5,2,5,1200);
 /*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,11 +91,12 @@ CREATE TABLE `orders` (
   `user` int(10) unsigned NOT NULL,
   `comment` text,
   `status` tinyint(4) NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `user` (`user`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +105,6 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (18,4,'Comment.',0),(19,4,'m',0),(20,4,'lul',0);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,7 +186,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,7 +195,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (4,'Thomas','tvestergaard@hotmail.com','$2a$10$hYjNfeJByPpIzPQ8Hs907ONaxWOiStSMYNAdKPg2i0VEgrQ6NGLBC',34500,2);
+INSERT INTO `users` VALUES (8,'user','user@cupcakes.dk','$2a$10$y6DmUsk6wqsrM0RdFo8lfu0lBDzm3PZVRNIsWhbtYKOvIWmR6ge4C',500000,0),(9,'administrator','administrator@cupcakes.dk','$2a$10$MzLkJL/DSf6RAwr30CrTduKm8aWGhmcEH/TR7yYTIEK7R1dWXsGxm',700000,1),(10,'owner','owner@cupcakes.dk','$2a$10$DeFl6iu0k8i0kt/tRd16c.Bk66D0Zn6766x/5xy7mnGfT9EAKnjim',200000,2);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -209,4 +208,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-05 14:25:01
+-- Dump completed on 2018-04-05 21:25:54
