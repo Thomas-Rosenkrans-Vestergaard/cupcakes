@@ -22,7 +22,7 @@
                     <td><c:out value="${order.getComment()}"/></td>
                     <td class="price">$<c:out value="${f:formatPrice(order.getTotal())}"/></td>
                     <td><c:out value="${order.getStatus()}"/></td>
-                    <td><c:out value="${order.getCreatedAt()}"/></td>
+                    <td><c:out value="${f:formatTimestamp(order.getCreatedAt())}"/></td>
                 </tr>
             </c:forEach>
         </c:when>

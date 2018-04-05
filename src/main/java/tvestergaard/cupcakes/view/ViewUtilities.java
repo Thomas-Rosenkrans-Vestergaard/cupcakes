@@ -3,6 +3,8 @@ package tvestergaard.cupcakes.view;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class ViewUtilities
 {
@@ -54,6 +56,19 @@ public class ViewUtilities
             return Integer.toString(dollars);
 
         return dollars + "." + (cents < 9 ? "0" + cents : cents);
+    }
+
+    private static SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+
+    /**
+     * Formats the provided {@code Timestamp} to the format dd-mm-yyyy HH:mm.
+     *
+     * @param timestamp The {@code Timestamp} to format.
+     * @return The resulting formatted string.
+     */
+    public static String formatTimestamp(Timestamp timestamp)
+    {
+        return format.format(timestamp);
     }
 
     /**

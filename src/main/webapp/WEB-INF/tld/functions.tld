@@ -10,4 +10,9 @@
         <function-class>tvestergaard.cupcakes.view.ViewUtilities</function-class>
         <function-signature>java.lang.String formatPrice(java.lang.Integer)</function-signature>
     </function>
+    <function>
+        <name>formatTimestamp</name>
+        <function-class>tvestergaard.cupcakes.view.ViewUtilities</function-class>
+        <function-signature>java.lang.String formatTimestamp(java.sql.Timestamp)</function-signature>
+    </function>
 </taglib>

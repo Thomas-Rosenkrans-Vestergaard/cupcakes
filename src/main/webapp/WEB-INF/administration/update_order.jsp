@@ -24,7 +24,7 @@
     </div>
     <div class="row">
         <div class="input-field col s12">
-            <input readonly type="text" id="created_at" value="${order.getCreatedAt()}">
+            <input readonly type="text" id="created_at" value="${f:formatTimestamp(order.getCreatedAt())}">
             <label for="created_at">Created at</label>
         </div>
     </div>
