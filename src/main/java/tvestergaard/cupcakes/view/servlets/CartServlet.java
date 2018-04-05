@@ -87,30 +87,23 @@ public class CartServlet extends HttpServlet
             return;
         }
 
-        try {
+        Bottom  bottom  = bottomFacade.get(parameters.getInt(PARAMETER_BOTTOM));
+        Topping topping = toppingFacade.get(parameters.getInt(PARAMETER_TOPPING));
 
-            Bottom  bottom  = bottomFacade.get(parameters.getInt(PARAMETER_BOTTOM));
-            Topping topping = toppingFacade.get(parameters.getInt(PARAMETER_TOPPING));
-
-            if (bottom == null) {
-                notifications.error("Bottom doesn't exist.");
-                response.sendRedirect(ViewUtilities.referer(request, "shop"));
-                return;
-            }
-
-            if (topping == null) {
-                notifications.error("Bottom doesn't exist.");
-                response.sendRedirect(ViewUtilities.referer(request, "shop"));
-                return;
-            }
-
-            ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
-            shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, parameters.getInt("quantity")));
-            response.sendRedirect("cart");
-
-        } catch (Exception e) {
-            notifications.error(Language.GENERAL_ERROR_RENDER);
+        if (bottom == null) {
+            notifications.error("Bottom doesn't exist.");
             response.sendRedirect(ViewUtilities.referer(request, "shop"));
+            return;
         }
+
+        if (topping == null) {
+            notifications.error("Bottom doesn't exist.");
+            response.sendRedirect(ViewUtilities.referer(request, "shop"));
+            return;
+        }
+
+        ShoppingCart shoppingCart = (ShoppingCart) request.getSession().getAttribute("cart");
+        shoppingCart.addItem(new ShoppingCart.Item(bottom, topping, parameters.getInt("quantity")));
+        response.sendRedirect("cart");
     }
 }

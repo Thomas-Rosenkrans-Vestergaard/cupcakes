@@ -51,16 +51,4 @@ public class CustomServlet extends HttpServlet
         ViewUtilities.attach(request, notifications);
         request.getRequestDispatcher("WEB-INF/custom.jsp").forward(request, response);
     }
-
-    /**
-     * Serves the /custom page where users can create their own cupcake. The url parameters 'bottom' and 'topping' can
-     * be use to fill the selection.
-     *
-     * @param request  The request.
-     * @param response The response.
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-        doGet(request, response);
-    }
 }

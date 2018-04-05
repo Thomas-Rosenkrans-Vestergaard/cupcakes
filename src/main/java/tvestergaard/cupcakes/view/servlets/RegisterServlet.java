@@ -83,9 +83,6 @@ public class RegisterServlet extends HttpServlet
             if (e.has(UserCreationException.Reason.USERNAME_TAKEN))
                 notifications.error("That username is already in use.");
             response.sendRedirect(ViewUtilities.referer(request, "shop"));
-        } catch (Exception e) {
-            notifications.error(Language.GENERAL_ERROR_RENDER);
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
         }
     }
 

@@ -2,6 +2,7 @@ package tvestergaard.cupcakes.view.servlets;
 
 import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.logic.UserFacade;
+import tvestergaard.cupcakes.logic.UserUpdateException;
 import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static tvestergaard.cupcakes.view.Language.GENERAL_ERROR_RENDER;
 import static tvestergaard.cupcakes.view.Language.INCOMPLETE_FORM_POST;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = "/funds")
@@ -87,9 +87,8 @@ public class FundsServlet extends HttpServlet
             authentication.updateUser(user);
             notifications.success("You have added $" + amount + " in funds to your wallet.");
             response.sendRedirect("funds");
-        } catch (Exception e) {
-            notifications.error(GENERAL_ERROR_RENDER);
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
+        } catch (UserUpdateException e) {
+            throw new RuntimeException(e);
         }
     }
 }
