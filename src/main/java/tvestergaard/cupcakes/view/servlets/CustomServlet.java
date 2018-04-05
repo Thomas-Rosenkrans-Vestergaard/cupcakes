@@ -2,7 +2,6 @@ package tvestergaard.cupcakes.view.servlets;
 
 import tvestergaard.cupcakes.logic.BottomFacade;
 import tvestergaard.cupcakes.logic.ToppingFacade;
-import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
@@ -41,24 +40,16 @@ public class CustomServlet extends HttpServlet
         Notifications notifications = ViewUtilities.getNotifications(request);
         Parameters    parameters    = new Parameters(request);
 
-        try {
+        request.setAttribute("bottoms", bottomFacade.get());
+        request.setAttribute("toppings", toppingFacade.get());
 
-            request.setAttribute("bottoms", bottomFacade.get());
-            request.setAttribute("toppings", toppingFacade.get());
+        if (parameters.isPresent("bottom") && parameters.isInt("bottom"))
+            request.setAttribute("selectedBottom", parameters.getInt("bottom"));
+        if (parameters.isPresent("topping") && parameters.isInt("topping"))
+            request.setAttribute("selectedTopping", parameters.getInt("topping"));
 
-
-            if (parameters.isPresent("bottom") && parameters.isInt("bottom"))
-                request.setAttribute("selectedBottom", parameters.getInt("bottom"));
-            if (parameters.isPresent("topping") && parameters.isInt("topping"))
-                request.setAttribute("selectedTopping", parameters.getInt("topping"));
-
-            ViewUtilities.attach(request, notifications);
-            request.getRequestDispatcher("WEB-INF/custom.jsp").forward(request, response);
-
-        } catch (Exception e) {
-            notifications.error(Language.GENERAL_ERROR_RENDER);
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
-        }
+        ViewUtilities.attach(request, notifications);
+        request.getRequestDispatcher("WEB-INF/custom.jsp").forward(request, response);
     }
 
     /**

@@ -42,14 +42,9 @@ public class ProfileServlet extends HttpServlet
             return;
         }
 
-        try {
-            request.setAttribute("user", authentication.getUser());
-            request.setAttribute("orders", orderFacade.get(authentication.getUser()));
-            ViewUtilities.attach(request, notifications);
-            request.getRequestDispatcher("WEB-INF/profile.jsp").forward(request, response);
-        } catch (Exception e) {
-            notifications.error(Language.GENERAL_ERROR_RENDER);
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
-        }
+        request.setAttribute("user", authentication.getUser());
+        request.setAttribute("orders", orderFacade.get(authentication.getUser()));
+        ViewUtilities.attach(request, notifications);
+        request.getRequestDispatcher("WEB-INF/profile.jsp").forward(request, response);
     }
 }

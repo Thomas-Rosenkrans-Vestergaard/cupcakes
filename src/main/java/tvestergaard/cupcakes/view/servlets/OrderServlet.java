@@ -5,7 +5,6 @@ import tvestergaard.cupcakes.logic.OrderFacade;
 import tvestergaard.cupcakes.logic.ShoppingCart;
 import tvestergaard.cupcakes.logic.UserFacade;
 import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -80,17 +79,10 @@ public class OrderServlet extends HttpServlet
             return;
         }
 
-        try {
-
-            request.setAttribute("user", authentication.getUser());
-            request.setAttribute("cart", shoppingCart);
-            ViewUtilities.attach(request, notifications);
-            request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
-
-        } catch (Exception e) {
-            notifications.error(Language.GENERAL_ERROR_RENDER);
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
-        }
+        request.setAttribute("user", authentication.getUser());
+        request.setAttribute("cart", shoppingCart);
+        ViewUtilities.attach(request, notifications);
+        request.getRequestDispatcher("WEB-INF/order.jsp").forward(request, response);
     }
 
     /**

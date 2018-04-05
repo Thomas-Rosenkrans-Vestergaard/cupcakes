@@ -40,14 +40,8 @@ public class RegisterServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Notifications notifications = ViewUtilities.getNotifications(request);
-
-        try {
-            ViewUtilities.attach(request, notifications);
-            request.getRequestDispatcher("WEB-INF/register.jsp").forward(request, response);
-        } catch (Exception e) {
-            notifications.error(Language.GENERAL_ERROR_RENDER);
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
-        }
+        ViewUtilities.attach(request, notifications);
+        request.getRequestDispatcher("WEB-INF/register.jsp").forward(request, response);
     }
 
     /**

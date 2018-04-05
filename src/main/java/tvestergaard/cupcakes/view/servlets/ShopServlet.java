@@ -47,14 +47,10 @@ public class ShopServlet extends HttpServlet
     {
         Notifications notifications = ViewUtilities.getNotifications(request);
 
-        try {
-            request.setAttribute("presets", presetFacade.get());
-            request.setAttribute("bottoms", bottomFacade.get());
-            request.setAttribute("toppings", toppingFacade.get());
-            ViewUtilities.attach(request, notifications);
-            request.getRequestDispatcher("WEB-INF/shop.jsp").forward(request, response);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        request.setAttribute("presets", presetFacade.get());
+        request.setAttribute("bottoms", bottomFacade.get());
+        request.setAttribute("toppings", toppingFacade.get());
+        ViewUtilities.attach(request, notifications);
+        request.getRequestDispatcher("WEB-INF/shop.jsp").forward(request, response);
     }
 }

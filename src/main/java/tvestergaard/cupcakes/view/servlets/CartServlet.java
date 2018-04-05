@@ -49,14 +49,9 @@ public class CartServlet extends HttpServlet
             return;
         }
 
-        try {
-            ViewUtilities.attach(request, notifications);
-            request.setAttribute("cart", request.getSession().getAttribute("cart"));
-            request.getRequestDispatcher("WEB-INF/cart.jsp").forward(request, response);
-        } catch (Exception e) {
-            notifications.error(Language.GENERAL_ERROR_RENDER);
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
-        }
+        ViewUtilities.attach(request, notifications);
+        request.setAttribute("cart", request.getSession().getAttribute("cart"));
+        request.getRequestDispatcher("WEB-INF/cart.jsp").forward(request, response);
     }
 
     private static final String PARAMETER_BOTTOM   = "bottom";

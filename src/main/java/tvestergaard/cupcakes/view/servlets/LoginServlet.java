@@ -55,30 +55,23 @@ public class LoginServlet extends HttpServlet
             return;
         }
 
-        try {
+        String username = parameters.getString("username");
+        String password = parameters.getString("password");
 
-            String username = parameters.getString("username");
-            String password = parameters.getString("password");
+        User   user = userFacade.authenticate(username, password);
+        String from = request.getParameter("from");
 
-            User   user = userFacade.authenticate(username, password);
-            String from = request.getParameter("from");
-
-            if (user == null) {
-                notifications.warning(LOGIN_ERROR);
-                response.sendRedirect(getErrorLocation(request));
-                return;
-            }
-
-            HttpSession session = request.getSession();
-            notifications.success(LOGIN_SUCCESS);
-            session.setAttribute("user", user);
-            session.setAttribute("cart", new ShoppingCart());
-            response.sendRedirect(from != null ? from : "profile");
-
-        } catch (Exception e) {
-            notifications.error(GENERAL_ERROR);
-            response.sendRedirect("profile");
+        if (user == null) {
+            notifications.warning(LOGIN_ERROR);
+            response.sendRedirect(getErrorLocation(request));
+            return;
         }
+
+        HttpSession session = request.getSession();
+        notifications.success(LOGIN_SUCCESS);
+        session.setAttribute("user", user);
+        session.setAttribute("cart", new ShoppingCart());
+        response.sendRedirect(from != null ? from : "profile");
     }
 
     /**
