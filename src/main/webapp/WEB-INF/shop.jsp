@@ -55,12 +55,15 @@
                     <c:forEach items="${presets}" var="preset">
                         <div class="col s4 shop-item">
                             <div class="shop-item-details">
-                                <img src="images/presets/${preset.getId()}.jpg" alt="<c:out value="${preset.getName()}"/>">
+                                <img src="images/presets/${preset.getId()}.jpg"
+                                     alt="<c:out value="${preset.getName()}"/>">
                                 <h2 class="shop-item-name"><c:out value="${preset.getName()}"/></h2>
                                 <p class="shop-item-description"><c:out value="${preset.getDescription()}"/></p>
-                                <p class="shop-item-price price">$<c:out value="${f:formatPrice(preset.getPrice())}"/></p>
+                                <p class="shop-item-price price">$<c:out
+                                        value="${f:formatPrice(preset.getPrice())}"/></p>
                             </div>
-                            <a href="custom?bottom=${preset.getBottom().getId()}&topping=${preset.getTopping().getId()}" class="btn red">ADD TO CART</a>
+                            <a href="custom?bottom=${preset.getBottom().getId()}&topping=${preset.getTopping().getId()}"
+                               class="btn red">ADD TO CART</a>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -98,8 +101,6 @@
         </c:choose>
     </ul>
 </div>
-</ul>
-</div>
 <div id="toppings" class="col s12">
     <h2>Toppings</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tortor ante, rutrum nec lacus vel, condimentum
@@ -113,7 +114,8 @@
 
                     <div class="col s4 shop-item">
                         <div class="shop-item-details">
-                            <img src="images/toppings/${topping.getId()}.jpg" alt="<c:out value="${topping.getName()}"/>">
+                            <img src="images/toppings/${topping.getId()}.jpg"
+                                 alt="<c:out value="${topping.getName()}"/>">
                             <h2 class="shop-item-name"><c:out value="${topping.getName()}"/></h2>
                             <p class="shop-item-description"><c:out value="${topping.getDescription()}"/></p>
                             <p class="shop-item-price price">$<c:out value="${f:formatPrice(topping.getPrice())}"/></p>
