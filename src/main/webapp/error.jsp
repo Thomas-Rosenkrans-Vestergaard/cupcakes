@@ -1,9 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Error</title>
-</head>
-<body>
-<p>There was an error.</p>
-</body>
-</html>
+<%@ page isErrorPage="true" import="java.io.*" contentType="text/plain"%>
+
+Message:
+<%=exception.getMessage()%>
+
+StackTrace:
+<%
+	StringWriter stringWriter = new StringWriter();
+	PrintWriter printWriter = new PrintWriter(stringWriter);
+	exception.printStackTrace(printWriter);
+	out.println(stringWriter);
+	printWriter.close();
+	stringWriter.close();
+%>

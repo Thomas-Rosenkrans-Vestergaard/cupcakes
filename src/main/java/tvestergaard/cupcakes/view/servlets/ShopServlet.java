@@ -45,6 +45,7 @@ public class ShopServlet extends HttpServlet
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+
         Notifications notifications = ViewUtilities.getNotifications(request);
 
         request.setAttribute("presets", presetFacade.get());
