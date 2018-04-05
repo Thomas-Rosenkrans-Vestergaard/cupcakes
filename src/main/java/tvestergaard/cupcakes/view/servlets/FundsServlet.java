@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import static tvestergaard.cupcakes.view.Language.INCOMPLETE_FORM_POST;
 
-@WebServlet(name = "LogoutServlet", urlPatterns = "/funds")
+@WebServlet(name = "FundsServlet", urlPatterns = "/funds")
 public class FundsServlet extends HttpServlet
 {
 
