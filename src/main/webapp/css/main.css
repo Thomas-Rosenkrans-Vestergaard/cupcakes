@@ -194,3 +194,11 @@ h4 {
 #funds-form input {
     margin-bottom: 0px;
 }
+
+p {
+    line-height: 30px;
+}
+
+.collection p {
+    line-height: normal;
+}
