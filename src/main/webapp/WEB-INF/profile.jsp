@@ -80,6 +80,7 @@
                             <th>Comment</th>
                             <th>Total</th>
                             <th>Status</th>
+                            <th>Created at</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -89,6 +90,7 @@
                                 <td><c:out value="${order.getComment()}"/></td>
                                 <td class="price">$<c:out value="${f:formatPrice(order.getTotal())}"/></td>
                                 <td><c:out value="${order.getStatus()}"/></td>
+                                <td><c:out value="${order.getCreatedAt()}"/></td>
                             </tr>
                             <tr class="order-items-row">
                                 <td colspan="4" class="no-padding">
