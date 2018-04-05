@@ -93,7 +93,7 @@
                                 <td><c:out value="${f:formatTimestamp(order.getCreatedAt())}"/></td>
                             </tr>
                             <tr class="order-items-row">
-                                <td colspan="4" class="no-padding">
+                                <td colspan="5" class="no-padding">
                                     <table class="order-items-table z-depth-0">
                                         <thead>
                                         <tr>
