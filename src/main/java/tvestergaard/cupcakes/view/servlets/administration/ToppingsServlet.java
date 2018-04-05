@@ -1,17 +1,10 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
-import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
 import tvestergaard.cupcakes.logic.FileSaver;
-import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.logic.ToppingFacade;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.MultipartParameters;
-import tvestergaard.cupcakes.view.Parameters;
-import tvestergaard.cupcakes.view.ViewUtilities;
+import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -33,7 +26,7 @@ public class ToppingsServlet extends HttpServlet
     /**
      * Facade for performing various operations related to toppings.
      */
-    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.get()));
+    private final ToppingFacade toppingFacade = new ToppingFacade();
 
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_UPDATE    = "update";
@@ -300,14 +293,14 @@ public class ToppingsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         return parameters.notEmpty(PARAMETER_NAME)
-                && parameters.notEmpty(PARAMETER_DESCRIPTION)
-                && parameters.notEmpty(PARAMETER_PRICE)
-                && parameters.isInt(PARAMETER_PRICE)
-                && parameters.notNegativeInt(PARAMETER_PRICE)
-                && parameters.notEmpty(PARAMETER_ACTIVE)
-                && parameters.isPresent(PARAMETER_ACTIVE)
-                && parameters.isBoolean(PARAMETER_ACTIVE)
-                && parameters.isPresent(PARAMETER_IMAGE);
+               && parameters.notEmpty(PARAMETER_DESCRIPTION)
+               && parameters.notEmpty(PARAMETER_PRICE)
+               && parameters.isInt(PARAMETER_PRICE)
+               && parameters.notNegativeInt(PARAMETER_PRICE)
+               && parameters.notEmpty(PARAMETER_ACTIVE)
+               && parameters.isPresent(PARAMETER_ACTIVE)
+               && parameters.isBoolean(PARAMETER_ACTIVE)
+               && parameters.isPresent(PARAMETER_IMAGE);
     }
 
     /**
@@ -321,14 +314,14 @@ public class ToppingsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         return parameters.notEmpty(PARAMETER_ID)
-                && parameters.isInt(PARAMETER_ID)
-                && parameters.notEmpty(PARAMETER_NAME)
-                && parameters.notEmpty(PARAMETER_DESCRIPTION)
-                && parameters.notEmpty(PARAMETER_PRICE)
-                && parameters.isInt(PARAMETER_PRICE)
-                && parameters.notNegativeInt(PARAMETER_PRICE)
-                && parameters.notEmpty(PARAMETER_ACTIVE)
-                && parameters.isPresent(PARAMETER_ACTIVE)
-                && parameters.isBoolean(PARAMETER_ACTIVE);
+               && parameters.isInt(PARAMETER_ID)
+               && parameters.notEmpty(PARAMETER_NAME)
+               && parameters.notEmpty(PARAMETER_DESCRIPTION)
+               && parameters.notEmpty(PARAMETER_PRICE)
+               && parameters.isInt(PARAMETER_PRICE)
+               && parameters.notNegativeInt(PARAMETER_PRICE)
+               && parameters.notEmpty(PARAMETER_ACTIVE)
+               && parameters.isPresent(PARAMETER_ACTIVE)
+               && parameters.isBoolean(PARAMETER_ACTIVE);
     }
 }

@@ -1,13 +1,12 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.Bottom;
-import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
-import tvestergaard.cupcakes.data.presets.MysqlPresetDAO;
 import tvestergaard.cupcakes.data.presets.Preset;
-import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
-import tvestergaard.cupcakes.logic.*;
+import tvestergaard.cupcakes.logic.BottomFacade;
+import tvestergaard.cupcakes.logic.FileSaver;
+import tvestergaard.cupcakes.logic.PresetFacade;
+import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
@@ -30,17 +29,17 @@ public class PresetsServlet extends HttpServlet
     /**
      * Facade for performing various operations related to presets.
      */
-    private final PresetFacade presetFacade = new PresetFacade(new MysqlPresetDAO(ProductionDatabaseSource.get()));
+    private final PresetFacade presetFacade = new PresetFacade();
 
     /**
      * Facade for performing various operations related to bottoms.
      */
-    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.get()));
+    private final BottomFacade bottomFacade = new BottomFacade();
 
     /**
      * Facade for performing various operations related to toppings.
      */
-    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.get()));
+    private final ToppingFacade toppingFacade = new ToppingFacade();
 
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_UPDATE    = "update";
@@ -345,14 +344,14 @@ public class PresetsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         return parameters.notEmpty(PARAMETER_NAME)
-                && parameters.notEmpty(PARAMETER_DESCRIPTION)
-                && parameters.notEmpty(PARAMETER_BOTTOM)
-                && parameters.isInt(PARAMETER_BOTTOM)
-                && parameters.notNegativeInt(PARAMETER_BOTTOM)
-                && parameters.notEmpty(PARAMETER_TOPPING)
-                && parameters.isInt(PARAMETER_TOPPING)
-                && parameters.notNegativeInt(PARAMETER_TOPPING)
-                && parameters.isPresent(PARAMETER_IMAGE);
+               && parameters.notEmpty(PARAMETER_DESCRIPTION)
+               && parameters.notEmpty(PARAMETER_BOTTOM)
+               && parameters.isInt(PARAMETER_BOTTOM)
+               && parameters.notNegativeInt(PARAMETER_BOTTOM)
+               && parameters.notEmpty(PARAMETER_TOPPING)
+               && parameters.isInt(PARAMETER_TOPPING)
+               && parameters.notNegativeInt(PARAMETER_TOPPING)
+               && parameters.isPresent(PARAMETER_IMAGE);
     }
 
     /**
@@ -366,15 +365,15 @@ public class PresetsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         return parameters.notEmpty(PARAMETER_ID)
-                && parameters.isInt(PARAMETER_ID)
-                && parameters.notEmpty(PARAMETER_NAME)
-                && parameters.notEmpty(PARAMETER_DESCRIPTION)
-                && parameters.notEmpty(PARAMETER_BOTTOM)
-                && parameters.isInt(PARAMETER_BOTTOM)
-                && parameters.notNegativeInt(PARAMETER_BOTTOM)
-                && parameters.notEmpty(PARAMETER_TOPPING)
-                && parameters.isInt(PARAMETER_TOPPING)
-                && parameters.notNegativeInt(PARAMETER_TOPPING)
-                && parameters.isPresent(PARAMETER_IMAGE);
+               && parameters.isInt(PARAMETER_ID)
+               && parameters.notEmpty(PARAMETER_NAME)
+               && parameters.notEmpty(PARAMETER_DESCRIPTION)
+               && parameters.notEmpty(PARAMETER_BOTTOM)
+               && parameters.isInt(PARAMETER_BOTTOM)
+               && parameters.notNegativeInt(PARAMETER_BOTTOM)
+               && parameters.notEmpty(PARAMETER_TOPPING)
+               && parameters.isInt(PARAMETER_TOPPING)
+               && parameters.notNegativeInt(PARAMETER_TOPPING)
+               && parameters.isPresent(PARAMETER_IMAGE);
     }
 }

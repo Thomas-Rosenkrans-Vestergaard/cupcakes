@@ -1,14 +1,8 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.logic.UserFacade;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.view.Notifications;
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
-import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.view.Parameters;
-import tvestergaard.cupcakes.view.ViewUtilities;
+import tvestergaard.cupcakes.logic.UserFacade;
+import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,7 +21,7 @@ public class FundsServlet extends HttpServlet
     /**
      * Facade for performing various operations related to users.
      */
-    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.get()));
+    private final UserFacade userFacade = new UserFacade();
 
     /**
      * Renders the /funds page where users can see their balance, and add more funds.
@@ -88,7 +82,7 @@ public class FundsServlet extends HttpServlet
                     user.getPassword(),
                     user.getBalance() + amount * 100,
                     user.getRole()
-                                    );
+            );
 
             authentication.updateUser(user);
             notifications.success("You have added $" + amount + " in funds to your wallet.");

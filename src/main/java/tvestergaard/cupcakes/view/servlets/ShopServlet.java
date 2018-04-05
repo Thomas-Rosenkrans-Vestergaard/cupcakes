@@ -1,10 +1,8 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
-import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
-import tvestergaard.cupcakes.data.presets.MysqlPresetDAO;
-import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
-import tvestergaard.cupcakes.logic.*;
+import tvestergaard.cupcakes.logic.BottomFacade;
+import tvestergaard.cupcakes.logic.PresetFacade;
+import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.view.ViewUtilities;
@@ -28,17 +26,17 @@ public class ShopServlet extends HttpServlet
     /**
      * Facade for performing various operations related to presets.
      */
-    private final PresetFacade presetFacade = new PresetFacade(new MysqlPresetDAO(ProductionDatabaseSource.get()));
+    private final PresetFacade presetFacade = new PresetFacade();
 
     /**
      * Facade for performing various operations related to bottoms.
      */
-    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.get()));
+    private final BottomFacade bottomFacade = new BottomFacade();
 
     /**
      * Facade for performing various operations related to toppings.
      */
-    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.get()));
+    private final ToppingFacade toppingFacade = new ToppingFacade();
 
     /**
      * Serves the /shop page where users can see the products of the shop.

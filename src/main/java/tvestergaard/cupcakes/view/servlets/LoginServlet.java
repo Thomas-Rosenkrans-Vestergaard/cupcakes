@@ -1,11 +1,9 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
-import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.logic.ShoppingCart;
 import tvestergaard.cupcakes.logic.UserFacade;
+import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -26,7 +24,7 @@ public class LoginServlet extends HttpServlet
     /**
      * Facade for performing various operations related to users.
      */
-    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.get()));
+    private final UserFacade userFacade = new UserFacade();
 
     /**
      * Serves the /login page where anonymous users can log in to their user account.

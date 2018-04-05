@@ -1,17 +1,10 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.Bottom;
-import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.logic.BottomFacade;
 import tvestergaard.cupcakes.logic.FileSaver;
-import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.view.Notifications;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.MultipartParameters;
-import tvestergaard.cupcakes.view.Parameters;
-import tvestergaard.cupcakes.view.ViewUtilities;
+import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -33,7 +26,7 @@ public class BottomsServlet extends HttpServlet
     /**
      * Facade for performing various operations related to bottoms.
      */
-    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.get()));
+    private final BottomFacade bottomFacade = new BottomFacade();
 
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_UPDATE    = "update";
@@ -263,13 +256,13 @@ public class BottomsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         return parameters.notEmpty(PARAMETER_NAME)
-                && parameters.notEmpty(PARAMETER_DESCRIPTION)
-                && parameters.notEmpty(PARAMETER_PRICE)
-                && parameters.isInt(PARAMETER_PRICE)
-                && parameters.notNegativeInt(PARAMETER_PRICE)
-                && parameters.notEmpty(PARAMETER_ACTIVE)
-                && parameters.isBoolean(PARAMETER_ACTIVE)
-                && parameters.isPresent(PARAMETER_IMAGE);
+               && parameters.notEmpty(PARAMETER_DESCRIPTION)
+               && parameters.notEmpty(PARAMETER_PRICE)
+               && parameters.isInt(PARAMETER_PRICE)
+               && parameters.notNegativeInt(PARAMETER_PRICE)
+               && parameters.notEmpty(PARAMETER_ACTIVE)
+               && parameters.isBoolean(PARAMETER_ACTIVE)
+               && parameters.isPresent(PARAMETER_IMAGE);
     }
 
     /**
@@ -283,13 +276,13 @@ public class BottomsServlet extends HttpServlet
         MultipartParameters parameters = new MultipartParameters(request);
 
         return parameters.isPresent(PARAMETER_ID)
-                && parameters.isInt(PARAMETER_ID)
-                && parameters.notEmpty(PARAMETER_NAME)
-                && parameters.notEmpty(PARAMETER_DESCRIPTION)
-                && parameters.notEmpty(PARAMETER_PRICE)
-                && parameters.isInt(PARAMETER_PRICE)
-                && parameters.notNegativeInt(PARAMETER_PRICE)
-                && parameters.notEmpty(PARAMETER_ACTIVE)
-                && parameters.isBoolean(PARAMETER_ACTIVE);
+               && parameters.isInt(PARAMETER_ID)
+               && parameters.notEmpty(PARAMETER_NAME)
+               && parameters.notEmpty(PARAMETER_DESCRIPTION)
+               && parameters.notEmpty(PARAMETER_PRICE)
+               && parameters.isInt(PARAMETER_PRICE)
+               && parameters.notNegativeInt(PARAMETER_PRICE)
+               && parameters.notEmpty(PARAMETER_ACTIVE)
+               && parameters.isBoolean(PARAMETER_ACTIVE);
     }
 }

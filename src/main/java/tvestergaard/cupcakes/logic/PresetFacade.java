@@ -1,7 +1,9 @@
 package tvestergaard.cupcakes.logic;
 
 import tvestergaard.cupcakes.data.DAOException;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.Bottom;
+import tvestergaard.cupcakes.data.presets.MysqlPresetDAO;
 import tvestergaard.cupcakes.data.presets.Preset;
 import tvestergaard.cupcakes.data.presets.PresetDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
@@ -27,6 +29,15 @@ public class PresetFacade
     public PresetFacade(PresetDAO dao)
     {
         this.dao = dao;
+    }
+
+    /**
+     * Creates a new {@link PresetFacade} using a {@link MysqlPresetDAO} to access persistent storage and the
+     * default {@link com.mysql.cj.jdbc.MysqlDataSource} from {@link ProductionDatabaseSource#get()}.
+     */
+    public PresetFacade()
+    {
+        this(new MysqlPresetDAO(ProductionDatabaseSource.get()));
     }
 
     /**

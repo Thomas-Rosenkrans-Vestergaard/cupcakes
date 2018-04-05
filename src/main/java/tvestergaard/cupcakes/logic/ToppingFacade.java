@@ -1,6 +1,8 @@
 package tvestergaard.cupcakes.logic;
 
 import tvestergaard.cupcakes.data.DAOException;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
+import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
 import tvestergaard.cupcakes.data.toppings.ToppingDAO;
 
@@ -25,6 +27,15 @@ public class ToppingFacade
     public ToppingFacade(ToppingDAO dao)
     {
         this.dao = dao;
+    }
+
+    /**
+     * Creates a new {@link ToppingFacade} using a {@link MysqlToppingDAO} to access persistent storage and the
+     * default {@link com.mysql.cj.jdbc.MysqlDataSource} from {@link ProductionDatabaseSource#get()}.
+     */
+    public ToppingFacade()
+    {
+        this(new MysqlToppingDAO(ProductionDatabaseSource.get()));
     }
 
     /**

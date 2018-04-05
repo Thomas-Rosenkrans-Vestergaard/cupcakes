@@ -1,7 +1,9 @@
 package tvestergaard.cupcakes.logic;
 
 import tvestergaard.cupcakes.data.DAOException;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.BottomDAO;
+import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.data.orders.Order;
 import tvestergaard.cupcakes.data.orders.OrderDAO;
 import tvestergaard.cupcakes.data.users.User;
@@ -27,6 +29,15 @@ public class OrderFacade
     public OrderFacade(OrderDAO dao)
     {
         this.dao = dao;
+    }
+
+    /**
+     * Creates a new {@link OrderFacade} using a {@link MysqlOrderDAO} to access persistent storage and the
+     * default {@link com.mysql.cj.jdbc.MysqlDataSource} from {@link ProductionDatabaseSource#get()}.
+     */
+    public OrderFacade()
+    {
+        this(new MysqlOrderDAO(ProductionDatabaseSource.get()));
     }
 
     /**

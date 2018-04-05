@@ -1,12 +1,9 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
-import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
-import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.logic.BottomFacade;
+import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.view.Notifications;
-import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.Parameters;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -24,12 +21,12 @@ public class CustomServlet extends HttpServlet
     /**
      * Facade for performing various operations related to bottoms.
      */
-    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.get()));
+    private final BottomFacade bottomFacade = new BottomFacade();
 
     /**
      * Facade for performing various operations related to toppings.
      */
-    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.get()));
+    private final ToppingFacade toppingFacade = new ToppingFacade();
 
     /**
      * Serves the /custom page where users can create their own cupcake. Parameters 'bottom' and 'topping' can be provided The url parameters 'bottom' and 'topping' can

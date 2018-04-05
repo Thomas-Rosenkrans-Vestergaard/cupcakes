@@ -1,9 +1,9 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
-import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.logic.*;
+import tvestergaard.cupcakes.logic.UserCreationException;
+import tvestergaard.cupcakes.logic.UserFacade;
+import tvestergaard.cupcakes.logic.UserUpdateException;
 import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
@@ -20,7 +20,7 @@ public class UsersServlet extends HttpServlet
     /**
      * Facade for performing various operations related to users.
      */
-    private final UserFacade userFacade = new UserFacade(new MysqlUserDAO(ProductionDatabaseSource.get()));
+    private final UserFacade userFacade = new UserFacade();
 
     private static final String ACTION_CREATE    = "create";
     private static final String ACTION_PARAMETER = "action";

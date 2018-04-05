@@ -1,15 +1,9 @@
 package tvestergaard.cupcakes.view.servlets.administration;
 
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
-import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
 import tvestergaard.cupcakes.data.orders.Order;
-import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.logic.OrderFacade;
-import tvestergaard.cupcakes.view.Authentication;
-import tvestergaard.cupcakes.view.Parameters;
-import tvestergaard.cupcakes.view.ViewUtilities;
+import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,7 +20,7 @@ public class OrdersServlet extends HttpServlet
     /**
      * Facade for performing various operations related to orders.
      */
-    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.get()));
+    private final OrderFacade orderFacade = new OrderFacade();
 
     private static final String ACTION_UPDATE = "update";
 
@@ -120,21 +114,21 @@ public class OrdersServlet extends HttpServlet
         Parameters parameters = new Parameters(request);
 
         if (parameters.isEmpty("id")
-                || parameters.notInt("id")
-                || parameters.notPresent("comment")
-                || parameters.isEmpty("comment")
-                || parameters.notPresent("status")
-                || parameters.isEmpty("status")
-                || parameters.notInt("status")) {
+            || parameters.notInt("id")
+            || parameters.notPresent("comment")
+            || parameters.isEmpty("comment")
+            || parameters.notPresent("status")
+            || parameters.isEmpty("status")
+            || parameters.notInt("status")) {
             notifications.error("Incomplete form data.");
             response.sendRedirect(ViewUtilities.referer(request, "orders"));
             return;
         }
 
         orderFacade.update(parameters.getInt("id"),
-                authentication.getUser(),
-                parameters.getString("comment"),
-                Order.Status.fromCode(parameters.getInt("status")));
+                           authentication.getUser(),
+                           parameters.getString("comment"),
+                           Order.Status.fromCode(parameters.getInt("status")));
 
         response.sendRedirect("orders?action=update&id=" + parameters.getInt("id"));
     }

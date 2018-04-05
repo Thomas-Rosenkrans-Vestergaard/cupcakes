@@ -1,11 +1,9 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
-import tvestergaard.cupcakes.data.orders.MysqlOrderDAO;
-import tvestergaard.cupcakes.view.Language;
-import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.logic.OrderFacade;
 import tvestergaard.cupcakes.view.Authentication;
+import tvestergaard.cupcakes.view.Language;
+import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
 import javax.servlet.ServletException;
@@ -25,7 +23,7 @@ public class ProfileServlet extends HttpServlet
     /**
      * Facade for performing various operations related to orders.
      */
-    private final OrderFacade orderFacade = new OrderFacade(new MysqlOrderDAO(ProductionDatabaseSource.get()));
+    private final OrderFacade orderFacade = new OrderFacade();
 
     /**
      * Serves the /shop page where users can see the products.

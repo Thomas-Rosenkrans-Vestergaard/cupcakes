@@ -3,6 +3,8 @@ package tvestergaard.cupcakes.logic;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.mindrot.jbcrypt.BCrypt;
 import tvestergaard.cupcakes.data.DAOException;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
+import tvestergaard.cupcakes.data.users.MysqlUserDAO;
 import tvestergaard.cupcakes.data.users.User;
 import tvestergaard.cupcakes.data.users.UserDAO;
 
@@ -29,6 +31,15 @@ public class UserFacade
     public UserFacade(UserDAO dao)
     {
         this.dao = dao;
+    }
+
+    /**
+     * Creates a new {@link UserFacade} using a {@link MysqlUserDAO} to access persistent storage and the
+     * default {@link com.mysql.cj.jdbc.MysqlDataSource} from {@link ProductionDatabaseSource#get()}.
+     */
+    public UserFacade()
+    {
+        this(new MysqlUserDAO(ProductionDatabaseSource.get()));
     }
 
     /**

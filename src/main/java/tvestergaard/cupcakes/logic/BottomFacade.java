@@ -1,8 +1,10 @@
 package tvestergaard.cupcakes.logic;
 
 import tvestergaard.cupcakes.data.DAOException;
+import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.Bottom;
 import tvestergaard.cupcakes.data.bottoms.BottomDAO;
+import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
 
 import java.util.List;
@@ -26,6 +28,15 @@ public class BottomFacade
     public BottomFacade(BottomDAO dao)
     {
         this.dao = dao;
+    }
+
+    /**
+     * Creates a new {@link BottomFacade} using a {@link MysqlBottomDAO} to access persistent storage and the
+     * default {@link com.mysql.cj.jdbc.MysqlDataSource} from {@link ProductionDatabaseSource#get()}.
+     */
+    public BottomFacade()
+    {
+        this(new MysqlBottomDAO(ProductionDatabaseSource.get()));
     }
 
     /**

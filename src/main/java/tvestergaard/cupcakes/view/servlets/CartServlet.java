@@ -1,11 +1,10 @@
 package tvestergaard.cupcakes.view.servlets;
 
-import tvestergaard.cupcakes.data.ProductionDatabaseSource;
 import tvestergaard.cupcakes.data.bottoms.Bottom;
-import tvestergaard.cupcakes.data.bottoms.MysqlBottomDAO;
-import tvestergaard.cupcakes.data.toppings.MysqlToppingDAO;
 import tvestergaard.cupcakes.data.toppings.Topping;
-import tvestergaard.cupcakes.logic.*;
+import tvestergaard.cupcakes.logic.BottomFacade;
+import tvestergaard.cupcakes.logic.ShoppingCart;
+import tvestergaard.cupcakes.logic.ToppingFacade;
 import tvestergaard.cupcakes.view.*;
 
 import javax.servlet.ServletException;
@@ -26,12 +25,12 @@ public class CartServlet extends HttpServlet
     /**
      * Facade for performing various operations related to bottoms.
      */
-    private final BottomFacade bottomFacade = new BottomFacade(new MysqlBottomDAO(ProductionDatabaseSource.get()));
+    private final BottomFacade bottomFacade = new BottomFacade();
 
     /**
      * Facade for performing various operations related to toppings.
      */
-    private final ToppingFacade toppingFacade = new ToppingFacade(new MysqlToppingDAO(ProductionDatabaseSource.get()));
+    private final ToppingFacade toppingFacade = new ToppingFacade();
 
     /**
      * Serves the /custom page where users can create their own cupcake.
@@ -83,11 +82,11 @@ public class CartServlet extends HttpServlet
 
         Parameters parameters = new Parameters(request);
         if (parameters.notPresent(PARAMETER_BOTTOM)
-                || parameters.notPositiveInt(PARAMETER_BOTTOM)
-                || parameters.notPresent(PARAMETER_TOPPING)
-                || parameters.notPositiveInt(PARAMETER_TOPPING)
-                || parameters.notPresent(PARAMETER_QUANTITY)
-                || parameters.notPositiveInt(PARAMETER_TOPPING)) {
+            || parameters.notPositiveInt(PARAMETER_BOTTOM)
+            || parameters.notPresent(PARAMETER_TOPPING)
+            || parameters.notPositiveInt(PARAMETER_TOPPING)
+            || parameters.notPresent(PARAMETER_QUANTITY)
+            || parameters.notPositiveInt(PARAMETER_TOPPING)) {
             notifications.error(Language.INCOMPLETE_FORM_POST);
             response.sendRedirect(ViewUtilities.referer(request, "shop"));
             return;
