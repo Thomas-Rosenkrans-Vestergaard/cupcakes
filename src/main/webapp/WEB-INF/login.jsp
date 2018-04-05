@@ -10,11 +10,11 @@
     </div>
     <form method="POST" class="col s12">
         <div class="input-field col s12">
-            <input type="text" id="username-input" name="username" value="Thomas" required>
+            <input type="text" id="username-input" name="username" required>
             <label for="username-input">Username</label>
         </div>
         <div class="input-field col s12">
-            <input type="password" id="password-input" name="password" value="123456789"required>
+            <input type="password" id="password-input" name="password" required>
             <label for="password-input">Password</label>
         </div>
         <input class="button-submit btn-large" type="submit" value="Login">
