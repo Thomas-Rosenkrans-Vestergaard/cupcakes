@@ -162,27 +162,22 @@ public class UserFacade
     public User create(String username, String email, String password, int balance, User.Role role) throws UserCreationException
     {
         try {
-
             Set<UserCreationException.Reason> reasons = new HashSet<>();
 
             // Username length
-            if (username.length() < 3)
+            if (username.length() < 3) {
                 reasons.add(UserCreationException.Reason.USERNAME_SHORTER_THAN_3);
-            else {
+            }else if(dao.getFromUsername(username) != null) {
                 // Username availability
-                User usernameUser = dao.getFromUsername(username);
-                if (usernameUser != null)
-                    reasons.add(UserCreationException.Reason.USERNAME_TAKEN);
+                reasons.add(UserCreationException.Reason.USERNAME_TAKEN);
             }
 
             // Email format
             if (!EmailValidator.getInstance().isValid(email))
                 reasons.add(UserCreationException.Reason.EMAIL_FORMAT);
-            else {
+            else if(dao.getFromEmail(email) != null) {
                 // Email availability
-                User emailUser = dao.getFromEmail(email);
-                if (emailUser != null)
-                    reasons.add(UserCreationException.Reason.EMAIL_TAKEN);
+                reasons.add(UserCreationException.Reason.EMAIL_TAKEN);
             }
 
             // Password length
@@ -214,27 +209,24 @@ public class UserFacade
     public User update(int id, String username, String email, String password, int balance, User.Role role) throws UserUpdateException
     {
         try {
-
             Set<UserUpdateException.Reason> reasons = new HashSet<>();
+            User usernameUser;
+            User emailUser;
 
             // Username length
             if (username.length() < 3)
                 reasons.add(UserUpdateException.Reason.USERNAME_SHORTER_THAN_3);
-            else {
+            else if((usernameUser = dao.getFromUsername(username)) != null && usernameUser.getId() != id){
                 // Username availability
-                User usernameUser = dao.getFromUsername(username);
-                if (usernameUser != null && usernameUser.getId() != id)
-                    reasons.add(UserUpdateException.Reason.USERNAME_TAKEN);
+                reasons.add(UserUpdateException.Reason.USERNAME_TAKEN);
             }
 
             // Email format
             if (!EmailValidator.getInstance().isValid(email))
                 reasons.add(UserUpdateException.Reason.EMAIL_FORMAT);
-            else {
+            else if((emailUser = dao.getFromEmail(email)) != null && emailUser.getId() != id){
                 // Email availability
-                User emailUser = dao.getFromEmail(email);
-                if (emailUser != null && emailUser.getId() != id)
-                    reasons.add(UserUpdateException.Reason.EMAIL_TAKEN);
+                reasons.add(UserUpdateException.Reason.EMAIL_TAKEN);
             }
 
             // Password length
