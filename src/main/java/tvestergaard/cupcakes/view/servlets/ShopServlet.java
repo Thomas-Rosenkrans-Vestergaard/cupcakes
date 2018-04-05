@@ -3,7 +3,6 @@ package tvestergaard.cupcakes.view.servlets;
 import tvestergaard.cupcakes.logic.BottomFacade;
 import tvestergaard.cupcakes.logic.PresetFacade;
 import tvestergaard.cupcakes.logic.ToppingFacade;
-import tvestergaard.cupcakes.view.Language;
 import tvestergaard.cupcakes.view.Notifications;
 import tvestergaard.cupcakes.view.ViewUtilities;
 
@@ -49,16 +48,13 @@ public class ShopServlet extends HttpServlet
         Notifications notifications = ViewUtilities.getNotifications(request);
 
         try {
-
             request.setAttribute("presets", presetFacade.get());
             request.setAttribute("bottoms", bottomFacade.get());
             request.setAttribute("toppings", toppingFacade.get());
             ViewUtilities.attach(request, notifications);
             request.getRequestDispatcher("WEB-INF/shop.jsp").forward(request, response);
-
         } catch (Exception e) {
-            notifications.error(Language.GENERAL_ERROR_RENDER);
-            response.sendRedirect(ViewUtilities.referer(request, "shop"));
+            throw new RuntimeException(e);
         }
     }
 }
