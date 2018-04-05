@@ -38,11 +38,11 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     @Override public Order get(int id) throws MysqlDAOException
     {
         String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                     "INNER JOIN users ON `user` = users.id " +
-                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                     "INNER JOIN toppings ON toppings.id = order_items.topping " +
-                     "WHERE orders.id = ?";
+                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                "INNER JOIN users ON `user` = users.id " +
+                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                "INNER JOIN toppings ON toppings.id = order_items.topping " +
+                "WHERE orders.id = ?";
 
         try {
             try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
@@ -71,11 +71,11 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     {
         List<Order> orders = new ArrayList<>();
         String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                     "INNER JOIN users ON `user` = users.id " +
-                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                     "INNER JOIN toppings ON toppings.id = order_items.topping " +
-                     "WHERE `user` = ?";
+                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                "INNER JOIN users ON `user` = users.id " +
+                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                "INNER JOIN toppings ON toppings.id = order_items.topping " +
+                "WHERE `user` = ?";
 
         try {
             try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
@@ -85,8 +85,7 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
                 if (!results.first())
                     return orders;
 
-                int currentId = results.getInt("orders.id");
-                orders.add(createOrder(results));
+                int currentId = -1;
                 while (results.next()) {
                     if (currentId != results.getInt("orders.id")) {
                         currentId = results.getInt("orders.id");
@@ -94,8 +93,8 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
                     }
                 }
 
+                results.close();
                 return orders;
-
             }
         } catch (SQLException e) {
             throw new MysqlDAOException(e);
@@ -112,10 +111,10 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
     {
         List<Order> orders = new ArrayList<>();
         String SQL = "SELECT *, (SELECT SUM(unit_price * quantity) FROM order_items WHERE order_items.`order` = orders.id) as `orders.total` " +
-                     "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
-                     "INNER JOIN users ON `user` = users.id " +
-                     "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
-                     "INNER JOIN toppings ON toppings.id = order_items.topping";
+                "FROM orders INNER JOIN order_items ON `orders`.id = `order`" +
+                "INNER JOIN users ON `user` = users.id " +
+                "INNER JOIN bottoms ON bottoms.id = order_items.bottom " +
+                "INNER JOIN toppings ON toppings.id = order_items.topping";
 
         try {
             try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
@@ -156,7 +155,6 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
             try (PreparedStatement statement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setInt(1, user.getId());
                 statement.setString(2, comment);
-
                 statement.executeUpdate();
 
                 ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -239,6 +237,7 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
                 results.getInt("orders.total"),
                 results.getString("orders.comment"),
                 Order.Status.fromCode(results.getInt("orders.status")),
+                results.getTimestamp("orders.created_at"),
                 createOrderItems(results)
         );
     }

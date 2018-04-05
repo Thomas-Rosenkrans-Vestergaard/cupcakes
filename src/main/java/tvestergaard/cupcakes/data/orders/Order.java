@@ -4,6 +4,7 @@ import tvestergaard.cupcakes.data.bottoms.Bottom;
 import tvestergaard.cupcakes.data.toppings.Topping;
 import tvestergaard.cupcakes.data.users.User;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,11 @@ public class Order
     private final Status status;
 
     /**
+     * The timestamp when the {@link Order} was created.
+     */
+    private final Timestamp createdAt;
+
+    /**
      * The items ordered.
      */
     private final List<Item> items;
@@ -46,20 +52,22 @@ public class Order
     /**
      * Creates a new order.
      *
-     * @param id      The id of the order.
-     * @param user    The user who created the order.
-     * @param total   The total price of the order.
-     * @param comment Optional comment given by the user.
-     * @param status  The status of the order.
-     * @param items   The items ordered.
+     * @param id        The id of the order.
+     * @param user      The user who created the order.
+     * @param total     The total price of the order.
+     * @param comment   Optional comment given by the user.
+     * @param status    The status of the order.
+     * @param createdAt The timestamp when the {@link Order} was created.
+     * @param items     The items ordered.
      */
-    public Order(int id, User user, int total, String comment, Status status, List<Item> items)
+    public Order(int id, User user, int total, String comment, Status status, Timestamp createdAt, List<Item> items)
     {
         this.id = id;
         this.user = user;
         this.total = total;
         this.comment = comment;
         this.status = status;
+        this.createdAt = createdAt;
         this.items = items;
     }
 
@@ -111,6 +119,16 @@ public class Order
     public Status getStatus()
     {
         return this.status;
+    }
+
+    /**
+     * Returns the timestamp when the {@link Order} was created.
+     *
+     * @return The timestamp when the {@link Order} was created.
+     */
+    public Timestamp getCreatedAt()
+    {
+        return this.createdAt;
     }
 
     /**
@@ -282,9 +300,9 @@ public class Order
         }
 
         /**
-         * Returns the price
+         * Returns the total price of the order.
          *
-         * @return
+         * @return The total price of the order.
          */
         public int getTotalPrice()
         {
