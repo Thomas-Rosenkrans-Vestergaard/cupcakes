@@ -55,7 +55,8 @@ public class RegisterServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Notifications notifications = ViewUtilities.getNotifications(request);
-        Parameters    parameters    = new Parameters(request);
+        ViewUtilities.attach(request, notifications);
+        Parameters parameters = new Parameters(request);
 
         notifications.record();
         validateParameters(notifications, parameters);
@@ -78,6 +79,10 @@ public class RegisterServlet extends HttpServlet
             response.sendRedirect("profile");
 
         } catch (UserCreationException e) {
+            if (e.has(UserCreationException.Reason.USERNAME_SHORTER_THAN_3))
+                notifications.error("Username is too short.");
+            if (e.has(UserCreationException.Reason.EMAIL_FORMAT))
+                notifications.error("That email is invalid.");
             if (e.has(UserCreationException.Reason.EMAIL_TAKEN))
                 notifications.error("That email is already in use.");
             if (e.has(UserCreationException.Reason.USERNAME_TAKEN))
