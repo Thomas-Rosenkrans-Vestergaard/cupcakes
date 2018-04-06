@@ -4,7 +4,7 @@ package tvestergaard.cupcakes.logic;
 import tvestergaard.cupcakes.data.orders.Order;
 import tvestergaard.cupcakes.data.users.User;
 
-public class NotEnoughFundsException extends Exception
+public class InsufficientFundsException extends Exception
 {
 
     /**
@@ -28,14 +28,14 @@ public class NotEnoughFundsException extends Exception
     private final int actual;
 
     /**
-     * Creates a new {@link NotEnoughFundsException}.
+     * Creates a new {@link InsufficientFundsException}.
      *
      * @param order    The order that was attempted placed.
      * @param user     The user who attempted to place the order.
      * @param required The amount of funds required (cents).
      * @param actual   The actual number of funds (cents).
      */
-    public NotEnoughFundsException(Order order, User user, int required, int actual)
+    public InsufficientFundsException(Order order, User user, int required, int actual)
     {
         this.order = order;
         this.user = user;

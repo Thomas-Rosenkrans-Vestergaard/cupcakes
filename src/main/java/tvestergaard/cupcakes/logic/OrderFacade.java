@@ -97,9 +97,9 @@ public class OrderFacade
      * @param comment A comment provided by the user.
      * @return An {@link Order} instance representing the newly inserted row.
      * @throws ApplicationException    When an error occurs during the operation.
-     * @throws NotEnoughFundsException When the user does not have enough funds to place the order.
+     * @throws InsufficientFundsException When the user does not have enough funds to place the order.
      */
-    public Order create(User user, ShoppingCart cart, String comment) throws NotEnoughFundsException
+    public Order create(User user, ShoppingCart cart, String comment) throws InsufficientFundsException
     {
         try {
 

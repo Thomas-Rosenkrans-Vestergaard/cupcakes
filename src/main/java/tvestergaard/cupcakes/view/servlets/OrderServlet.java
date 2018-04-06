@@ -1,7 +1,7 @@
 package tvestergaard.cupcakes.view.servlets;
 
 import tvestergaard.cupcakes.data.users.User;
-import tvestergaard.cupcakes.logic.NotEnoughFundsException;
+import tvestergaard.cupcakes.logic.InsufficientFundsException;
 import tvestergaard.cupcakes.logic.OrderFacade;
 import tvestergaard.cupcakes.logic.ShoppingCart;
 import tvestergaard.cupcakes.logic.UserFacade;
@@ -125,7 +125,7 @@ public class OrderServlet extends HttpServlet
             notifications.success(ORDER_SUCCESS);
             response.sendRedirect("profile");
 
-        } catch (NotEnoughFundsException e) {
+        } catch (InsufficientFundsException e) {
             notifications.error("Not enough funds.");
             response.sendRedirect(ViewUtilities.referer(request, "cart"));
         } catch (Exception e) {
