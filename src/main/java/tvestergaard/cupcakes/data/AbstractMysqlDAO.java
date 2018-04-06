@@ -3,7 +3,9 @@ package tvestergaard.cupcakes.data;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public abstract class AbstractMysqlDAO
 {

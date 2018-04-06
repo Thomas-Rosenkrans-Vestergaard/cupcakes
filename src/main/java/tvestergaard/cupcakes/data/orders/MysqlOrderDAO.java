@@ -82,9 +82,6 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
                 statement.setInt(1, user.getId());
                 ResultSet results = statement.executeQuery();
 
-                if (!results.first())
-                    return orders;
-
                 int currentId = -1;
                 while (results.next()) {
                     if (currentId != results.getInt("orders.id")) {
@@ -93,7 +90,6 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
                     }
                 }
 
-                results.close();
                 return orders;
             }
         } catch (SQLException e) {
@@ -119,11 +115,8 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
         try {
             try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
                 ResultSet results = statement.executeQuery();
-                if (!results.first())
-                    return null;
 
-                int currentId = results.getInt("orders.id");
-                orders.add(createOrder(results));
+                int currentId = -1;
                 while (results.next()) {
                     if (currentId != results.getInt("orders.id")) {
                         currentId = results.getInt("orders.id");
@@ -160,20 +153,21 @@ public class MysqlOrderDAO extends AbstractMysqlDAO implements OrderDAO
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 generatedKeys.first();
 
-                int               id            = generatedKeys.getInt(1);
-                String            sql           = "INSERT INTO order_items (`order`, bottom, topping, quantity, unit_price) " + "VALUES (?, ?, ?, ?, ?)";
-                PreparedStatement itemStatement = connection.prepareStatement(sql);
+                int    id  = generatedKeys.getInt(1);
+                String sql = "INSERT INTO order_items (`order`, bottom, topping, quantity, unit_price) " + "VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement itemStatement = connection.prepareStatement(sql)) {
 
-                for (ShoppingCart.Item item : items) {
-                    itemStatement.setInt(1, id);
-                    itemStatement.setInt(2, item.getBottom().getId());
-                    itemStatement.setInt(3, item.getTopping().getId());
-                    itemStatement.setInt(4, item.getQuantity());
-                    itemStatement.setInt(5, item.getUnitPrice());
-                    itemStatement.executeUpdate();
+                    for (ShoppingCart.Item item : items) {
+                        itemStatement.setInt(1, id);
+                        itemStatement.setInt(2, item.getBottom().getId());
+                        itemStatement.setInt(3, item.getTopping().getId());
+                        itemStatement.setInt(4, item.getQuantity());
+                        itemStatement.setInt(5, item.getUnitPrice());
+                        itemStatement.executeUpdate();
+                    }
+
+                    connection.commit();
                 }
-
-                connection.commit();
 
                 return get(id);
 

@@ -34,12 +34,11 @@ public class MysqlBottomDAO extends AbstractMysqlDAO implements BottomDAO
     @Override public Bottom get(int id) throws MysqlDAOException
     {
         try {
-            String SQL = "SELECT * FROM bottoms WHERE id = ?";
-            try (PreparedStatement statement = getConnection().prepareStatement(SQL)) {
-                statement.setInt(1, id);
-                ResultSet results = statement.executeQuery();
-                return !results.first() ? null : createBottom(results);
-            }
+            String            SQL       = "SELECT * FROM bottoms WHERE id = ?";
+            PreparedStatement statement = getConnection().prepareStatement(SQL);
+            statement.setInt(1, id);
+            ResultSet results = statement.executeQuery();
+            return !results.first() ? null : createBottom(results);
         } catch (SQLException e) {
             throw new MysqlDAOException(e);
         }
